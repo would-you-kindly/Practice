@@ -1,0 +1,375 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="Files" EntityType="Model.Store.Files" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ContentTypes" EntityType="Model.Store.ContentTypes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="FileFormats" EntityType="Model.Store.FileFormats" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Users" EntityType="Model.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Purchases" EntityType="Model.Store.Purchases" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserFile" EntityType="Model.Store.UserFile" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="ContentTypeFile" Association="Model.Store.ContentTypeFile">
+      <End Role="ContentType" EntitySet="ContentTypes" />
+      <End Role="File" EntitySet="Files" />
+    </AssociationSet>
+    <AssociationSet Name="FileFormatFile" Association="Model.Store.FileFormatFile">
+      <End Role="FileFormat" EntitySet="FileFormats" />
+      <End Role="File" EntitySet="Files" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserFile_User" Association="Model.Store.FK_UserFile_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UserFile" EntitySet="UserFile" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserFile_File" Association="Model.Store.FK_UserFile_File">
+      <End Role="File" EntitySet="Files" />
+      <End Role="UserFile" EntitySet="UserFile" />
+    </AssociationSet>
+    <AssociationSet Name="FilePurchase" Association="Model.Store.FilePurchase">
+      <End Role="File" EntitySet="Files" />
+      <End Role="Purchase" EntitySet="Purchases" />
+    </AssociationSet>
+    <AssociationSet Name="UserPurchase" Association="Model.Store.UserPurchase">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Purchase" EntitySet="Purchases" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Files">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Url" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Price" Type="float" Nullable="false" />
+    <Property Name="ContentType_Id" Type="int" Nullable="false" />
+    <Property Name="FileFormat_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ContentTypes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Type" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FileFormats">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Format" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Purchases">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="File_Id" Type="int" Nullable="false" />
+    <Property Name="User_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserFile">
+    <Key>
+      <PropertyRef Name="Users_Id" />
+      <PropertyRef Name="Files_Id" />
+    </Key>
+    <Property Name="Users_Id" Type="int" Nullable="false" />
+    <Property Name="Files_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="ContentTypeFile">
+    <End Role="ContentType" Type="Model.Store.ContentTypes" Multiplicity="1" />
+    <End Role="File" Type="Model.Store.Files" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ContentType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="File">
+        <PropertyRef Name="ContentType_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FileFormatFile">
+    <End Role="FileFormat" Type="Model.Store.FileFormats" Multiplicity="1" />
+    <End Role="File" Type="Model.Store.Files" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FileFormat">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="File">
+        <PropertyRef Name="FileFormat_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FilePurchase">
+    <End Role="File" Type="Model.Store.Files" Multiplicity="1" />
+    <End Role="Purchase" Type="Model.Store.Purchases" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="File">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Purchase">
+        <PropertyRef Name="File_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserPurchase">
+    <End Role="User" Type="Model.Store.Users" Multiplicity="1" />
+    <End Role="Purchase" Type="Model.Store.Purchases" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Purchase">
+        <PropertyRef Name="User_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserFile_User">
+    <End Role="User" Type="Model.Store.Users" Multiplicity="1" />
+    <End Role="UserFile" Type="Model.Store.UserFile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserFile">
+        <PropertyRef Name="Users_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserFile_File">
+    <End Role="UserFile" Type="Model.Store.UserFile" Multiplicity="*" />
+    <End Role="File" Type="Model.Store.Files" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="File">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserFile">
+        <PropertyRef Name="Files_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="ModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Files" EntityType="Model.File" />
+          <EntitySet Name="ContentTypes" EntityType="Model.ContentType" />
+          <EntitySet Name="FileFormats" EntityType="Model.FileFormat" />
+          <EntitySet Name="Users" EntityType="Model.User" />
+          <EntitySet Name="Purchases" EntityType="Model.Purchase" />
+          <AssociationSet Name="ContentTypeFile" Association="Model.ContentTypeFile">
+            <End Role="ContentType" EntitySet="ContentTypes" />
+            <End Role="File" EntitySet="Files" />
+          </AssociationSet>
+          <AssociationSet Name="FileFormatFile" Association="Model.FileFormatFile">
+            <End Role="FileFormat" EntitySet="FileFormats" />
+            <End Role="File" EntitySet="Files" />
+          </AssociationSet>
+          <AssociationSet Name="UserFile" Association="Model.UserFile">
+            <End Role="User" EntitySet="Users" />
+            <End Role="File" EntitySet="Files" />
+          </AssociationSet>
+          <AssociationSet Name="FilePurchase" Association="Model.FilePurchase">
+            <End Role="File" EntitySet="Files" />
+            <End Role="Purchase" EntitySet="Purchases" />
+          </AssociationSet>
+          <AssociationSet Name="UserPurchase" Association="Model.UserPurchase">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Purchase" EntitySet="Purchases" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="File">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="Url" Type="String" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <NavigationProperty Name="ContentType" Relationship="Model.ContentTypeFile" FromRole="File" ToRole="ContentType" />
+          <NavigationProperty Name="FileFormat" Relationship="Model.FileFormatFile" FromRole="File" ToRole="FileFormat" />
+          <NavigationProperty Name="Users" Relationship="Model.UserFile" FromRole="File" ToRole="User" />
+          <NavigationProperty Name="Purchases" Relationship="Model.FilePurchase" FromRole="File" ToRole="Purchase" />
+        </EntityType>
+        <EntityType Name="ContentType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="Type" Type="String" Nullable="false" />
+          <NavigationProperty Name="Files" Relationship="Model.ContentTypeFile" FromRole="ContentType" ToRole="File" />
+        </EntityType>
+        <EntityType Name="FileFormat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="Format" Type="String" Nullable="false" />
+          <NavigationProperty Name="Files" Relationship="Model.FileFormatFile" FromRole="FileFormat" ToRole="File" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" />
+          <NavigationProperty Name="Files" Relationship="Model.UserFile" FromRole="User" ToRole="File" />
+          <NavigationProperty Name="Purchases" Relationship="Model.UserPurchase" FromRole="User" ToRole="Purchase" />
+        </EntityType>
+        <EntityType Name="Purchase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="File" Relationship="Model.FilePurchase" FromRole="Purchase" ToRole="File" />
+          <NavigationProperty Name="User" Relationship="Model.UserPurchase" FromRole="Purchase" ToRole="User" />
+        </EntityType>
+        <Association Name="ContentTypeFile">
+          <End Type="Model.ContentType" Role="ContentType" Multiplicity="1" />
+          <End Type="Model.File" Role="File" Multiplicity="*" />
+        </Association>
+        <Association Name="FileFormatFile">
+          <End Type="Model.FileFormat" Role="FileFormat" Multiplicity="1" />
+          <End Type="Model.File" Role="File" Multiplicity="*" />
+        </Association>
+        <Association Name="UserFile">
+          <End Type="Model.User" Role="User" Multiplicity="*" />
+          <End Type="Model.File" Role="File" Multiplicity="*" />
+        </Association>
+        <Association Name="FilePurchase">
+          <End Type="Model.File" Role="File" Multiplicity="1" />
+          <End Type="Model.Purchase" Role="Purchase" Multiplicity="*" />
+        </Association>
+        <Association Name="UserPurchase">
+          <End Type="Model.User" Role="User" Multiplicity="1" />
+          <End Type="Model.Purchase" Role="Purchase" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="ModelContainer">
+    <EntitySetMapping Name="Files">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.File)">
+        <MappingFragment StoreEntitySet="Files">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Url" ColumnName="Url" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ContentTypes">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.ContentType)">
+        <MappingFragment StoreEntitySet="ContentTypes">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FileFormats">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.FileFormat)">
+        <MappingFragment StoreEntitySet="FileFormats">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Format" ColumnName="Format" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.User)">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Purchases">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.Purchase)">
+        <MappingFragment StoreEntitySet="Purchases">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="ContentTypeFile" TypeName="Model.ContentTypeFile" StoreEntitySet="Files">
+      <EndProperty Name="ContentType">
+        <ScalarProperty Name="Id" ColumnName="ContentType_Id" />
+      </EndProperty>
+      <EndProperty Name="File">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="FileFormatFile" TypeName="Model.FileFormatFile" StoreEntitySet="Files">
+      <EndProperty Name="FileFormat">
+        <ScalarProperty Name="Id" ColumnName="FileFormat_Id" />
+      </EndProperty>
+      <EndProperty Name="File">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserFile" TypeName="Model.UserFile" StoreEntitySet="UserFile">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="Users_Id" />
+      </EndProperty>
+      <EndProperty Name="File">
+        <ScalarProperty Name="Id" ColumnName="Files_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="FilePurchase" TypeName="Model.FilePurchase" StoreEntitySet="Purchases">
+      <EndProperty Name="File">
+        <ScalarProperty Name="Id" ColumnName="File_Id" />
+      </EndProperty>
+      <EndProperty Name="Purchase">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserPurchase" TypeName="Model.UserPurchase" StoreEntitySet="Purchases">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="User_Id" />
+      </EndProperty>
+      <EndProperty Name="Purchase">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
