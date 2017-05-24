@@ -11,29 +11,29 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Users"
   DTS:PackageType="5"
-  DTS:VersionBuild="2"
-  DTS:VersionGUID="{29FEF22B-01F3-45AA-BD99-E41F64AACE64}">
+  DTS:VersionBuild="3"
+  DTS:VersionGUID="{F3B1DD67-8E95-46FD-9FC1-FEE548BF9624}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[.\sqlexpress.Files]"
+      DTS:refId="Package.ConnectionManagers[.\sqlexpress.Practice]"
       DTS:CreationName="OLEDB"
-      DTS:DTSID="{710EFA6A-D0A5-4BEA-8493-6D7656BDF3FF}"
-      DTS:ObjectName=".\sqlexpress.Files">
+      DTS:DTSID="{5EF45528-C4D3-42DB-84C9-53C957885FAF}"
+      DTS:ObjectName=".\sqlexpress.Practice">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="Data Source=.\sqlexpress;Initial Catalog=Files;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+          DTS:ConnectionString="Data Source=.\sqlexpress;Initial Catalog=Practice;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[Диспетчер соединений Excel]"
       DTS:CreationName="EXCEL"
-      DTS:DTSID="{E27BEE3B-EEC5-493C-956B-EB63AF0E05E0}"
+      DTS:DTSID="{E8385C8C-2E81-40B0-9D52-1867D1F2700B}"
       DTS:ObjectName="Диспетчер соединений Excel">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Андрей\YandexDisk\Third course\Производственная практика\Мои работы\Загрузка данных.xls;Extended Properties=&quot;EXCEL 8.0;HDR=YES&quot;;" />
+          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=D:\YandexDisk\Third course\Производственная практика\Practice\Загрузка данных.xls;Extended Properties=&quot;EXCEL 8.0;HDR=YES&quot;;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
@@ -252,8 +252,8 @@
               <connections>
                 <connection
                   refId="Package\Задача потока данных\Users (DB).Connections[OleDbConnection]"
-                  connectionManagerID="Package.ConnectionManagers[.\sqlexpress.Files]"
-                  connectionManagerRefId="Package.ConnectionManagers[.\sqlexpress.Files]"
+                  connectionManagerID="Package.ConnectionManagers[.\sqlexpress.Practice]"
+                  connectionManagerRefId="Package.ConnectionManagers[.\sqlexpress.Practice]"
                   description="Соединение OLE DB среды выполнения, используемое для доступа к базе данных."
                   name="OleDbConnection" />
               </connections>
@@ -365,13 +365,13 @@
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
-          Size="105,42"
-          Id="Package\Задача потока данных\Users"
-          TopLeft="134,58" />
-        <NodeLayout
           Size="130,42"
           Id="Package\Задача потока данных\Users (DB)"
           TopLeft="126,139" />
+        <NodeLayout
+          Size="105,42"
+          Id="Package\Задача потока данных\Users"
+          TopLeft="134,58" />
         <EdgeLayout
           Id="Package\Задача потока данных.Paths[Выход источника &quot;Excel&quot;]"
           TopLeft="188.75,100">

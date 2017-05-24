@@ -11,29 +11,29 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="ContentTypes"
   DTS:PackageType="5"
-  DTS:VersionBuild="4"
-  DTS:VersionGUID="{B87AA430-E5F5-4E47-9979-049FA4F588E5}">
+  DTS:VersionBuild="6"
+  DTS:VersionGUID="{CCFA7372-0779-46AF-B9B0-69AB14E95BC9}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[.\sqlexpress.Files]"
+      DTS:refId="Package.ConnectionManagers[.\sqlexpress.Practice]"
       DTS:CreationName="OLEDB"
-      DTS:DTSID="{A974574C-F0DC-4027-95D1-7E35D16F765F}"
-      DTS:ObjectName=".\sqlexpress.Files">
+      DTS:DTSID="{79BC43A1-B364-49F8-9C42-691537E5B9C7}"
+      DTS:ObjectName=".\sqlexpress.Practice">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="Data Source=.\sqlexpress;Initial Catalog=Files;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+          DTS:ConnectionString="Data Source=.\sqlexpress;Initial Catalog=Practice;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[Диспетчер соединений Excel]"
       DTS:CreationName="EXCEL"
-      DTS:DTSID="{2C713A98-E62C-499F-BF38-F0407F158FD3}"
+      DTS:DTSID="{59868EAD-6ED6-4803-AC4B-6CB075D91C23}"
       DTS:ObjectName="Диспетчер соединений Excel">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Андрей\YandexDisk\Third course\Производственная практика\Мои работы\Загрузка данных.xls;Extended Properties=&quot;EXCEL 8.0;HDR=YES&quot;;" />
+          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=D:\YandexDisk\Third course\Производственная практика\Practice\Загрузка данных.xls;Extended Properties=&quot;Excel 8.0;HDR=YES&quot;;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
@@ -96,8 +96,8 @@
               <connections>
                 <connection
                   refId="Package\Задача потока данных\ContentTypes.Connections[OleDbConnection]"
-                  connectionManagerID="{9695AB1B-9633-446C-8905-6AE0AD770B53}:invalid"
-                  connectionManagerRefId="{9695AB1B-9633-446C-8905-6AE0AD770B53}:invalid"
+                  connectionManagerID="Package.ConnectionManagers[Диспетчер соединений Excel]"
+                  connectionManagerRefId="Package.ConnectionManagers[Диспетчер соединений Excel]"
                   description="Соединение OLE DB среды выполнения, используемое для доступа к базе данных."
                   name="OleDbConnection" />
               </connections>
@@ -231,8 +231,8 @@
               <connections>
                 <connection
                   refId="Package\Задача потока данных\ContentTypes (DB).Connections[OleDbConnection]"
-                  connectionManagerID="Package.ConnectionManagers[.\sqlexpress.Files]"
-                  connectionManagerRefId="Package.ConnectionManagers[.\sqlexpress.Files]"
+                  connectionManagerID="Package.ConnectionManagers[.\sqlexpress.Practice]"
+                  connectionManagerRefId="Package.ConnectionManagers[.\sqlexpress.Practice]"
                   description="Соединение OLE DB среды выполнения, используемое для доступа к базе данных."
                   name="OleDbConnection" />
               </connections>
@@ -309,12 +309,12 @@
     </DTS:Executable>
   </DTS:Executables>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
-<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
-<!--If you manually edit this section and make a mistake, you can delete it. -->
-<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<!--В данном разделе CDATA содержатся сведения о макете пакета. В данном разделе содержатся сведения о координатах (x,y), ширине и высоте.-->
+<!--В случае возникновения ошибки при редактировании этого раздела вручную его можно удалить. -->
+<!--Пакет можно загрузить обычным образом, но прежние сведения о макете будут утеряны, и конструктор автоматически перераспределит элементы в области конструктора.-->
 <Objects
   Version="sql12">
-  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <!--Все приведенные ниже узлы будут содержать свойства, не влияющие на поведение среды выполнения.-->
   <Package
     design-time-name="Package">
     <LayoutInfo>

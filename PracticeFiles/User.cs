@@ -16,15 +16,17 @@ namespace PracticeFiles
     {
         public User()
         {
-            this.Files = new HashSet<File>();
+            this.CreatedFiles = new HashSet<File>();
             this.Purchases = new HashSet<Purchase>();
+            this.OwnedFiles = new HashSet<File>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
     
-        public virtual ICollection<File> Files { get; set; }
+        public virtual ICollection<File> CreatedFiles { get; set; }
         public virtual ICollection<Purchase> Purchases { get; set; }
+        public virtual ICollection<File> OwnedFiles { get; set; }
     }
 }

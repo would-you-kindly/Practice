@@ -11,29 +11,29 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Purchases"
   DTS:PackageType="5"
-  DTS:VersionBuild="1"
-  DTS:VersionGUID="{D22D4695-E1C4-4D59-94EE-5CD352E39EA5}">
+  DTS:VersionBuild="3"
+  DTS:VersionGUID="{62AF71D7-E489-412A-ADDB-CCC5EC6CD960}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[.\sqlexpress.Files]"
+      DTS:refId="Package.ConnectionManagers[.\sqlexpress.Practice]"
       DTS:CreationName="OLEDB"
-      DTS:DTSID="{B3C48B4D-B5B9-4075-81BC-2D4D0694708F}"
-      DTS:ObjectName=".\sqlexpress.Files">
+      DTS:DTSID="{28D1D441-CC22-444C-BC7E-9B4015792ABF}"
+      DTS:ObjectName=".\sqlexpress.Practice">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="Data Source=.\sqlexpress;Initial Catalog=Files;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+          DTS:ConnectionString="Data Source=.\sqlexpress;Initial Catalog=Practice;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[Диспетчер соединений Excel]"
       DTS:CreationName="EXCEL"
-      DTS:DTSID="{6F0CC4C6-6296-4C54-BEB5-C1E94FF90C2A}"
+      DTS:DTSID="{F5A697B4-FA84-4F08-969E-5DA473531E9B}"
       DTS:ObjectName="Диспетчер соединений Excel">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Андрей\YandexDisk\Third course\Производственная практика\Мои работы\Загрузка данных.xls;Extended Properties=&quot;EXCEL 8.0;HDR=YES&quot;;" />
+          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=D:\YandexDisk\Third course\Производственная практика\Practice\Загрузка данных.xls;Extended Properties=&quot;EXCEL 8.0;HDR=YES&quot;;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
@@ -134,13 +134,13 @@
                       name="File_Id"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Задача потока данных\Purchases.Outputs[Выход источника &quot;Excel&quot;].Columns[User_Id]"
+                      refId="Package\Задача потока данных\Purchases.Outputs[Выход источника &quot;Excel&quot;].Columns[Purchaser_Id]"
                       dataType="r8"
                       errorOrTruncationOperation="Преобразование"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Задача потока данных\Purchases.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[User_Id]"
-                      lineageId="Package\Задача потока данных\Purchases.Outputs[Выход источника &quot;Excel&quot;].Columns[User_Id]"
-                      name="User_Id"
+                      externalMetadataColumnId="Package\Задача потока данных\Purchases.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[Purchaser_Id]"
+                      lineageId="Package\Задача потока данных\Purchases.Outputs[Выход источника &quot;Excel&quot;].Columns[Purchaser_Id]"
+                      name="Purchaser_Id"
                       truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
@@ -158,9 +158,9 @@
                       dataType="r8"
                       name="File_Id" />
                     <externalMetadataColumn
-                      refId="Package\Задача потока данных\Purchases.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[User_Id]"
+                      refId="Package\Задача потока данных\Purchases.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[Purchaser_Id]"
                       dataType="r8"
-                      name="User_Id" />
+                      name="Purchaser_Id" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -184,10 +184,10 @@
                       lineageId="Package\Задача потока данных\Purchases.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[File_Id]"
                       name="File_Id" />
                     <outputColumn
-                      refId="Package\Задача потока данных\Purchases.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[User_Id]"
+                      refId="Package\Задача потока данных\Purchases.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[Purchaser_Id]"
                       dataType="r8"
-                      lineageId="Package\Задача потока данных\Purchases.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[User_Id]"
-                      name="User_Id" />
+                      lineageId="Package\Задача потока данных\Purchases.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[Purchaser_Id]"
+                      name="Purchaser_Id" />
                     <outputColumn
                       refId="Package\Задача потока данных\Purchases.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[ErrorCode]"
                       dataType="i4"
@@ -264,8 +264,8 @@
               <connections>
                 <connection
                   refId="Package\Задача потока данных\Purchases (DB).Connections[OleDbConnection]"
-                  connectionManagerID="Package.ConnectionManagers[.\sqlexpress.Files]"
-                  connectionManagerRefId="Package.ConnectionManagers[.\sqlexpress.Files]"
+                  connectionManagerID="Package.ConnectionManagers[.\sqlexpress.Practice]"
+                  connectionManagerRefId="Package.ConnectionManagers[.\sqlexpress.Practice]"
                   description="Соединение OLE DB среды выполнения, используемое для доступа к базе данных."
                   name="OleDbConnection" />
               </connections>
@@ -296,11 +296,11 @@
                       externalMetadataColumnId="Package\Задача потока данных\Purchases (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[File_Id]"
                       lineageId="Package\Задача потока данных\Purchases.Outputs[Выход источника &quot;Excel&quot;].Columns[File_Id]" />
                     <inputColumn
-                      refId="Package\Задача потока данных\Purchases (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[User_Id]"
+                      refId="Package\Задача потока данных\Purchases (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[Purchaser_Id]"
                       cachedDataType="r8"
-                      cachedName="User_Id"
-                      externalMetadataColumnId="Package\Задача потока данных\Purchases (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[User_Id]"
-                      lineageId="Package\Задача потока данных\Purchases.Outputs[Выход источника &quot;Excel&quot;].Columns[User_Id]" />
+                      cachedName="Purchaser_Id"
+                      externalMetadataColumnId="Package\Задача потока данных\Purchases (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Purchaser_Id]"
+                      lineageId="Package\Задача потока данных\Purchases.Outputs[Выход источника &quot;Excel&quot;].Columns[Purchaser_Id]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -317,9 +317,9 @@
                       dataType="i4"
                       name="File_Id" />
                     <externalMetadataColumn
-                      refId="Package\Задача потока данных\Purchases (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[User_Id]"
+                      refId="Package\Задача потока данных\Purchases (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Purchaser_Id]"
                       dataType="i4"
-                      name="User_Id" />
+                      name="Purchaser_Id" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -385,13 +385,13 @@
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
-          Size="126,42"
-          Id="Package\Задача потока данных\Purchases"
-          TopLeft="94,56" />
-        <NodeLayout
           Size="151,42"
           Id="Package\Задача потока данных\Purchases (DB)"
           TopLeft="83,143" />
+        <NodeLayout
+          Size="126,42"
+          Id="Package\Задача потока данных\Purchases"
+          TopLeft="94,56" />
         <EdgeLayout
           Id="Package\Задача потока данных.Paths[Выход источника &quot;Excel&quot;]"
           TopLeft="157.75,98">

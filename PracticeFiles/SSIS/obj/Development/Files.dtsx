@@ -11,29 +11,29 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Files"
   DTS:PackageType="5"
-  DTS:VersionBuild="1"
-  DTS:VersionGUID="{E9D2D5DE-3045-4A10-AF67-820F08D6F01C}">
+  DTS:VersionBuild="7"
+  DTS:VersionGUID="{4C309B40-3C3B-4080-88B3-30523A80832B}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[.\sqlexpress.Files]"
+      DTS:refId="Package.ConnectionManagers[.\sqlexpress.Practice]"
       DTS:CreationName="OLEDB"
-      DTS:DTSID="{9AB55B02-3367-4E26-85C3-119D5A19EE48}"
-      DTS:ObjectName=".\sqlexpress.Files">
+      DTS:DTSID="{1AD7D528-5115-4BAB-9B18-1F52E3E70111}"
+      DTS:ObjectName=".\sqlexpress.Practice">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="Data Source=.\sqlexpress;Initial Catalog=Files;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+          DTS:ConnectionString="Data Source=.\sqlexpress;Initial Catalog=Practice;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[Диспетчер соединений Excel]"
       DTS:CreationName="EXCEL"
-      DTS:DTSID="{9E782980-FE33-4A67-BE47-F43D8F0FCDA9}"
+      DTS:DTSID="{3A22AA1A-E296-4A21-9254-EB62D0E712D6}"
       DTS:ObjectName="Диспетчер соединений Excel">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Андрей\YandexDisk\Third course\Производственная практика\Мои работы\Загрузка данных.xls;Extended Properties=&quot;EXCEL 8.0;HDR=YES&quot;;" />
+          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=D:\YandexDisk\Third course\Производственная практика\Practice\Загрузка данных.xls;Extended Properties=&quot;EXCEL 8.0;HDR=YES&quot;;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
@@ -172,6 +172,24 @@
                       lineageId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].Columns[FileFormat_Id]"
                       name="FileFormat_Id"
                       truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].Columns[Creator_Id]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[Creator_Id]"
+                      lineageId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].Columns[Creator_Id]"
+                      name="Creator_Id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].Columns[PdfFile_Id]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[PdfFile_Id]"
+                      lineageId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].Columns[PdfFile_Id]"
+                      name="PdfFile_Id"
+                      truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -206,6 +224,19 @@
                       refId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[FileFormat_Id]"
                       dataType="r8"
                       name="FileFormat_Id" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[Creator_Id]"
+                      dataType="r8"
+                      name="Creator_Id" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[PdfFile_Id]"
+                      dataType="r8"
+                      name="PdfFile_Id" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[F10]"
+                      dataType="wstr"
+                      length="255"
+                      name="F10" />
                   </externalMetadataColumns>
                 </output>
                 <output
@@ -252,6 +283,16 @@
                       lineageId="Package\Задача потока данных\Files.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[FileFormat_Id]"
                       name="FileFormat_Id" />
                     <outputColumn
+                      refId="Package\Задача потока данных\Files.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[Creator_Id]"
+                      dataType="r8"
+                      lineageId="Package\Задача потока данных\Files.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[Creator_Id]"
+                      name="Creator_Id" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Files.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[PdfFile_Id]"
+                      dataType="r8"
+                      lineageId="Package\Задача потока данных\Files.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[PdfFile_Id]"
+                      name="PdfFile_Id" />
+                    <outputColumn
                       refId="Package\Задача потока данных\Files.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[ErrorCode]"
                       dataType="i4"
                       lineageId="Package\Задача потока данных\Files.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[ErrorCode]"
@@ -269,11 +310,11 @@
               </outputs>
             </component>
             <component
-              refId="Package\Задача потока данных\FIles (DB)"
+              refId="Package\Задача потока данных\Files (DB)"
               componentClassID="Microsoft.OLEDBDestination"
               contactInfo="Назначение &quot;OLE DB&quot;;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;4"
               description="Назначение &quot;OLE DB&quot;"
-              name="FIles (DB)"
+              name="Files (DB)"
               usesDispositions="true"
               version="4">
               <properties>
@@ -326,117 +367,137 @@
               </properties>
               <connections>
                 <connection
-                  refId="Package\Задача потока данных\FIles (DB).Connections[OleDbConnection]"
-                  connectionManagerID="Package.ConnectionManagers[.\sqlexpress.Files]"
-                  connectionManagerRefId="Package.ConnectionManagers[.\sqlexpress.Files]"
+                  refId="Package\Задача потока данных\Files (DB).Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[.\sqlexpress.Practice]"
+                  connectionManagerRefId="Package.ConnectionManagers[.\sqlexpress.Practice]"
                   description="Соединение OLE DB среды выполнения, используемое для доступа к базе данных."
                   name="OleDbConnection" />
               </connections>
               <inputs>
                 <input
-                  refId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;]"
+                  refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;]"
                   errorOrTruncationOperation="Вставить"
                   errorRowDisposition="FailComponent"
                   hasSideEffects="true"
                   name="Вход назначения &quot;OLE DB&quot;">
                   <inputColumns>
                     <inputColumn
-                      refId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[Id]"
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[Id]"
                       cachedDataType="r8"
                       cachedName="Id"
-                      externalMetadataColumnId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Id]"
+                      externalMetadataColumnId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Id]"
                       lineageId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].Columns[Id]" />
                     <inputColumn
-                      refId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[Name]"
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[Name]"
                       cachedDataType="wstr"
                       cachedLength="255"
                       cachedName="Name"
-                      externalMetadataColumnId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Name]"
+                      externalMetadataColumnId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Name]"
                       lineageId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].Columns[Name]" />
                     <inputColumn
-                      refId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[Description]"
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[Description]"
                       cachedDataType="wstr"
                       cachedLength="255"
                       cachedName="Description"
-                      externalMetadataColumnId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Description]"
+                      externalMetadataColumnId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Description]"
                       lineageId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].Columns[Description]" />
                     <inputColumn
-                      refId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[Url]"
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[Url]"
                       cachedDataType="wstr"
                       cachedLength="255"
                       cachedName="Url"
-                      externalMetadataColumnId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Url]"
+                      externalMetadataColumnId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Url]"
                       lineageId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].Columns[Url]" />
                     <inputColumn
-                      refId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[Price]"
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[Price]"
                       cachedDataType="r8"
                       cachedName="Price"
-                      externalMetadataColumnId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Price]"
+                      externalMetadataColumnId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Price]"
                       lineageId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].Columns[Price]" />
                     <inputColumn
-                      refId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[ContentType_Id]"
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[ContentType_Id]"
                       cachedDataType="r8"
                       cachedName="ContentType_Id"
-                      externalMetadataColumnId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[ContentType_Id]"
+                      externalMetadataColumnId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[ContentType_Id]"
                       lineageId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].Columns[ContentType_Id]" />
                     <inputColumn
-                      refId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[FileFormat_Id]"
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[FileFormat_Id]"
                       cachedDataType="r8"
                       cachedName="FileFormat_Id"
-                      externalMetadataColumnId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[FileFormat_Id]"
+                      externalMetadataColumnId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[FileFormat_Id]"
                       lineageId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].Columns[FileFormat_Id]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[Creator_Id]"
+                      cachedDataType="r8"
+                      cachedName="Creator_Id"
+                      externalMetadataColumnId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Creator_Id]"
+                      lineageId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].Columns[Creator_Id]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].Columns[PdfFile_Id]"
+                      cachedDataType="r8"
+                      cachedName="PdfFile_Id"
+                      externalMetadataColumnId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[PdfFile_Id]"
+                      lineageId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;].Columns[PdfFile_Id]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
                     <externalMetadataColumn
-                      refId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Id]"
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Id]"
                       dataType="i4"
                       name="Id" />
                     <externalMetadataColumn
-                      refId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Name]"
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Name]"
                       dataType="nText"
                       name="Name" />
                     <externalMetadataColumn
-                      refId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Description]"
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Description]"
                       dataType="nText"
                       name="Description" />
                     <externalMetadataColumn
-                      refId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Url]"
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Url]"
                       dataType="nText"
                       name="Url" />
                     <externalMetadataColumn
-                      refId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Price]"
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Price]"
                       dataType="r8"
                       name="Price" />
                     <externalMetadataColumn
-                      refId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[ContentType_Id]"
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[ContentType_Id]"
                       dataType="i4"
                       name="ContentType_Id" />
                     <externalMetadataColumn
-                      refId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[FileFormat_Id]"
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[FileFormat_Id]"
                       dataType="i4"
                       name="FileFormat_Id" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Creator_Id]"
+                      dataType="i4"
+                      name="Creator_Id" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[PdfFile_Id]"
+                      dataType="i4"
+                      name="PdfFile_Id" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
               <outputs>
                 <output
-                  refId="Package\Задача потока данных\FIles (DB).Outputs[Вывод ошибок назначения &quot;OLE DB&quot;]"
+                  refId="Package\Задача потока данных\Files (DB).Outputs[Вывод ошибок назначения &quot;OLE DB&quot;]"
                   exclusionGroup="1"
                   isErrorOut="true"
                   name="Вывод ошибок назначения &quot;OLE DB&quot;"
-                  synchronousInputId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;]">
+                  synchronousInputId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;]">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\Задача потока данных\FIles (DB).Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorCode]"
+                      refId="Package\Задача потока данных\Files (DB).Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorCode]"
                       dataType="i4"
-                      lineageId="Package\Задача потока данных\FIles (DB).Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorCode]"
+                      lineageId="Package\Задача потока данных\Files (DB).Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorCode]"
                       name="ErrorCode"
                       specialFlags="1" />
                     <outputColumn
-                      refId="Package\Задача потока данных\FIles (DB).Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorColumn]"
+                      refId="Package\Задача потока данных\Files (DB).Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorColumn]"
                       dataType="i4"
-                      lineageId="Package\Задача потока данных\FIles (DB).Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorColumn]"
+                      lineageId="Package\Задача потока данных\Files (DB).Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorColumn]"
                       name="ErrorColumn"
                       specialFlags="2" />
                   </outputColumns>
@@ -448,7 +509,7 @@
           <paths>
             <path
               refId="Package\Задача потока данных.Paths[Выход источника &quot;Excel&quot;]"
-              endId="Package\Задача потока данных\FIles (DB).Inputs[Вход назначения &quot;OLE DB&quot;]"
+              endId="Package\Задача потока данных\Files (DB).Inputs[Вход назначения &quot;OLE DB&quot;]"
               name="Выход источника &quot;Excel&quot;"
               startId="Package\Задача потока данных\Files.Outputs[Выход источника &quot;Excel&quot;]" />
           </paths>
@@ -485,12 +546,12 @@
           Id="Package\Задача потока данных\Files"
           TopLeft="106,65" />
         <NodeLayout
-          Size="126,42"
-          Id="Package\Задача потока данных\FIles (DB)"
+          Size="125,42"
+          Id="Package\Задача потока данных\Files (DB)"
           TopLeft="93,140" />
         <EdgeLayout
           Id="Package\Задача потока данных.Paths[Выход источника &quot;Excel&quot;]"
-          TopLeft="156,107">
+          TopLeft="155.75,107">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
@@ -527,7 +588,7 @@
     </Properties>
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
-    design-time-name="Package\Задача потока данных\FIles (DB)">
+    design-time-name="Package\Задача потока данных\Files (DB)">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>

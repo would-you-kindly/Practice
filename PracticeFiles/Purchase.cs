@@ -18,6 +18,6 @@ namespace PracticeFiles
         public System.DateTime Date { get; set; }
     
         public virtual File File { get; set; }
-        public virtual User User { get; set; }
+        public virtual User Purchaser { get; set; }
     }
 }

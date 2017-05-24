@@ -2,13 +2,13 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 05/23/2017 14:46:06
--- Generated from EDMX file: C:\Users\Андрей\YandexDisk\Third course\Производственная практика\Мои работы\PracticeFiles\Model.edmx
+-- Date Created: 05/24/2017 15:45:15
+-- Generated from EDMX file: D:\YandexDisk\Third course\Производственная практика\Practice\PracticeFiles\Model.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
 GO
-USE [Files];
+USE [Practice];
 GO
 IF SCHEMA_ID(N'dbo') IS NULL EXECUTE(N'CREATE SCHEMA [dbo]');
 GO
@@ -23,17 +23,23 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_FileFormatFile]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Files] DROP CONSTRAINT [FK_FileFormatFile];
 GO
-IF OBJECT_ID(N'[dbo].[FK_UserFile_User]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserFile] DROP CONSTRAINT [FK_UserFile_User];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserFile_File]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[UserFile] DROP CONSTRAINT [FK_UserFile_File];
+IF OBJECT_ID(N'[dbo].[FK_CreatorFile]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Files] DROP CONSTRAINT [FK_CreatorFile];
 GO
 IF OBJECT_ID(N'[dbo].[FK_FilePurchase]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Purchases] DROP CONSTRAINT [FK_FilePurchase];
 GO
 IF OBJECT_ID(N'[dbo].[FK_UserPurchase]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Purchases] DROP CONSTRAINT [FK_UserPurchase];
+GO
+IF OBJECT_ID(N'[dbo].[FK_FileFile]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Files] DROP CONSTRAINT [FK_FileFile];
+GO
+IF OBJECT_ID(N'[dbo].[FK_OwnerFile_Owner]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[OwnerFile] DROP CONSTRAINT [FK_OwnerFile_Owner];
+GO
+IF OBJECT_ID(N'[dbo].[FK_OwnerFile_File]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[OwnerFile] DROP CONSTRAINT [FK_OwnerFile_File];
 GO
 
 -- --------------------------------------------------
@@ -55,8 +61,8 @@ GO
 IF OBJECT_ID(N'[dbo].[Purchases]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Purchases];
 GO
-IF OBJECT_ID(N'[dbo].[UserFile]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[UserFile];
+IF OBJECT_ID(N'[dbo].[OwnerFile]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[OwnerFile];
 GO
 
 -- --------------------------------------------------
@@ -67,11 +73,13 @@ GO
 CREATE TABLE [dbo].[Files] (
     [Id] int  NOT NULL,
     [Name] nvarchar(max)  NOT NULL,
-    [Description] nvarchar(max)  NOT NULL,
+    [Description] nvarchar(max)  NULL,
     [Url] nvarchar(max)  NOT NULL,
     [Price] float  NOT NULL,
     [ContentType_Id] int  NOT NULL,
-    [FileFormat_Id] int  NOT NULL
+    [FileFormat_Id] int  NOT NULL,
+    [Creator_Id] int  NOT NULL,
+    [PdfFile_Id] int  NULL
 );
 GO
 
@@ -102,14 +110,14 @@ CREATE TABLE [dbo].[Purchases] (
     [Id] int  NOT NULL,
     [Date] datetime  NOT NULL,
     [File_Id] int  NOT NULL,
-    [User_Id] int  NOT NULL
+    [Purchaser_Id] int  NOT NULL
 );
 GO
 
--- Creating table 'UserFile'
-CREATE TABLE [dbo].[UserFile] (
-    [Users_Id] int  NOT NULL,
-    [Files_Id] int  NOT NULL
+-- Creating table 'OwnerFile'
+CREATE TABLE [dbo].[OwnerFile] (
+    [Owners_Id] int  NOT NULL,
+    [OwnedFiles_Id] int  NOT NULL
 );
 GO
 
@@ -147,10 +155,10 @@ ADD CONSTRAINT [PK_Purchases]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [Users_Id], [Files_Id] in table 'UserFile'
-ALTER TABLE [dbo].[UserFile]
-ADD CONSTRAINT [PK_UserFile]
-    PRIMARY KEY CLUSTERED ([Users_Id], [Files_Id] ASC);
+-- Creating primary key on [Owners_Id], [OwnedFiles_Id] in table 'OwnerFile'
+ALTER TABLE [dbo].[OwnerFile]
+ADD CONSTRAINT [PK_OwnerFile]
+    PRIMARY KEY CLUSTERED ([Owners_Id], [OwnedFiles_Id] ASC);
 GO
 
 -- --------------------------------------------------
@@ -187,28 +195,19 @@ ON [dbo].[Files]
     ([FileFormat_Id]);
 GO
 
--- Creating foreign key on [Users_Id] in table 'UserFile'
-ALTER TABLE [dbo].[UserFile]
-ADD CONSTRAINT [FK_UserFile_User]
-    FOREIGN KEY ([Users_Id])
+-- Creating foreign key on [Creator_Id] in table 'Files'
+ALTER TABLE [dbo].[Files]
+ADD CONSTRAINT [FK_CreatorFile]
+    FOREIGN KEY ([Creator_Id])
     REFERENCES [dbo].[Users]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating foreign key on [Files_Id] in table 'UserFile'
-ALTER TABLE [dbo].[UserFile]
-ADD CONSTRAINT [FK_UserFile_File]
-    FOREIGN KEY ([Files_Id])
-    REFERENCES [dbo].[Files]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_UserFile_File'
-CREATE INDEX [IX_FK_UserFile_File]
-ON [dbo].[UserFile]
-    ([Files_Id]);
+-- Creating non-clustered index for FOREIGN KEY 'FK_CreatorFile'
+CREATE INDEX [IX_FK_CreatorFile]
+ON [dbo].[Files]
+    ([Creator_Id]);
 GO
 
 -- Creating foreign key on [File_Id] in table 'Purchases'
@@ -226,10 +225,10 @@ ON [dbo].[Purchases]
     ([File_Id]);
 GO
 
--- Creating foreign key on [User_Id] in table 'Purchases'
+-- Creating foreign key on [Purchaser_Id] in table 'Purchases'
 ALTER TABLE [dbo].[Purchases]
 ADD CONSTRAINT [FK_UserPurchase]
-    FOREIGN KEY ([User_Id])
+    FOREIGN KEY ([Purchaser_Id])
     REFERENCES [dbo].[Users]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -238,7 +237,46 @@ GO
 -- Creating non-clustered index for FOREIGN KEY 'FK_UserPurchase'
 CREATE INDEX [IX_FK_UserPurchase]
 ON [dbo].[Purchases]
-    ([User_Id]);
+    ([Purchaser_Id]);
+GO
+
+-- Creating foreign key on [PdfFile_Id] in table 'Files'
+ALTER TABLE [dbo].[Files]
+ADD CONSTRAINT [FK_FileFile]
+    FOREIGN KEY ([PdfFile_Id])
+    REFERENCES [dbo].[Files]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_FileFile'
+CREATE INDEX [IX_FK_FileFile]
+ON [dbo].[Files]
+    ([PdfFile_Id]);
+GO
+
+-- Creating foreign key on [Owners_Id] in table 'OwnerFile'
+ALTER TABLE [dbo].[OwnerFile]
+ADD CONSTRAINT [FK_OwnerFile_Owner]
+    FOREIGN KEY ([Owners_Id])
+    REFERENCES [dbo].[Users]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [OwnedFiles_Id] in table 'OwnerFile'
+ALTER TABLE [dbo].[OwnerFile]
+ADD CONSTRAINT [FK_OwnerFile_File]
+    FOREIGN KEY ([OwnedFiles_Id])
+    REFERENCES [dbo].[Files]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_OwnerFile_File'
+CREATE INDEX [IX_FK_OwnerFile_File]
+ON [dbo].[OwnerFile]
+    ([OwnedFiles_Id]);
 GO
 
 -- --------------------------------------------------

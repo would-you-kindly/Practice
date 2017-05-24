@@ -11,29 +11,29 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="FileFormats"
   DTS:PackageType="5"
-  DTS:VersionBuild="1"
-  DTS:VersionGUID="{50325AA1-35D1-42C4-8AE3-BBF82658FA1C}">
+  DTS:VersionBuild="3"
+  DTS:VersionGUID="{A91D2903-8984-4BB0-B7A8-5013997E007E}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
     <DTS:ConnectionManager
-      DTS:refId="Package.ConnectionManagers[.\sqlexpress.Files]"
+      DTS:refId="Package.ConnectionManagers[.\sqlexpress.Practice]"
       DTS:CreationName="OLEDB"
-      DTS:DTSID="{9FA7D390-03F0-46C5-AB07-6CC0F9FC2860}"
-      DTS:ObjectName=".\sqlexpress.Files">
+      DTS:DTSID="{C7AA3519-5F82-4CA2-AD4B-2D8421FF642A}"
+      DTS:ObjectName=".\sqlexpress.Practice">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="Data Source=.\sqlexpress;Initial Catalog=Files;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+          DTS:ConnectionString="Data Source=.\sqlexpress;Initial Catalog=Practice;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
     <DTS:ConnectionManager
       DTS:refId="Package.ConnectionManagers[Диспетчер соединений Excel]"
       DTS:CreationName="EXCEL"
-      DTS:DTSID="{A0761133-B585-4315-97BA-56ADC8369B7A}"
+      DTS:DTSID="{925A33FD-9898-415C-9A9C-A8B74F96F799}"
       DTS:ObjectName="Диспетчер соединений Excel">
       <DTS:ObjectData>
         <DTS:ConnectionManager
-          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Андрей\YandexDisk\Third course\Производственная практика\Мои работы\Загрузка данных.xls;Extended Properties=&quot;EXCEL 8.0;HDR=YES&quot;;" />
+          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=D:\YandexDisk\Third course\Производственная практика\Practice\Загрузка данных.xls;Extended Properties=&quot;EXCEL 8.0;HDR=YES&quot;;" />
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
@@ -231,8 +231,8 @@
               <connections>
                 <connection
                   refId="Package\Задача потока данных\FileFormats (DB).Connections[OleDbConnection]"
-                  connectionManagerID="Package.ConnectionManagers[.\sqlexpress.Files]"
-                  connectionManagerRefId="Package.ConnectionManagers[.\sqlexpress.Files]"
+                  connectionManagerID="Package.ConnectionManagers[.\sqlexpress.Practice]"
+                  connectionManagerRefId="Package.ConnectionManagers[.\sqlexpress.Practice]"
                   description="Соединение OLE DB среды выполнения, используемое для доступа к базе данных."
                   name="OleDbConnection" />
               </connections>

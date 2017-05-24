@@ -16,8 +16,8 @@ namespace PracticeFiles
     {
         public File()
         {
-            this.Users = new HashSet<User>();
             this.Purchases = new HashSet<Purchase>();
+            this.Owners = new HashSet<User>();
         }
     
         public int Id { get; set; }
@@ -28,7 +28,10 @@ namespace PracticeFiles
     
         public virtual ContentType ContentType { get; set; }
         public virtual FileFormat FileFormat { get; set; }
-        public virtual ICollection<User> Users { get; set; }
+        public virtual User Creator { get; set; }
         public virtual ICollection<Purchase> Purchases { get; set; }
+        public virtual File MediaFile { get; set; }
+        public virtual File PdfFile { get; set; }
+        public virtual ICollection<User> Owners { get; set; }
     }
 }
