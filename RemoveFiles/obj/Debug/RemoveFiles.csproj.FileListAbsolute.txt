@@ -1,1 +1,6 @@
 D:\YandexDisk\Third course\Производственная практика\Practice\RemoveFiles\bin\Debug\RemoveFiles.exe.config
+D:\YandexDisk\Third course\Производственная практика\Practice\RemoveFiles\bin\Debug\RemoveFiles.exe
+D:\YandexDisk\Third course\Производственная практика\Practice\RemoveFiles\bin\Debug\RemoveFiles.pdb
+D:\YandexDisk\Third course\Производственная практика\Practice\RemoveFiles\obj\Debug\RemoveFiles.csprojResolveAssemblyReference.cache
+D:\YandexDisk\Third course\Производственная практика\Practice\RemoveFiles\obj\Debug\RemoveFiles.exe
+D:\YandexDisk\Third course\Производственная практика\Practice\RemoveFiles\obj\Debug\RemoveFiles.pdb
