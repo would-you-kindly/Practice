@@ -10,8 +10,8 @@ namespace RemoveFiles
     {
         static void Main(string[] args)
         {
-            Settings parametrs = new Settings(args);
-            parametrs.Execute();
+            Settings settings = new Settings(args);
+            settings.Execute();
         }
     }
 }
