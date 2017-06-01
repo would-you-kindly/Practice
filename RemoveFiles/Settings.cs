@@ -210,20 +210,36 @@ namespace RemoveFiles
         {
             // Переменные для логирования.
             string removedFile = "Удален файл: ";
+            string removedPdfFile = "Удален .pdf файл: ";
             string removedRecord = "Удалена запись: ";
 
             // Удаляем файлы (включая .pdf) из файловой системы.
             SqlCommand sqlCommand = connection.CreateCommand();
             sqlCommand.CommandText = string.Format("SELECT {0} FROM {1} WHERE {2} = {3}", command.UrlFieldName, command.TableName, command.PrimaryKeyFieldName, primaryKey);
             string relativePath = (string)sqlCommand.ExecuteScalar();
-            sqlCommand.CommandText = string.Format("SELECT {0} FROM {1} WHERE {2} = {3}", "Name", command.TableName, command.PrimaryKeyFieldName, primaryKey);
-            string filename = (string)sqlCommand.ExecuteScalar();
-            DirectoryInfo directory = new DirectoryInfo(command.Path + relativePath);
-            FileInfo[] files = directory.GetFiles(filename + ".*", SearchOption.TopDirectoryOnly);
-            foreach (FileInfo file in files)
+            FileInfo file = new FileInfo(command.Path + relativePath);
+            FileInfo pdfFile = new FileInfo(command.Path + relativePath.Remove(relativePath.LastIndexOf(".")) + ".pdf");
+
+            // Удаляем файл.
+            if (file != null && file.Exists)
             {
-                removedFile += file.FullName + "\n";
+                removedFile += file.FullName;
                 file.Delete();
+                if (command.Log == "true")
+                {
+                    Logger.Log.InfoFormat(removedFile);
+                }
+            }
+
+            // Удаляем .pdf файл.
+            if (pdfFile != null && pdfFile.Exists)
+            {
+                removedPdfFile += pdfFile.FullName;
+                pdfFile.Delete();
+                if (command.Log == "true")
+                {
+                    Logger.Log.InfoFormat(removedPdfFile);
+                }
             }
 
             removedRecord += GetRemovingRecord(connection, primaryKey) + "\n";
@@ -235,7 +251,6 @@ namespace RemoveFiles
             // Выполняем логирование.
             if (command.Log == "true")
             {
-                Logger.Log.InfoFormat(removedFile);
                 Logger.Log.InfoFormat(removedRecord);
             }
         }
