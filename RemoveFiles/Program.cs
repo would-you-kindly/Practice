@@ -10,8 +10,15 @@ namespace RemoveFiles
     {
         static void Main(string[] args)
         {
-            Settings settings = new Settings(args);
-            settings.Execute();
+            try
+            {
+                Settings settings = new Settings(args);
+                settings.Execute();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);               
+            }
         }
     }
 }

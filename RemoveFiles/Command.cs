@@ -33,13 +33,13 @@ namespace RemoveFiles
             Confirmation
         }
 
-        private const string defaultConnectionString = @"Data Source=.\sqlexpress;Initial Catalog=FlexberryPractice;Integrated Security=True;";
-        private const string defaultTableName = "Файл";
-        private const string defaultPrimaryKeyFieldName = "PrimaryKey";
-        private const string defaultUrlFieldName = "Url";
-        private const string defaultPath = @"D:\YandexDisk\Third course\Производственная практика\Practice\TestFiles";
-        private const string defaultLog = "true";
-        private const string defaultConfirmation = "true";
+        internal const string DefaultConnectionString = @"Data Source=.\sqlexpress;Initial Catalog=FlexberryPractice;Integrated Security=True;";
+        internal const string DefaultTableName = "Файл";
+        internal const string DefaultPrimaryKeyFieldName = "PrimaryKey";
+        internal const string DefaultUrlFieldName = "Url";
+        internal const string DefaultPath = @"D:\YandexDisk\Third course\Производственная практика\Practice\TestFiles";
+        internal const string DefaultLog = "true";
+        internal const string DefaultConfirmation = "true";
 
         private Dictionary<Commands, string> commands;
 
@@ -52,13 +52,13 @@ namespace RemoveFiles
             commands = new Dictionary<Commands, string>()
             {
                 { Commands.Help, null },
-                { Commands.ConnectionString, defaultConnectionString },
-                { Commands.TableName, defaultTableName },
-                { Commands.PrimaryKeyFieldName, defaultPrimaryKeyFieldName },
-                { Commands.UrlFieldName, defaultUrlFieldName },
-                { Commands.Path, defaultPath },
-                { Commands.Log, defaultLog },
-                { Commands.Confirmation, defaultConfirmation }
+                { Commands.ConnectionString, DefaultConnectionString },
+                { Commands.TableName, DefaultTableName },
+                { Commands.PrimaryKeyFieldName, DefaultPrimaryKeyFieldName },
+                { Commands.UrlFieldName, DefaultUrlFieldName },
+                { Commands.Path, DefaultPath },
+                { Commands.Log, DefaultLog },
+                { Commands.Confirmation, DefaultConfirmation }
             };
         }
 
@@ -183,9 +183,8 @@ namespace RemoveFiles
                 }
                 else
                 {
-                    Console.WriteLine("Аргумент команды -log указан неверно." +
+                    throw new ArgumentException("Аргумент команды -log указан неверно." +
                         "Он может принимать только значение \"true\" или \"false\".");
-                    Environment.Exit(0);
                 }
             }
         }
