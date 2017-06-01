@@ -25,15 +25,6 @@ namespace RemoveFiles
         private const string confirmationCommand = "-conf";
 
         /// <summary>
-        /// Создает новый экземпляр класса Settings и устанавливает
-        /// все параметры программы в значения по умолчанию.
-        /// </summary>
-        public Settings()
-        {
-            command = new Command();
-        }
-
-        /// <summary>
         /// Создает новый экземпляр класса Settings и устанавливает параметры программы
         /// в соответствии с переданным в функции Main значением args.
         /// </summary>
@@ -41,6 +32,7 @@ namespace RemoveFiles
         public Settings(string[] args)
         {
             command = new Command();
+            Logger.InitLogger();
             this.ParseArgs(args);
         }
 
@@ -171,6 +163,30 @@ namespace RemoveFiles
         }
 
         /// <summary>
+        /// Возвращает строковое представление записи в базе данных,
+        /// указанной в строке подключения connection.
+        /// </summary>
+        /// <returns></returns>
+        private string GetRemovingRecord(SqlConnection connection, object primaryKey)
+        {
+            // Запрашиваем запись удаляемого файла.
+            SqlCommand sqlCommand = connection.CreateCommand();
+            sqlCommand.CommandText = string.Format("SELECT * FROM {0} WHERE {1} = {2}", command.TableName, command.PrimaryKeyFieldName, primaryKey);
+            SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
+            DataTable table = new DataTable();
+            adapter.Fill(table);
+
+            // Собираем поля записи в строку.
+            string result = string.Empty;
+            foreach (DataColumn column in table.Columns)
+            {
+                result += string.Format("{0}: {1}, ", column.ColumnName, table.Rows[0][column].ToString());
+            }
+
+            return result.Trim().Trim(',');
+        }
+
+        /// <summary>
         /// Удаляет запись о файле с первичным ключом primaryKey 
         /// из базы данных, указанной в строке подключения connection, 
         /// и соответствующий записи файл из файловой системы.
@@ -179,6 +195,10 @@ namespace RemoveFiles
         /// <param name="key"></param>
         private void RemoveRecordAndFile(SqlConnection connection, object primaryKey)
         {
+            // Переменные для логирования.
+            string removedFile = "Удален файл: ";
+            string removedRecord = "Удалена запись: ";
+
             // Удаляем файлы (включая .pdf) из файловой системы.
             SqlCommand sqlCommand = connection.CreateCommand();
             sqlCommand.CommandText = string.Format("SELECT {0} FROM {1} WHERE {2} = {3}", command.UrlFieldName, command.TableName, command.PrimaryKeyFieldName, primaryKey);
@@ -189,12 +209,22 @@ namespace RemoveFiles
             FileInfo[] files = directory.GetFiles(filename + ".*", SearchOption.TopDirectoryOnly);
             foreach (FileInfo file in files)
             {
+                removedFile += file.FullName + "\n";
                 file.Delete();
             }
+
+            removedRecord += GetRemovingRecord(connection, primaryKey) + "\n";
 
             // Удаляем запись файла из базы данных.
             sqlCommand.CommandText = string.Format("DELETE FROM {0} WHERE {1} = {2}", command.TableName, command.PrimaryKeyFieldName, primaryKey);
             sqlCommand.ExecuteNonQuery();
+
+            // Выполняем логирование.
+            if (command.Log == "true")
+            {
+                Logger.Log.InfoFormat(removedFile);
+                Logger.Log.InfoFormat(removedRecord);
+            }
         }
 
         /// <summary>

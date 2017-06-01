@@ -1,0 +1,1 @@
+RemoveFiles -cs "Data Source=.\SQLEXPRESS;Initial Catalog=TestDB1;Integrated Security=True" -tn "Файлы" -pk "Id" -url "RelativePath" -path "D:\YandexDisk\Third course\Производственная практика\Practice\Tests\Ссылки на таблицу Файл из одной таблицы\TestDB1"

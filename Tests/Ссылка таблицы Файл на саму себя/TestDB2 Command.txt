@@ -1,0 +1,1 @@
+RemoveFiles -cs "Data Source=.\SQLEXPRESS;Initial Catalog=TestDB2;Integrated Security=True" -tn "File1" -pk "Ключ" -url "Путь" -path "D:\YandexDisk\Third course\Производственная практика\Practice\Tests\Ссылка таблицы Файл на саму себя\TestDB2" -conf "false"

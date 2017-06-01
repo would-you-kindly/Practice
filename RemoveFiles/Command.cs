@@ -37,7 +37,7 @@ namespace RemoveFiles
         private const string defaultTableName = "Files";
         private const string defaultPrimaryKeyFieldName = "PrimaryKey";
         private const string defaultUrlFieldName = "Url";
-        private const string defaultPath = @"С:\";
+        private const string defaultPath = @"D:\YandexDisk\Third course\Производственная практика\Practice\TestFiles";
         private const string defaultLog = "true";
         private const string defaultConfirmation = "true";
 
@@ -221,8 +221,6 @@ namespace RemoveFiles
         /// </summary>
         public void Help()
         {
-            Console.WriteLine("Вывод справки. Порядок указания важен. Названия файлов хранятся в столбце Name или другое имя? Что делать с .pdf фалами, которые уадлись (по требованию), но запси о них сотались, т.к. ссылки из дургих мест на них до сих пор есть.");
-
             Console.WriteLine("\nУтилита предназначена для удаления файлов и записей о них из базы данных, " +
                 "на которые нет ссылок из других таблиц базы данных. При удалении файлов также выполняется " +
                 "удаление файла с расширением .pdf с тем же именем. Утилита позволяет:\n" +
@@ -238,7 +236,7 @@ namespace RemoveFiles
                 "\n\nЗадание названия таблицы файлов.\n\tКлючевое слово:\n\t\t-tn\n\tПараметры:\n\t\tНазвание таблицы файлов в кавычках.\n\tПример:\n\t\t-tn \"Файлы\"\n\tЗначение по умолчанию:\n\t\t\"Files\"" +
                 "\n\nЗадание названия поля первичного ключа.\n\tКлючевое слово:\n\t\t-pk\n\tПараметры:\n\t\tНазвание поля первичного ключа в кавычках.\n\tПример:\n\t\t-pk \"Id\"\n\tЗначение по умолчанию:\n\t\t\"PrimaryKey\"" +
                 "\n\nЗадание названия поля с относительным путем к файлу.\n\tКлючевое слово:\n\t\t-url\n\tПараметры:\n\t\tОтносительный путь к каталогу с файлами в кавычках.\n\tПример:\n\t\t-url \"Url\"\n\tЗначение по умолчанию:\n\t\t\"Url\"" +
-                "\n\nЗадание пути к каталогу с файлами.\n\tКлючевое слово:\n\t\t-path\n\tПараметры:\n\t\tПуть к каталогу с файлами в кавычках.\n\tПример:\n\t\t-path \"C:\\Windows\\Help\"\n\tЗначение по умолчанию:\n\t\t\"С:\\\"" +
+                "\n\nЗадание пути к каталогу с файлами.\n\tКлючевое слово:\n\t\t-path\n\tПараметры:\n\t\tПуть к каталогу с файлами в кавычках.\n\tПример:\n\t\t-path \"C:\\Windows\\Help\"\n\tЗначение по умолчанию:\n\t\t\"D:\\YandexDisk\\Third course\\Производственная практика\\Practice\\TestFiles\"" +
                 "\n\nВыполнения логирования действий программы.\n\tКлючевое слово:\n\t\t-log\n\tПараметры:\n\t\t- \"true\" - выполнять логирование.\n\t\t- \"false\" - не выполнять логирование.\n\tПример:\n\t\t-log \"false\"\n\tЗначение по умолчанию:\n\t\t\"true\"" +
                 "\n\nЗапрос на подтверждение удаления.\n\tКлючевое слово:\n\t\t-conf\n\tПараметры:\n\t\t- \"true\" - запрашивать подтверждение удаления.\n\t\t- \"false\" - не запрашивать подтверждение удаления.\n\tПример:\n\t\t-conf \"false\"\n\tЗначение по умолчанию:\n\t\t\"true\"\n\n\n");
 

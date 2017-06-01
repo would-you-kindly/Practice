@@ -1,0 +1,39 @@
+2017-06-01 02:25:57,925  INFO  
+Удаленные файлы:
+D:\YandexDisk\Third course\Производственная практика\Practice\Tests\Ссылки на таблицу Файл из одной таблицы\TestDB1\File2.txt
+
+2017-06-01 10:17:01,170  INFO  
+Удаленные файлы:
+D:\YandexDisk\Third course\Производственная практика\Practice\Tests\Ссылки на таблицу Файл из одной таблицы\TestDB1\Directory2\File4.pdf
+D:\YandexDisk\Third course\Производственная практика\Practice\Tests\Ссылки на таблицу Файл из одной таблицы\TestDB1\Directory2\File4.txt
+
+2017-06-01 10:17:01,180  INFO  
+Удаленные файлы:
+D:\YandexDisk\Third course\Производственная практика\Practice\Tests\Ссылки на таблицу Файл из одной таблицы\TestDB1\Directory3\Directory3.1\File5.txt
+
+2017-06-01 10:32:38,485  INFO  
+Удаленные файлы:
+D:\YandexDisk\Third course\Производственная практика\Practice\Tests\Ссылки на таблицу Файл из одной таблицы\TestDB1\File2.txt
+
+2017-06-01 10:32:38,496  INFO  
+Удаленные файлы:
+D:\YandexDisk\Third course\Производственная практика\Practice\Tests\Ссылки на таблицу Файл из одной таблицы\TestDB1\Directory2\File4.pdf
+D:\YandexDisk\Third course\Производственная практика\Practice\Tests\Ссылки на таблицу Файл из одной таблицы\TestDB1\Directory2\File4.txt
+
+2017-06-01 10:32:38,501  INFO  
+Удаленные файлы:
+D:\YandexDisk\Third course\Производственная практика\Practice\Tests\Ссылки на таблицу Файл из одной таблицы\TestDB1\Directory3\Directory3.1\File5.txt
+
+2017-06-01 10:34:15,611  INFO  Удален файл: D:\YandexDisk\Third course\Производственная практика\Practice\Tests\Ссылки на таблицу Файл из одной таблицы\TestDB1\File2.txt
+
+2017-06-01 10:34:15,620  INFO  Удалена запись: Id: 2, Name: File2, RelativePath: \, 
+
+2017-06-01 10:34:15,623  INFO  Удален файл: D:\YandexDisk\Third course\Производственная практика\Practice\Tests\Ссылки на таблицу Файл из одной таблицы\TestDB1\Directory2\File4.pdf
+D:\YandexDisk\Third course\Производственная практика\Practice\Tests\Ссылки на таблицу Файл из одной таблицы\TestDB1\Directory2\File4.txt
+
+2017-06-01 10:34:15,723  INFO  Удалена запись: Id: 4, Name: File4, RelativePath: \Directory2, 
+
+2017-06-01 10:34:15,726  INFO  Удален файл: D:\YandexDisk\Third course\Производственная практика\Practice\Tests\Ссылки на таблицу Файл из одной таблицы\TestDB1\Directory3\Directory3.1\File5.txt
+
+2017-06-01 10:34:15,726  INFO  Удалена запись: Id: 5, Name: File5, RelativePath: \Directory3\Directory3.1, 
+
