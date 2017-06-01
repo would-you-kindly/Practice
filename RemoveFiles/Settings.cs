@@ -209,9 +209,9 @@ namespace RemoveFiles
         private void RemoveRecordAndFile(SqlConnection connection, object primaryKey)
         {
             // Переменные для логирования.
-            string removedFile = "Удален файл: ";
-            string removedPdfFile = "Удален .pdf файл: ";
-            string removedRecord = "Удалена запись: ";
+            string removedFileLog = "Удален файл: ";
+            string removedPdfFileLog = "Удален .pdf файл: ";
+            string removedRecordLog = "Удалена запись: ";
 
             // Удаляем файлы (включая .pdf) из файловой системы.
             SqlCommand sqlCommand = connection.CreateCommand();
@@ -223,26 +223,26 @@ namespace RemoveFiles
             // Удаляем файл.
             if (file != null && file.Exists)
             {
-                removedFile += file.FullName;
+                removedFileLog += file.FullName;
                 file.Delete();
                 if (command.Log == "true")
                 {
-                    Logger.Log.InfoFormat(removedFile);
+                    Logger.Log.InfoFormat(removedFileLog);
                 }
             }
 
             // Удаляем .pdf файл.
             if (pdfFile != null && pdfFile.Exists)
             {
-                removedPdfFile += pdfFile.FullName;
+                removedPdfFileLog += pdfFile.FullName;
                 pdfFile.Delete();
                 if (command.Log == "true")
                 {
-                    Logger.Log.InfoFormat(removedPdfFile);
+                    Logger.Log.InfoFormat(removedPdfFileLog);
                 }
             }
 
-            removedRecord += GetRemovingRecord(connection, primaryKey) + "\n";
+            removedRecordLog += GetRemovingRecord(connection, primaryKey);
 
             // Удаляем запись файла из базы данных.
             sqlCommand.CommandText = string.Format("DELETE FROM {0} WHERE {1} = {2}", command.TableName, command.PrimaryKeyFieldName, primaryKey);
@@ -251,7 +251,7 @@ namespace RemoveFiles
             // Выполняем логирование.
             if (command.Log == "true")
             {
-                Logger.Log.InfoFormat(removedRecord);
+                Logger.Log.InfoFormat(removedRecordLog);
             }
         }
 
