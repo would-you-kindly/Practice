@@ -11,18 +11,18 @@ namespace RemoveFiles
     /// <summary>
     /// Представляет параметры программы по удалению файлов.
     /// </summary>
-    class Settings
+    public class Settings
     {
         Command command;
 
-        private const string helpCommand = "-help";
-        private const string connectionStringCommand = "-cs";
-        private const string tableNameCommand = "-tn";
-        private const string primaryKeyFieldNameCommand = "-pk";
-        private const string urlFieldNameCommand = "-url";
-        private const string pathCommand = "-path";
-        private const string logCommand = "-log";
-        private const string confirmationCommand = "-conf";
+        internal const string HelpCommand = "-help";
+        internal const string ConnectionStringCommand = "-cs";
+        internal const string TableNameCommand = "-tn";
+        internal const string PrimaryKeyFieldNameCommand = "-pk";
+        internal const string UrlFieldNameCommand = "-url";
+        internal const string PathCommand = "-path";
+        internal const string LogCommand = "-log";
+        internal const string ConfirmationCommand = "-conf";
 
         /// <summary>
         /// Создает новый экземпляр класса Settings и устанавливает параметры программы
@@ -31,53 +31,64 @@ namespace RemoveFiles
         /// <param name="args"></param>
         public Settings(string[] args)
         {
-            command = new Command();
             Logger.InitLogger();
-            this.ParseArgs(args);
+            command = this.ParseArgs(args);
         }
 
         /// <summary>
+        /// Конструктор для тестов.
+        /// </summary>
+        public Settings()
+        { }
+
+        /// <summary>
         /// Выполняет parsing переданных аргументов
-        /// и присваивает их свойствам класса Command
+        /// и присваивает их свойствам класса Command.
         /// </summary>
         /// <param name="args"></param>
-        private void ParseArgs(string[] args)
+        internal Command ParseArgs(string[] args)
         {
+            var command = new Command();
             for (int i = 0; i < args.Length; i++)
             {
+                if (i == args.Length - 1 && args[i] != "-help")
+                {
+                    throw new ArgumentException("Аргументы заданы неверно. Выполните команду -help для получения дополнительной информации.");
+                }
+
                 // args[++i] означает аргумент команды, который должен следовать сразу за ней.
                 switch (args[i])
                 {
-                    case helpCommand:
+                    case HelpCommand:
                         command.Help();
                         break;
-                    case connectionStringCommand:
+                    case ConnectionStringCommand:
                         command.ConnectionString = args[++i];
                         break;
-                    case tableNameCommand:
+                    case TableNameCommand:
                         command.TableName = args[++i];
                         break;
-                    case primaryKeyFieldNameCommand:
+                    case PrimaryKeyFieldNameCommand:
                         command.PrimaryKeyFieldName = args[++i];
                         break;
-                    case urlFieldNameCommand:
+                    case UrlFieldNameCommand:
                         command.UrlFieldName = args[++i];
                         break;
-                    case pathCommand:
+                    case PathCommand:
                         command.Path = args[++i];
                         break;
-                    case logCommand:
+                    case LogCommand:
                         command.Log = args[++i];
                         break;
-                    case confirmationCommand:
+                    case ConfirmationCommand:
                         command.Confirmation = args[++i];
                         break;
                     default:
-                        Console.WriteLine("Аргументы заданы неверно. Выполните команду -help для получения дополнительной информации.");
-                        Environment.Exit(0);
-                        break;
+                        throw new ArgumentException("Аргументы заданы неверно. Выполните команду -help для получения дополнительной информации.");
                 }
             }
+
+            return command;
         }
 
         /// <summary>
@@ -163,9 +174,11 @@ namespace RemoveFiles
         }
 
         /// <summary>
-        /// Возвращает строковое представление записи в базе данных,
-        /// указанной в строке подключения connection.
+        /// Возвращает строковое представление записи по ключу primaryKey
+        /// в базе данных, указанной в строке подключения connection.
         /// </summary>
+        /// <param name="connection"></param>
+        /// <param name="primaryKey"></param>
         /// <returns></returns>
         private string GetRemovingRecord(SqlConnection connection, object primaryKey)
         {
@@ -192,7 +205,7 @@ namespace RemoveFiles
         /// и соответствующий записи файл из файловой системы.
         /// </summary>
         /// <param name="connection"></param>
-        /// <param name="key"></param>
+        /// <param name="primaryKey"></param>
         private void RemoveRecordAndFile(SqlConnection connection, object primaryKey)
         {
             // Переменные для логирования.
@@ -236,7 +249,7 @@ namespace RemoveFiles
         {
             if (command.Confirmation == "true")
             {
-                Console.WriteLine("Вы уверены, что хотите удалить файлы? (Y/N)");
+                Console.WriteLine(string.Format("Вы уверены, что хотите удалить файлы из базы данных {0}? (Y/N)", command.ConnectionString));
                 ConsoleKeyInfo key = Console.ReadKey();
                 Console.WriteLine();
                 if (key.Key == ConsoleKey.Y)

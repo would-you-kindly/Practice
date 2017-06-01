@@ -1,0 +1,16 @@
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\obj\Debug\RemoveFilesTests.csprojResolveAssemblyReference.cache
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\bin\Debug\RemoveFilesTests.dll
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\bin\Debug\RemoveFilesTests.pdb
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\bin\Debug\RemoveFiles.exe
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\bin\Debug\log4net.dll
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\bin\Debug\RemoveFiles.pdb
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\bin\Debug\log4net.xml
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\obj\Debug\RemoveFilesTests.dll
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\obj\Debug\RemoveFilesTests.pdb

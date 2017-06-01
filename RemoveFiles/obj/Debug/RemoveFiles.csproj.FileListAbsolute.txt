@@ -6,3 +6,11 @@ D:\YandexDisk\Third course\Производственная практика\Pra
 D:\YandexDisk\Third course\Производственная практика\Practice\RemoveFiles\obj\Debug\RemoveFiles.pdb
 D:\YandexDisk\Third course\Производственная практика\Practice\RemoveFiles\bin\Debug\log4net.dll
 D:\YandexDisk\Third course\Производственная практика\Practice\RemoveFiles\bin\Debug\log4net.xml
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFiles\bin\Debug\RemoveFiles.exe.config
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFiles\obj\Debug\RemoveFiles.exe
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFiles\obj\Debug\RemoveFiles.pdb
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFiles\bin\Debug\RemoveFiles.exe
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFiles\bin\Debug\RemoveFiles.pdb
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFiles\bin\Debug\log4net.dll
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFiles\bin\Debug\log4net.xml
+D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFiles\obj\Debug\RemoveFiles.csprojResolveAssemblyReference.cache
