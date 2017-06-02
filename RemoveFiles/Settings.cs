@@ -13,8 +13,11 @@ namespace RemoveFiles
     /// </summary>
     public class Settings
     {
+        // TODO: Комментарии должны быть у всех полей, свойств и методов класса, которые не являются совершенно очевидными. 
+        // В данном случае command - слишком общий термин, чтоюы являться очевидным.
         Command command;
-
+        
+        // TODO: Нужны комментарии, поясняющий, что это допустимые параметр командной строки и что он означает.
         internal const string HelpCommand = "-help";
         internal const string ConnectionStringCommand = "-cs";
         internal const string TableNameCommand = "-tn";
@@ -28,7 +31,7 @@ namespace RemoveFiles
         /// Создает новый экземпляр класса Settings и устанавливает параметры программы
         /// в соответствии с переданным в функции Main значением args.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">//TODO: Комментарии должны быть полными.</param>
         public Settings(string[] args)
         {
             Logger.InitLogger();
@@ -45,7 +48,7 @@ namespace RemoveFiles
         /// Выполняет parsing переданных аргументов
         /// и присваивает их свойствам класса Command
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">//TODO: Комментарии должны быть полными.</param>
         internal Command ParseArgs(string[] args)
         {
             var command = new Command();
@@ -90,8 +93,8 @@ namespace RemoveFiles
         /// внешние ключи на таблицу файлов, и названия внешних ключей 
         /// из базы данных, указанной в строке подключения connection.
         /// </summary>
-        /// <param name="connection"></param>
-        /// <returns></returns>
+        /// <param name="connection">//TODO: Комментарии должны быть полными.</param>        
+        /// <returns>//TODO: Комментарии должны быть полными.</returns>
         private DataTable GetTablesAndForeignKeys(SqlConnection connection)
         {
             // Получаем DataTable, содержащий названия таблиц и внешних ключей на таблицу файлов.
@@ -121,14 +124,16 @@ namespace RemoveFiles
         /// таблицы tableName на таблицу файлов из базы данных, 
         /// указанной в строке подключения connection.
         /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="tableName"></param>
-        /// <param name="columnName"></param>
-        /// <returns></returns>
+        /// <param name="connection">//TODO: Комментарии должны быть полными.</param>
+        /// <param name="tableName">//TODO: Комментарии должны быть полными.</param>
+        /// <param name="columnName">//TODO: Комментарии должны быть полными.</param>
+        /// <returns>//TODO: Комментарии должны быть полными.</returns>
         private List<object> GetForeignKeysFromTable(SqlConnection connection, string tableName, string columnName)
         {
             // Получаем список внешних ключей на таблицу файлов.
             SqlCommand sqlCommand = connection.CreateCommand();
+            //TODO: Запрос в таком виде может вызвать ошибку. Необходимо поместить имена полей и таблиц в квадратные скобки. 
+            // Например, если имя поля будет user, такой запрос выполнится некорректно.            
             sqlCommand.CommandText = string.Format("SELECT {0} FROM {1} WHERE {0} IS NOT NULL", columnName, tableName);
 
             List<object> foreignKeys = new List<object>();
@@ -147,12 +152,13 @@ namespace RemoveFiles
         /// Возвращает список первичных ключей таблицы файлов 
         /// из базы данных, указанной в строке подключения connection.
         /// </summary>
-        /// <param name="connection"></param>
-        /// <returns></returns>
+        /// <param name="connection">//TODO: Комментарии должны быть полными.</param>
+        /// <returns>//TODO: Комментарии должны быть полными.</returns>
         private List<object> GetFilesPrimaryKeys(SqlConnection connection)
         {
             // Получаем список первичных ключей таблицы файлов.
             SqlCommand sqlCommand = connection.CreateCommand();
+            //TODO: Поместить имена полей и таблиц в квадратные скобки.
             sqlCommand.CommandText = string.Format("SELECT {0} FROM {1}", command.PrimaryKeyFieldName, command.TableName);
 
             List<object> primaryKeys = new List<object>();
@@ -171,12 +177,15 @@ namespace RemoveFiles
         /// Возвращает строковое представление записи в базе данных,
         /// указанной в строке подключения connection.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>//TODO: Комментарии должны быть полными.</returns>
         private string GetRemovingRecord(SqlConnection connection, object primaryKey)
         {
             // Запрашиваем запись удаляемого файла.
             SqlCommand sqlCommand = connection.CreateCommand();
+            //TODO: Поместить имена полей и таблиц в квадратные скобки.            
+            //TODO: Нет ли здесь ошибки в формировании запроса? На мой взгляд нужно обернуть параметр {2} в кавычки. Иначе произвольная строка с пробелом все испортит. И не только строка.
             sqlCommand.CommandText = string.Format("SELECT * FROM {0} WHERE {1} = {2}", command.TableName, command.PrimaryKeyFieldName, primaryKey);
+            //TODO: Насколько я помню адаптер является IDisposable, поэтому его нужно правильно закрывать. Проще всего использовать using().
             SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
             DataTable table = new DataTable();
             adapter.Fill(table);
@@ -185,9 +194,10 @@ namespace RemoveFiles
             string result = string.Empty;
             foreach (DataColumn column in table.Columns)
             {
+                // TODO: Складывать строки в цикле неизвестной длины - как правило очень плохая практика. Нужно использовать StringBuilder. Рекомендую для ознакомления http://jonskeet.uk/csharp/stringbuilder.html
                 result += string.Format("{0}: {1}, ", column.ColumnName, table.Rows[0][column].ToString());
             }
-
+            
             return result.Trim().Trim(',');
         }
 
@@ -196,8 +206,8 @@ namespace RemoveFiles
         /// из базы данных, указанной в строке подключения connection, 
         /// и соответствующий записи файл из файловой системы.
         /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="key"></param>
+        /// <param name="connection">//TODO: Комментарии должны быть полными.</param>
+        /// <param name="key">//TODO: Комментарии должны быть полными.</param>
         private void RemoveRecordAndFile(SqlConnection connection, object primaryKey)
         {
             // Переменные для логирования.
@@ -205,7 +215,9 @@ namespace RemoveFiles
             string removedRecord = "Удалена запись: ";
 
             // Удаляем файлы (включая .pdf) из файловой системы.
+            //TODO: Имя файла в файловой системе не содержится в отдельном поле таблицы, оно входит в относительный путь. Поэтому достаточно вычитать его из БД и выделить из него имя файла без расширения.
             SqlCommand sqlCommand = connection.CreateCommand();
+            //TODO: Нет ли здесь ошибки в формировании запроса? На мой взгляд нужно обернуть параметр {3} в кавычки. Иначе произвольная строка с пробелом все испортит. И не только строка.
             sqlCommand.CommandText = string.Format("SELECT {0} FROM {1} WHERE {2} = {3}", command.UrlFieldName, command.TableName, command.PrimaryKeyFieldName, primaryKey);
             string relativePath = (string)sqlCommand.ExecuteScalar();
             sqlCommand.CommandText = string.Format("SELECT {0} FROM {1} WHERE {2} = {3}", "Name", command.TableName, command.PrimaryKeyFieldName, primaryKey);
@@ -221,6 +233,7 @@ namespace RemoveFiles
             removedRecord += GetRemovingRecord(connection, primaryKey) + "\n";
 
             // Удаляем запись файла из базы данных.
+            //TODO: Нет ли здесь ошибки в формировании запроса? На мой взгляд нужно обернуть параметр {2} в кавычки. Иначе произвольная строка с пробелом все испортит. И не только строка.
             sqlCommand.CommandText = string.Format("DELETE FROM {0} WHERE {1} = {2}", command.TableName, command.PrimaryKeyFieldName, primaryKey);
             sqlCommand.ExecuteNonQuery();
 
@@ -236,7 +249,7 @@ namespace RemoveFiles
         /// Запрашивает подтверждение на удаление файлов,
         /// если аргумент -conf установлен в true.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>//TODO: Комментарии должны быть полными.</returns>
         private bool RequestConfirmation()
         {
             if (command.Confirmation == "true")
@@ -267,6 +280,8 @@ namespace RemoveFiles
         /// </summary>
         public void Execute()
         {
+            //TODO: Довольно странно задавать такой вопрос сразу после запуска приложения, когда еще даже не подсчитано количество файлов для удаления. Может и удалять ничего не понадобится. 
+            // Предлагаю показывать его после подсчета количества файлов, которые будут удалены, предупреждая пользователя об этом количестве.
             if (RequestConfirmation())
             {
                 using (SqlConnection connection = new SqlConnection(command.ConnectionString))
@@ -283,9 +298,10 @@ namespace RemoveFiles
                         // Получаем список внешних ключей из указанной таблицы.
                         List<object> foreignKeys = GetForeignKeysFromTable(connection, (string)row["TableName"], (string)row["ColumnName"]);
 
-                        // Собираем внешние ключи в список так, чтобы они не повторялись.
+                        // Собираем внешние ключи в список так, чтобы они не повторялись.                        
                         foreach (object foreignKey in foreignKeys)
                         {
+                            //TODO: В данном случае действие производится за O(N), что для больших таблиц не лучший вариант. Однако есть более эффективная структура для этих целей - HashSet<>. Предлагаю использовать её.
                             if (!keysWithRefs.Contains(foreignKey))
                             {
                                 keysWithRefs.Add(foreignKey);
