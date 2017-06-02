@@ -40,3 +40,4 @@
 2017-06-02 03:34:44,375  INFO  Удален файл: D:\YandexDisk\Third course\Производственная практика\Practice\TestFiles\Animations\Mario jumps.bpg
 2017-06-02 03:34:44,375  INFO  Удален .pdf файл: D:\YandexDisk\Third course\Производственная практика\Practice\TestFiles\Animations\Mario jumps.pdf
 2017-06-02 03:34:44,379  INFO  Удалена запись: PrimaryKey: 10, Description: Skeletal animation, Url: \Animations\Mario jumps.bpg, Price: 2, ContentType_Id: 7, PdfFile_Id: 2
+2017-06-02 03:39:29,867  INFO  Удалена запись: PrimaryKey: 25, Description: asd, Url: \File.txt, Price: 1, ContentType_Id: 1, PdfFile_Id: 
