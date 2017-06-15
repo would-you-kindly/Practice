@@ -41,3 +41,13 @@
 2017-06-02 03:34:44,375  INFO  Удален .pdf файл: D:\YandexDisk\Third course\Производственная практика\Practice\TestFiles\Animations\Mario jumps.pdf
 2017-06-02 03:34:44,379  INFO  Удалена запись: PrimaryKey: 10, Description: Skeletal animation, Url: \Animations\Mario jumps.bpg, Price: 2, ContentType_Id: 7, PdfFile_Id: 2
 2017-06-02 03:39:29,867  INFO  Удалена запись: PrimaryKey: 25, Description: asd, Url: \File.txt, Price: 1, ContentType_Id: 1, PdfFile_Id: 
+2017-06-02 13:06:14,924  INFO  Удален файл: D:\YandexDisk\Third course\Производственная практика\Practice\TestFiles\Sounds\Soundtracks\BioShock soundtrack.mp3
+2017-06-02 13:06:15,001  INFO  Удалена запись: PrimaryKey: 21, Description: , Url: \Sounds\Soundtracks\BioShock soundtrack.mp3, Price: 8,99, ContentType_Id: 3, PdfFile_Id: 
+2017-06-02 13:06:15,003  INFO  Удален файл: D:\YandexDisk\Third course\Производственная практика\Practice\TestFiles\Calibri.ttf
+2017-06-02 13:06:15,112  INFO  Удалена запись: PrimaryKey: 23, Description: Standard font, Url: \Calibri.ttf, Price: 1,2, ContentType_Id: 6, PdfFile_Id: 
+2017-06-02 13:06:15,114  INFO  Удален файл: D:\YandexDisk\Third course\Производственная практика\Practice\TestFiles\Pictures\Plane.psd
+2017-06-02 13:06:15,116  INFO  Удален .pdf файл: D:\YandexDisk\Third course\Производственная практика\Practice\TestFiles\Pictures\Plane.pdf
+2017-06-02 13:06:15,121  INFO  Удалена запись: PrimaryKey: 18, Description: , Url: \Pictures\Plane.psd, Price: 1,25, ContentType_Id: 4, PdfFile_Id: 1
+2017-06-02 13:06:15,123  INFO  Удален файл: D:\YandexDisk\Third course\Производственная практика\Practice\TestFiles\Animations\Mario jumps.bpg
+2017-06-02 13:06:15,125  INFO  Удален .pdf файл: D:\YandexDisk\Third course\Производственная практика\Practice\TestFiles\Animations\Mario jumps.pdf
+2017-06-02 13:06:15,131  INFO  Удалена запись: PrimaryKey: 10, Description: Skeletal animation, Url: \Animations\Mario jumps.bpg, Price: 2, ContentType_Id: 7, PdfFile_Id: 2
