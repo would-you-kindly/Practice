@@ -39,7 +39,9 @@ namespace RemoveFiles
         /// Конструктор для тестов.
         /// </summary>
         public Settings()
-        { }
+        {
+
+        }
 
         /// <summary>
         /// Выполняет parsing переданных аргументов
@@ -175,7 +177,7 @@ namespace RemoveFiles
 
         /// <summary>
         /// Возвращает строковое представление записи по ключу primaryKey
-        /// в базе данных, указанной в строке подключения connection.
+        /// в базе данных (для лога), указанной в строке подключения connection.
         /// </summary>
         /// <param name="connection"></param>
         /// <param name="primaryKey"></param>
@@ -264,7 +266,7 @@ namespace RemoveFiles
         {
             if (command.Confirmation == "true")
             {
-                Console.WriteLine(string.Format("Вы уверены, что хотите удалить файлы из базы данных {0}? (Y/N)", command.ConnectionString));
+                Console.WriteLine(string.Format("Вы уверены, что хотите удалить файлы из базы данных {0}? (A/Y/N)", command.ConnectionString));
                 ConsoleKeyInfo key = Console.ReadKey();
                 Console.WriteLine();
                 if (key.Key == ConsoleKey.Y)

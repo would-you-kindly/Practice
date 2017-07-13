@@ -14,3 +14,15 @@ D:\YandexDisk\Third course\Производственная практика\З�
 D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFiles\bin\Debug\log4net.dll
 D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFiles\bin\Debug\log4net.xml
 D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFiles\obj\Debug\RemoveFiles.csprojResolveAssemblyReference.cache
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\bin\Debug\RemoveFiles.exe.config
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\obj\Debug\RemoveFiles.exe
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\obj\Debug\RemoveFiles.pdb
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\bin\Debug\RemoveFiles.exe
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\bin\Debug\RemoveFiles.pdb
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\bin\Debug\log4net.dll
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\bin\Debug\Npgsql.dll
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\bin\Debug\log4net.xml
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\bin\Debug\Npgsql.xml
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\obj\Debug\RemoveFiles.csprojResolveAssemblyReference.cache
