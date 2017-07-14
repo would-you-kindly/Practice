@@ -14,6 +14,7 @@ namespace RemoveFiles
     public class Settings
     {
         Command command;
+        Parser parser;
 
         internal const string HelpCommand = "-help";
         internal const string ConnectionStringCommand = "-cs";
@@ -23,6 +24,7 @@ namespace RemoveFiles
         internal const string PathCommand = "-path";
         internal const string LogCommand = "-log";
         internal const string ConfirmationCommand = "-conf";
+        internal const string DbmsCommand = "-dbms";
 
         /// <summary>
         /// Создает новый экземпляр класса Settings и устанавливает параметры программы
@@ -32,7 +34,8 @@ namespace RemoveFiles
         public Settings(string[] args)
         {
             Logger.InitLogger();
-            command = this.ParseArgs(args);
+            parser = new Parser();
+            command = parser.ParseArgs(args);
         }
 
         /// <summary>
@@ -41,56 +44,6 @@ namespace RemoveFiles
         public Settings()
         {
 
-        }
-
-        /// <summary>
-        /// Выполняет parsing переданных аргументов
-        /// и присваивает их свойствам класса Command.
-        /// </summary>
-        /// <param name="args"></param>
-        internal Command ParseArgs(string[] args)
-        {
-            var command = new Command();
-            for (int i = 0; i < args.Length; i++)
-            {
-                if (i == args.Length - 1 && args[i] != "-help")
-                {
-                    throw new ArgumentException("Аргументы заданы неверно. Выполните команду -help для получения дополнительной информации.");
-                }
-
-                // args[++i] означает аргумент команды, который должен следовать сразу за ней.
-                switch (args[i])
-                {
-                    case HelpCommand:
-                        command.Help();
-                        break;
-                    case ConnectionStringCommand:
-                        command.ConnectionString = args[++i];
-                        break;
-                    case TableNameCommand:
-                        command.TableName = args[++i];
-                        break;
-                    case PrimaryKeyFieldNameCommand:
-                        command.PrimaryKeyFieldName = args[++i];
-                        break;
-                    case UrlFieldNameCommand:
-                        command.UrlFieldName = args[++i];
-                        break;
-                    case PathCommand:
-                        command.Path = args[++i];
-                        break;
-                    case LogCommand:
-                        command.Log = args[++i];
-                        break;
-                    case ConfirmationCommand:
-                        command.Confirmation = args[++i];
-                        break;
-                    default:
-                        throw new ArgumentException("Аргументы заданы неверно. Выполните команду -help для получения дополнительной информации.");
-                }
-            }
-
-            return command;
         }
 
         /// <summary>

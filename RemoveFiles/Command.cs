@@ -30,7 +30,9 @@ namespace RemoveFiles
             // Выполнять ли логирование данного действия.
             Log,
             // Запрашивать ли подтверждение перед удалением.
-            Confirmation
+            Confirmation,
+            // Задание СУБД
+            Dbms
         }
 
         internal const string DefaultConnectionString = @"Data Source=.\sqlexpress;Initial Catalog=FlexberryPractice;Integrated Security=True;";
@@ -40,6 +42,7 @@ namespace RemoveFiles
         internal const string DefaultPath = @"D:\YandexDisk\Third course\Производственная практика\Practice\TestFiles";
         internal const string DefaultLog = "true";
         internal const string DefaultConfirmation = "true";
+        internal const string DefaultDbms = "PostgreSQL";
 
         private Dictionary<Commands, string> commands;
 
@@ -58,7 +61,8 @@ namespace RemoveFiles
                 { Commands.UrlFieldName, DefaultUrlFieldName },
                 { Commands.Path, DefaultPath },
                 { Commands.Log, DefaultLog },
-                { Commands.Confirmation, DefaultConfirmation }
+                { Commands.Confirmation, DefaultConfirmation },
+                { Commands.Dbms, DefaultDbms }
             };
         }
 
@@ -210,6 +214,28 @@ namespace RemoveFiles
                 {
                     Console.WriteLine("Аргумент команды -conf указан неверно. " +
                         "Он может принимать только значение \"true\" или \"false\".");
+                    Environment.Exit(0);
+                }
+            }
+        }
+
+        public string Dbms
+        {
+            get
+            {
+                return commands[Commands.Dbms];
+            }
+            set
+            {
+                // Проверяем правильность параметров команды -conf.
+                if (value == "SQL Server" || value == "PostgreSQL")
+                {
+                    commands[Commands.Dbms] = value;
+                }
+                else
+                {
+                    Console.WriteLine("Аргумент команды -dbms указан неверно. " +
+                        "Он может принимать только значение \"SQL Server\" или \"PostgreSQL\".");
                     Environment.Exit(0);
                 }
             }
