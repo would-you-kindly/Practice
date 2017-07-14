@@ -53,15 +53,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command.cs" />
-    <Compile Include="Connection.cs" />
-    <Compile Include="IConnector.cs" />
+    <Compile Include="FileCleaner.cs" />
+    <Compile Include="BaseConnector.cs" />
+    <Compile Include="ConnectorFactory.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="NullLogger.cs" />
     <Compile Include="Parser.cs" />
-    <Compile Include="PostgreSqlConnection.cs" />
+    <Compile Include="PostgreSqlConnector.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="SqlServerConnection.cs" />
+    <Compile Include="SqlServerConnector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

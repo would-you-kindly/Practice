@@ -15,7 +15,8 @@ namespace RemoveFiles
         /// <param name="args"></param>
         public Command ParseArgs(string[] args)
         {
-            var command = new Command();
+            Command command = new Command();
+
             for (int i = 0; i < args.Length; i++)
             {
                 if (i == args.Length - 1 && args[i] != "-help")

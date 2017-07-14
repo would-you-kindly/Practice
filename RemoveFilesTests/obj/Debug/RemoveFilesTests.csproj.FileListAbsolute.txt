@@ -14,3 +14,23 @@ D:\YandexDisk\Third course\Производственная практика\З�
 D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\bin\Debug\log4net.xml
 D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\obj\Debug\RemoveFilesTests.dll
 D:\YandexDisk\Third course\Производственная практика\Замечания\RemoveFilesTests\obj\Debug\RemoveFilesTests.pdb
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\RemoveFilesTests.dll
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\RemoveFilesTests.pdb
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\RemoveFiles.exe
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\log4net.dll
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\Npgsql.dll
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\RemoveFiles.pdb
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\log4net.xml
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\Npgsql.xml
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\obj\Debug\RemoveFilesTests.csprojResolveAssemblyReference.cache
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\obj\Debug\RemoveFilesTests.dll
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFilesTests\obj\Debug\RemoveFilesTests.pdb
