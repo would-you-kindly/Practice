@@ -21,7 +21,7 @@ namespace RemoveFiles
         }
 
         protected override DbConnection GetConnection()
-        {            
+        {
             return Connection;
         }
 
@@ -53,8 +53,55 @@ namespace RemoveFiles
         {
             // Удаляем запись файла из базы данных.
             SqlCommand sqlCommand = (Connection as SqlConnection).CreateCommand();
-            sqlCommand.CommandText = string.Format("DELETE FROM {0} WHERE {1} = {2}", command.TableName, command.PrimaryKeyFieldName, key);
+            sqlCommand.CommandText = string.Format("DELETE FROM {0} WHERE {1} = @key", command.TableName, command.PrimaryKeyFieldName);
+            sqlCommand.Parameters.Add("key", SqlDbType.UniqueIdentifier).Value = key;
             sqlCommand.ExecuteNonQuery();
+        }
+
+        protected override DbCommand GetSqlCommand(Command command, object key)
+        {
+            // Составляем запрос для получения Url.
+            SqlCommand sqlCommand = (Connection as SqlConnection).CreateCommand();
+            sqlCommand.CommandText = string.Format("SELECT {0} FROM {1} WHERE {2} = @key", command.UrlFieldName, command.TableName, command.PrimaryKeyFieldName);
+            sqlCommand.Parameters.Add("key", SqlDbType.UniqueIdentifier).Value = key;
+
+            return sqlCommand;
+        }
+
+        protected override List<object> GetForeignKeysFromTable(List<object> keys, string tableName, string columnName)
+        {
+            // Получаем список внешних ключей на таблицу файлов.
+            SqlCommand sqlCommand = (Connection as SqlConnection).CreateCommand();
+            sqlCommand.CommandText = string.Format("SELECT {0} FROM {1} WHERE {0} IS NOT NULL", columnName, tableName);
+
+            List<object> foreignKeys = new List<object>();
+            using (SqlDataReader reader = sqlCommand.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    foreignKeys.Add(reader.GetValue(0));
+                }
+            }
+
+            return foreignKeys;
+        }
+
+        protected override List<object> GetFilesPrimaryKeys(Command command)
+        {
+            // Получаем список первичных ключей таблицы файлов.
+            SqlCommand sqlCommand = (Connection as SqlConnection).CreateCommand();
+            sqlCommand.CommandText = string.Format("SELECT {0} FROM {1}", command.PrimaryKeyFieldName, command.TableName);
+
+            List<object> primaryKeys = new List<object>();
+            using (SqlDataReader reader = sqlCommand.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    primaryKeys.Add(reader.GetValue(0));
+                }
+            }
+
+            return primaryKeys;
         }
     }
 }

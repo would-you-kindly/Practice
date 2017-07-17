@@ -180,7 +180,7 @@ namespace RemoveFiles
             {
                 removedFileLog += file.FullName;
                 file.Delete();
-                if (command.Log == "true")
+                if (command.Log)
                 {
                     Logger.Log.InfoFormat(removedFileLog);
                 }
@@ -191,7 +191,7 @@ namespace RemoveFiles
             {
                 removedPdfFileLog += pdfFile.FullName;
                 pdfFile.Delete();
-                if (command.Log == "true")
+                if (command.Log)
                 {
                     Logger.Log.InfoFormat(removedPdfFileLog);
                 }
@@ -204,7 +204,7 @@ namespace RemoveFiles
             sqlCommand.ExecuteNonQuery();
 
             // Выполняем логирование.
-            if (command.Log == "true")
+            if (command.Log)
             {
                 Logger.Log.InfoFormat(removedRecordLog);
             }
@@ -217,7 +217,7 @@ namespace RemoveFiles
         /// <returns></returns>
         private bool RequestConfirmation()
         {
-            if (command.Confirmation == "true")
+            if (command.Confirmation)
             {
                 Console.WriteLine(string.Format("Вы уверены, что хотите удалить файлы из базы данных {0}? (A/Y/N)", command.ConnectionString));
                 ConsoleKeyInfo key = Console.ReadKey();

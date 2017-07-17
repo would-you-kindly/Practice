@@ -28,7 +28,7 @@ namespace RemoveFiles
             {
                 Connection.Open();
                 DataTable table = FindReferencingTables(command);
-                List<object> keys = FindHangingFileKeys(command);
+                List<object> keys = FindHangingFileKeys(command, table);
                 RemoveHangingFiles(command, keys);
             }
         }
@@ -37,9 +37,38 @@ namespace RemoveFiles
 
         protected abstract DataTable FindReferencingTables(Command command);
 
-        private List<object> FindHangingFileKeys(Command command)
+        private List<object> FindHangingFileKeys(Command command, DataTable table)
         {
-            return new List<object>(); // keys
+            // Получаем список ключей файлов, на которые есть ссылки из других таблиц.
+            List<object> keysWithRefs = new List<object>();
+            foreach (DataRow row in table.Rows)
+            {
+                // Получаем список внешних ключей из указанной таблицы.
+                List<object> foreignKeys = GetForeignKeysFromTable(keysWithRefs, (string)row["TableName"], (string)row["ColumnName"]);
+
+                // Собираем внешние ключи в список так, чтобы они не повторялись.
+                foreach (object foreignKey in foreignKeys)
+                {
+                    if (!keysWithRefs.Contains(foreignKey))
+                    {
+                        keysWithRefs.Add(foreignKey);
+                    }
+                }
+            }
+
+            // Получаем список первичных ключей таблицы файлов.
+            List<object> primaryKeys = GetFilesPrimaryKeys(command);
+
+            // Определяем записи, на которые нет ссылок и удаляем их.
+            foreach (object primaryKey in primaryKeys)
+            {
+                if (keysWithRefs.Contains(primaryKey))
+                {
+                    primaryKeys.Remove(primaryKey);
+                }
+            }
+
+            return primaryKeys;
         }
 
         protected virtual void RemoveHangingFiles(Command command, List<object> keys)
@@ -54,12 +83,8 @@ namespace RemoveFiles
         protected void RemoveFromFS(Command command, object key)
         {
             // Удаляем файлы (включая .pdf) из файловой системы.
-            DbCommand sqlCommand = Connection.CreateCommand();
-            /////*Это можно винести в другую абстрактную функцию*/
-            // здесь лучше сделать параметризованный запрос (чтобы кавычки, кв. скобки... сами вставлялись)
-            sqlCommand.CommandText = string.Format("SELECT {0} FROM {1} WHERE {2} = {3}", command.UrlFieldName, command.TableName, command.PrimaryKeyFieldName, key);
+            DbCommand sqlCommand = GetSqlCommand(command, key);
             string relativePath = (string)sqlCommand.ExecuteScalar();
-            /*Это можно винести в другую абстрактную функцию*/////
 
             FileInfo file = new FileInfo(command.Path + relativePath);
             FileInfo pdfFile = new FileInfo(command.Path + relativePath.Remove(relativePath.LastIndexOf(".")) + ".pdf");
@@ -68,15 +93,23 @@ namespace RemoveFiles
             if (file != null && file.Exists)
             {
                 file.Delete();
+                _logger.InfoFormat("Удален файл: {0}", file.FullName);
             }
 
             // Удаляем .pdf файл.
             if (pdfFile != null && pdfFile.Exists)
             {
                 pdfFile.Delete();
+                _logger.InfoFormat("Удален .pdf файл: {0}", pdfFile.FullName);
             }
         }
 
         protected abstract void RemoveFromDB(Command command, object key);
+
+        protected abstract DbCommand GetSqlCommand(Command command, object key);
+
+        protected abstract List<object> GetForeignKeysFromTable(List<object> keys, string tableName, string columnName);
+
+        protected abstract List<object> GetFilesPrimaryKeys(Command command);
     }
 }

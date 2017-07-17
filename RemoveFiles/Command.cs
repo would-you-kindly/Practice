@@ -40,11 +40,11 @@ namespace RemoveFiles
         internal const string DefaultPrimaryKeyFieldName = "PrimaryKey";
         internal const string DefaultUrlFieldName = "Url";
         internal const string DefaultPath = @"D:\YandexDisk\Third course\Производственная практика\Practice\TestFiles";
-        internal const string DefaultLog = "true";
-        internal const string DefaultConfirmation = "true";
+        internal const bool DefaultLog = true;
+        internal const bool DefaultConfirmation = true;
         internal const string DefaultDbms = "PostgreSQL";
 
-        private Dictionary<Commands, string> commands;
+        private Dictionary<Commands, object> commands;
 
         /// <summary>
         /// Создает новый экземпляр класса Command 
@@ -52,7 +52,7 @@ namespace RemoveFiles
         /// </summary>
         public Command()
         {
-            commands = new Dictionary<Commands, string>()
+            commands = new Dictionary<Commands, object>()
             {
                 { Commands.Help, null },
                 { Commands.ConnectionString, DefaultConnectionString },
@@ -73,7 +73,7 @@ namespace RemoveFiles
         {
             get
             {
-                return commands[Commands.ConnectionString];
+                return (string)commands[Commands.ConnectionString];
             }
             set
             {
@@ -89,8 +89,7 @@ namespace RemoveFiles
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("При попытке соединения произошла ошибка. Проверьте правильность строки подключения.");
-                    Environment.Exit(0);
+                    throw new ArgumentException("При попытке соединения произошла ошибка. Проверьте правильность строки подключения.");
                 }
             }
         }
@@ -102,7 +101,7 @@ namespace RemoveFiles
         {
             get
             {
-                return commands[Commands.TableName];
+                return (string)commands[Commands.TableName];
             }
             set
             {
@@ -118,7 +117,7 @@ namespace RemoveFiles
         {
             get
             {
-                return commands[Commands.PrimaryKeyFieldName];
+                return (string)commands[Commands.PrimaryKeyFieldName];
             }
             set
             {
@@ -134,7 +133,7 @@ namespace RemoveFiles
         {
             get
             {
-                return commands[Commands.UrlFieldName];
+                return (string)commands[Commands.UrlFieldName];
             }
             set
             {
@@ -150,7 +149,7 @@ namespace RemoveFiles
         {
             get
             {
-                return commands[Commands.Path];
+                return (string)commands[Commands.Path];
             }
             set
             {
@@ -162,8 +161,7 @@ namespace RemoveFiles
                 }
                 else
                 {
-                    Console.WriteLine("Указанного пути не существует. Проверьте правильность пути к каталогу.");
-                    Environment.Exit(0);
+                    throw new ArgumentException("Указанного пути не существует. Проверьте правильность пути к каталогу.");
                 }
             }
         }
@@ -172,16 +170,16 @@ namespace RemoveFiles
         /// Задает или возвращает значение ("true" или "false"), указывающее, 
         /// необходимо ли выполнять логирование действий программы. 
         /// </summary>
-        public string Log
+        public bool Log
         {
             get
             {
-                return commands[Commands.Log];
+                return (bool)commands[Commands.Log];
             }
             set
             {
                 // Проверяем правильность параметров команды -log.
-                if (value == "true" || value == "false")
+                if (value != null)
                 {
                     commands[Commands.Log] = value;
                 }
@@ -197,24 +195,23 @@ namespace RemoveFiles
         /// Задает или возвращает значение ("true" или "false"), указывающее, 
         /// необходимо ли запрашивать подтвержедние перед удалением. 
         /// </summary>
-        public string Confirmation
+        public bool Confirmation
         {
             get
             {
-                return commands[Commands.Confirmation];
+                return (bool)commands[Commands.Confirmation];
             }
             set
             {
                 // Проверяем правильность параметров команды -conf.
-                if (value == "true" || value == "false")
+                if (value != null)
                 {
                     commands[Commands.Confirmation] = value;
                 }
                 else
                 {
-                    Console.WriteLine("Аргумент команды -conf указан неверно. " +
+                    throw new ArgumentException("Аргумент команды -conf указан неверно. " +
                         "Он может принимать только значение \"true\" или \"false\".");
-                    Environment.Exit(0);
                 }
             }
         }
@@ -223,7 +220,7 @@ namespace RemoveFiles
         {
             get
             {
-                return commands[Commands.Dbms];
+                return (string)commands[Commands.Dbms];
             }
             set
             {
@@ -234,9 +231,8 @@ namespace RemoveFiles
                 }
                 else
                 {
-                    Console.WriteLine("Аргумент команды -dbms указан неверно. " +
+                    throw new ArgumentException("Аргумент команды -dbms указан неверно. " +
                         "Он может принимать только значение \"SQL Server\" или \"PostgreSQL\".");
-                    Environment.Exit(0);
                 }
             }
         }
@@ -264,8 +260,6 @@ namespace RemoveFiles
                 "\n\nЗадание пути к каталогу с файлами.\n\tКлючевое слово:\n\t\t-path\n\tПараметры:\n\t\tПуть к каталогу с файлами в кавычках.\n\tПример:\n\t\t-path \"C:\\Windows\\Help\"\n\tЗначение по умолчанию:\n\t\t\"D:\\YandexDisk\\Third course\\Производственная практика\\Practice\\TestFiles\"" +
                 "\n\nВыполнения логирования действий программы.\n\tКлючевое слово:\n\t\t-log\n\tПараметры:\n\t\t- \"true\" - выполнять логирование.\n\t\t- \"false\" - не выполнять логирование.\n\tПример:\n\t\t-log \"false\"\n\tЗначение по умолчанию:\n\t\t\"true\"" +
                 "\n\nЗапрос на подтверждение удаления.\n\tКлючевое слово:\n\t\t-conf\n\tПараметры:\n\t\t- \"true\" - запрашивать подтверждение удаления.\n\t\t- \"false\" - не запрашивать подтверждение удаления.\n\tПример:\n\t\t-conf \"false\"\n\tЗначение по умолчанию:\n\t\t\"true\"\n\n\n");
-
-            Environment.Exit(0);
         }
     }
 }
