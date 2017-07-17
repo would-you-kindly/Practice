@@ -25,3 +25,4 @@ C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\bin\Debug\System.Thre
 C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\bin\Debug\log4net.xml
 C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\bin\Debug\Npgsql.xml
 C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\aschelkunov\Documents\GitHub\Practice\RemoveFiles\obj\Debug\RemoveFiles.csprojResolveAssemblyReference.cache

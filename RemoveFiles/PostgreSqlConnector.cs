@@ -32,7 +32,16 @@ namespace RemoveFiles
             // Получаем DataTable, содержащий названия таблиц и внешних ключей на таблицу файлов.
             SqlCommand sqlCommand = (Connection as SqlConnection).CreateCommand();
             sqlCommand.CommandText =
-                /* Postgre SQL запрос */;
+                @"SELECT
+                  ccu.table_name  AS TableName,
+                  kcu.column_name AS ColumnName
+                FROM
+                  information_schema.table_constraints AS tc
+                  JOIN information_schema.key_column_usage AS kcu
+                    ON tc.constraint_name = kcu.constraint_name
+                  JOIN information_schema.constraint_column_usage AS ccu
+                    ON ccu.constraint_name = tc.constraint_name
+                WHERE constraint_type = 'FOREIGN KEY' AND tc.table_name = 'mspsubject';";
             sqlCommand.Parameters.Add("FilesTableName", SqlDbType.NVarChar).Value = command.TableName;
             SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
             DataTable table = new DataTable();
