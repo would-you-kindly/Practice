@@ -28,7 +28,7 @@ namespace RemoveFiles
             {
                 Connection.Open();
                 DataTable table = FindReferencingTables(command);
-                List<object> keys = FindHangingFileKeys(command, table);
+                List<Guid> keys = FindHangingFileKeys(command, table);
                 RemoveHangingFiles(command, keys);
 
                 Console.WriteLine("Удаление файлов прошло успешно.");
@@ -39,17 +39,17 @@ namespace RemoveFiles
 
         protected abstract DataTable FindReferencingTables(Command command);
 
-        private List<object> FindHangingFileKeys(Command command, DataTable table)
+        private List<Guid> FindHangingFileKeys(Command command, DataTable table)
         {
             // Получаем список ключей файлов, на которые есть ссылки из других таблиц.
-            List<object> keysWithRefs = new List<object>();
+            List<Guid> keysWithRefs = new List<Guid>();
             foreach (DataRow row in table.Rows)
             {
                 // Получаем список внешних ключей из указанной таблицы.
-                List<object> foreignKeys = GetForeignKeysFromTable(keysWithRefs, (string)row["TableName"], (string)row["ColumnName"]);
+                List<Guid> foreignKeys = GetForeignKeysFromTable(keysWithRefs, (string)row["TableName"], (string)row["ColumnName"]);
 
                 // Собираем внешние ключи в список так, чтобы они не повторялись.
-                foreach (object foreignKey in foreignKeys)
+                foreach (Guid foreignKey in foreignKeys)
                 {
                     if (!keysWithRefs.Contains(foreignKey))
                     {
@@ -59,10 +59,10 @@ namespace RemoveFiles
             }
 
             // Получаем список первичных ключей таблицы файлов.
-            List<object> primaryKeys = GetFilesPrimaryKeys(command);
+            List<Guid> primaryKeys = GetFilesPrimaryKeys(command);
 
             // Определяем записи, на которые нет ссылок и удаляем их.
-            foreach (object primaryKey in primaryKeys)
+            foreach (Guid primaryKey in primaryKeys)
             {
                 if (keysWithRefs.Contains(primaryKey))
                 {
@@ -73,9 +73,9 @@ namespace RemoveFiles
             return primaryKeys;
         }
 
-        protected virtual void RemoveHangingFiles(Command command, List<object> keys)
+        protected virtual void RemoveHangingFiles(Command command, List<Guid> keys)
         {
-            foreach (var key in keys)
+            foreach (Guid key in keys)
             {
                 // TODO: Сделать удаление всех файлов за раз.
                 if (RequestConfirmation(command, key))
@@ -86,7 +86,7 @@ namespace RemoveFiles
             }
         }
 
-        protected void RemoveFromFS(Command command, object key)
+        protected void RemoveFromFS(Command command, Guid key)
         {
             // Удаляем файлы (включая .pdf) из файловой системы.
             DbCommand sqlCommand = GetSqlCommand(command, key);
@@ -110,15 +110,47 @@ namespace RemoveFiles
             }
         }
 
-        protected abstract void RemoveFromDB(Command command, object key);
+        protected abstract void RemoveFromDB(Command command, Guid key);
 
-        protected abstract DbCommand GetSqlCommand(Command command, object key);
+        protected abstract DbCommand GetSqlCommand(Command command, Guid key);
 
-        protected abstract List<object> GetForeignKeysFromTable(List<object> keys, string tableName, string columnName);
+        protected virtual List<Guid> GetForeignKeysFromTable(List<Guid> keys, string tableName, string columnName)
+        {
+            // Получаем список внешних ключей на таблицу файлов.
+            var sqlCommand = Connection.CreateCommand();
+            sqlCommand.CommandText = string.Format("SELECT {0} FROM {1} WHERE {0} IS NOT NULL", columnName, tableName);
 
-        protected abstract List<object> GetFilesPrimaryKeys(Command command);
+            List<Guid> foreignKeys = new List<Guid>();
+            using (var reader = sqlCommand.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    foreignKeys.Add((Guid)reader.GetValue(0));
+                }
+            }
 
-        private bool RequestConfirmation(Command command, object key)
+            return foreignKeys;
+        }
+
+        protected virtual List<Guid> GetFilesPrimaryKeys(Command command)
+        { 
+            // Получаем список первичных ключей таблицы файлов.
+            var sqlCommand = Connection.CreateCommand();
+            sqlCommand.CommandText = string.Format("SELECT {0} FROM {1}", command.PrimaryKeyFieldName, command.TableName);
+
+            List<Guid> primaryKeys = new List<Guid>();
+            using (var reader = sqlCommand.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    primaryKeys.Add((Guid)reader.GetValue(0));
+                }
+            }
+
+            return primaryKeys;
+        }
+
+        private bool RequestConfirmation(Command command, Guid key)
         {
             if (command.Confirmation)
             {
@@ -140,6 +172,6 @@ namespace RemoveFiles
             }
         }
 
-        protected abstract string GetFileNameByKey(Command command, object key);
+        protected abstract string GetFileNameByKey(Command command, Guid key);
     }
 }

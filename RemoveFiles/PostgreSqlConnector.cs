@@ -30,7 +30,7 @@ namespace RemoveFiles
         protected override DataTable FindReferencingTables(Command command)
         {
             // Получаем DataTable, содержащий названия таблиц и внешних ключей на таблицу файлов.
-            SqlCommand sqlCommand = (Connection as SqlConnection).CreateCommand();
+            NpgsqlCommand sqlCommand = (Connection as NpgsqlConnection).CreateCommand();
             sqlCommand.CommandText =
                 @"SELECT
                   ccu.table_name  AS TableName,
@@ -41,16 +41,16 @@ namespace RemoveFiles
                     ON tc.constraint_name = kcu.constraint_name
                   JOIN information_schema.constraint_column_usage AS ccu
                     ON ccu.constraint_name = tc.constraint_name
-                WHERE constraint_type = 'FOREIGN KEY' AND tc.table_name = 'mspsubject';";
-            sqlCommand.Parameters.Add("FilesTableName", SqlDbType.NVarChar).Value = command.TableName;
-            SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
+                WHERE constraint_type = 'FOREIGN KEY' AND tc.table_name = @FilesTableName;";
+            sqlCommand.Parameters.AddWithValue("FilesTableName", command.TableName);
+            NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(sqlCommand);
             DataTable table = new DataTable();
             adapter.Fill(table);
 
             return table;
         }
 
-        protected override void RemoveFromDB(Command command, object key)
+        protected override void RemoveFromDB(Command command, Guid key)
         {
             // Удаляем запись файла из базы данных.
             NpgsqlCommand sqlCommand = (Connection as NpgsqlConnection).CreateCommand();
@@ -59,7 +59,7 @@ namespace RemoveFiles
             sqlCommand.ExecuteNonQuery();
         }
 
-        protected override DbCommand GetSqlCommand(Command command, object key)
+        protected override DbCommand GetSqlCommand(Command command, Guid key)
         {
             // Составляем запрос для получения Url.
             NpgsqlCommand sqlCommand = (Connection as NpgsqlConnection).CreateCommand();
@@ -69,47 +69,11 @@ namespace RemoveFiles
             return sqlCommand;
         }
 
-        protected override List<object> GetForeignKeysFromTable(List<object> keys, string tableName, string columnName)
-        {
-            // Получаем список внешних ключей на таблицу файлов.
-            NpgsqlCommand sqlCommand = (Connection as NpgsqlConnection).CreateCommand();
-            sqlCommand.CommandText = string.Format("SELECT {0} FROM {1} WHERE {0} IS NOT NULL", columnName, tableName);
-
-            List<object> foreignKeys = new List<object>();
-            using (NpgsqlDataReader reader = sqlCommand.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    foreignKeys.Add(reader.GetValue(0));
-                }
-            }
-
-            return foreignKeys;
-        }
-
-        protected override List<object> GetFilesPrimaryKeys(Command command)
-        {
-            // Получаем список первичных ключей таблицы файлов.
-            NpgsqlCommand sqlCommand = (Connection as NpgsqlConnection).CreateCommand();
-            sqlCommand.CommandText = string.Format("SELECT {0} FROM {1}", command.PrimaryKeyFieldName, command.TableName);
-
-            List<object> primaryKeys = new List<object>();
-            using (NpgsqlDataReader reader = sqlCommand.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    primaryKeys.Add(reader.GetValue(0));
-                }
-            }
-
-            return primaryKeys;
-        }
-
-        protected override string GetFileNameByKey(Command command, object key)
+        protected override string GetFileNameByKey(Command command, Guid key)
         {
             NpgsqlCommand sqlCommand = (Connection as NpgsqlConnection).CreateCommand();
             sqlCommand.CommandText = string.Format("SELECT {0} FROM {1} WHERE {2} = @key", command.UrlFieldName, command.TableName, command.PrimaryKeyFieldName);
-            sqlCommand.Parameters.Add("key", NpgsqlDbType.Uuid).Value = key;
+            sqlCommand.Parameters.AddWithValue("key", key);            
             string result = (string)sqlCommand.ExecuteScalar();
 
             return result;
