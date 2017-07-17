@@ -95,5 +95,15 @@ namespace RemoveFiles
 
             return primaryKeys;
         }
+
+        protected override string GetFileNameByKey(Command command, object key)
+        {
+            NpgsqlCommand sqlCommand = (Connection as NpgsqlConnection).CreateCommand();
+            sqlCommand.CommandText = string.Format("SELECT {0} FROM {1} WHERE {2} = @key", command.UrlFieldName, command.TableName, command.PrimaryKeyFieldName);
+            sqlCommand.Parameters.Add("key", NpgsqlDbType.Uuid).Value = key;
+            string result = (string)sqlCommand.ExecuteScalar();
+
+            return result;
+        }
     }
 }

@@ -46,10 +46,10 @@ namespace RemoveFiles
                         command.Path = args[++i];
                         break;
                     case Settings.LogCommand:
-                        command.Log = args[++i];
+                        command.Log = true;
                         break;
                     case Settings.ConfirmationCommand:
-                        command.Confirmation = args[++i];
+                        command.Confirmation = true;
                         break;
                     case Settings.DbmsCommand:
                         command.Dbms = args[++i];

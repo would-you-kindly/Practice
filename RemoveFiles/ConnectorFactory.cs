@@ -17,7 +17,7 @@ namespace RemoveFiles
             // Это позволяет сделать проверку на command.Log
             // один раз, а не перед каждой записью в лог.
             ILog logger = new NullLogger();
-            if (command.Log == "true")
+            if (command.Log)
             {
                 logger = Logger.Log;
             }
@@ -31,7 +31,7 @@ namespace RemoveFiles
                     return new PostgreSqlConnector(logger, command.ConnectionString);
                     break;
                 default:
-                    throw new Exception("");
+                    throw new ArgumentException("Неверно указана база данных.");
                     break;
             }
         }

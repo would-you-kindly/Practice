@@ -40,8 +40,8 @@ namespace RemoveFiles
         internal const string DefaultPrimaryKeyFieldName = "PrimaryKey";
         internal const string DefaultUrlFieldName = "Url";
         internal const string DefaultPath = @"D:\YandexDisk\Third course\Производственная практика\Practice\TestFiles";
-        internal const bool DefaultLog = true;
-        internal const bool DefaultConfirmation = true;
+        internal const bool DefaultLog = false;
+        internal const bool DefaultConfirmation = false;
         internal const string DefaultDbms = "PostgreSQL";
 
         private Dictionary<Commands, object> commands;

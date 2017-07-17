@@ -30,6 +30,8 @@ namespace RemoveFiles
                 DataTable table = FindReferencingTables(command);
                 List<object> keys = FindHangingFileKeys(command, table);
                 RemoveHangingFiles(command, keys);
+
+                Console.WriteLine("Удаление файлов прошло успешно.");
             }
         }
 
@@ -75,8 +77,12 @@ namespace RemoveFiles
         {
             foreach (var key in keys)
             {
-                RemoveFromFS(command, key);
-                RemoveFromDB(command, key);
+                // TODO: Сделать удаление всех файлов за раз.
+                if (RequestConfirmation(command, key))
+                {
+                    RemoveFromFS(command, key);
+                    RemoveFromDB(command, key);
+                }
             }
         }
 
@@ -111,5 +117,29 @@ namespace RemoveFiles
         protected abstract List<object> GetForeignKeysFromTable(List<object> keys, string tableName, string columnName);
 
         protected abstract List<object> GetFilesPrimaryKeys(Command command);
+
+        private bool RequestConfirmation(Command command, object key)
+        {
+            if (command.Confirmation)
+            {
+                Console.WriteLine(string.Format("Вы уверены, что хотите удалить файл {0}? (Y/N)", GetFileNameByKey(command, key)));
+                ConsoleKeyInfo consoleKey = Console.ReadKey();
+                Console.WriteLine();
+                if (consoleKey.Key == ConsoleKey.Y)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        protected abstract string GetFileNameByKey(Command command, object key);
     }
 }
