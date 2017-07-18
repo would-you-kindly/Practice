@@ -15,18 +15,18 @@ namespace RemoveFiles
     {
         protected ILog _logger;
 
+        protected DbConnection _connection;
+
         public BaseConnector(ILog logger)
         {
             _logger = logger;
         }
 
-        protected DbConnection Connection { get; set; }
-
         public virtual void Execute(Command command)
         {
-            using (Connection = GetConnection())
+            using (_connection)
             {
-                Connection.Open();
+                _connection.Open();
                 DataTable table = FindReferencingTables(command);
                 List<Guid> keys = FindHangingFileKeys(command, table);
                 RemoveHangingFiles(command, keys);
@@ -35,42 +35,39 @@ namespace RemoveFiles
             }
         }
 
-        protected abstract DbConnection GetConnection();
-
         protected abstract DataTable FindReferencingTables(Command command);
 
-        private List<Guid> FindHangingFileKeys(Command command, DataTable table)
+        protected virtual List<Guid> FindHangingFileKeys(Command command, DataTable table)
         {
-            // Получаем список ключей файлов, на которые есть ссылки из других таблиц.
-            List<Guid> keysWithRefs = new List<Guid>();
-            foreach (DataRow row in table.Rows)
-            {
-                // Получаем список внешних ключей из указанной таблицы.
-                List<Guid> foreignKeys = GetForeignKeysFromTable(keysWithRefs, (string)row["TableName"], (string)row["ColumnName"]);
+            string queryString = string.Empty;
 
-                // Собираем внешние ключи в список так, чтобы они не повторялись.
-                foreach (Guid foreignKey in foreignKeys)
+            foreach (DataRow foreignKey in table.Rows)
+            {
+                queryString += $@"SELECT {command.TableName}.{command.PrimaryKeyFieldName}
+                FROM {command.TableName}
+                WHERE {command.TableName}.{command.PrimaryKeyFieldName} IS NOT NULL 
+                AND {command.TableName}.{command.PrimaryKeyFieldName} NOT IN 
+                (SELECT {foreignKey["TableName"]}.{foreignKey["ColumnName"]}
+                FROM {foreignKey["TableName"]} 
+                WHERE {foreignKey["TableName"]}.{foreignKey["ColumnName"]} IS NOT NULL)
+                INTERSECT";
+            }
+
+            queryString.TrimEnd("INTERSECT".ToCharArray());
+
+            var sqlCommand = _connection.CreateCommand();
+            sqlCommand.CommandText = queryString;
+
+            List<Guid> keys = new List<Guid>();
+            using (var reader = sqlCommand.ExecuteReader())
+            {
+                while (reader.Read())
                 {
-                    if (!keysWithRefs.Contains(foreignKey))
-                    {
-                        keysWithRefs.Add(foreignKey);
-                    }
+                    keys.Add((Guid)reader.GetValue(0));
                 }
             }
 
-            // Получаем список первичных ключей таблицы файлов.
-            List<Guid> primaryKeys = GetFilesPrimaryKeys(command);
-
-            // Определяем записи, на которые нет ссылок и удаляем их.
-            foreach (Guid primaryKey in primaryKeys)
-            {
-                if (keysWithRefs.Contains(primaryKey))
-                {
-                    primaryKeys.Remove(primaryKey);
-                }
-            }
-
-            return primaryKeys;
+            return keys;
         }
 
         protected virtual void RemoveHangingFiles(Command command, List<Guid> keys)
@@ -89,8 +86,7 @@ namespace RemoveFiles
         protected void RemoveFromFS(Command command, Guid key)
         {
             // Удаляем файлы (включая .pdf) из файловой системы.
-            DbCommand sqlCommand = GetSqlCommand(command, key);
-            string relativePath = (string)sqlCommand.ExecuteScalar();
+            string relativePath = GetFileUrlByKey(command, key);
 
             FileInfo file = new FileInfo(command.Path + relativePath);
             FileInfo pdfFile = new FileInfo(command.Path + relativePath.Remove(relativePath.LastIndexOf(".")) + ".pdf");
@@ -99,62 +95,35 @@ namespace RemoveFiles
             if (file != null && file.Exists)
             {
                 file.Delete();
-                _logger.InfoFormat("Удален файл: {0}", file.FullName);
+                _logger.Info($"Удален файл: {file.FullName}");
             }
 
             // Удаляем .pdf файл.
             if (pdfFile != null && pdfFile.Exists)
             {
                 pdfFile.Delete();
-                _logger.InfoFormat("Удален .pdf файл: {0}", pdfFile.FullName);
+                _logger.Info($"Удален .pdf файл: {pdfFile.FullName}");
             }
         }
 
-        protected abstract void RemoveFromDB(Command command, Guid key);
-
-        protected abstract DbCommand GetSqlCommand(Command command, Guid key);
-
-        protected virtual List<Guid> GetForeignKeysFromTable(List<Guid> keys, string tableName, string columnName)
+        protected virtual void RemoveFromDB(Command command, Guid key)
         {
-            // Получаем список внешних ключей на таблицу файлов.
-            var sqlCommand = Connection.CreateCommand();
-            sqlCommand.CommandText = string.Format("SELECT {0} FROM {1} WHERE {0} IS NOT NULL", columnName, tableName);
-
-            List<Guid> foreignKeys = new List<Guid>();
-            using (var reader = sqlCommand.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    foreignKeys.Add((Guid)reader.GetValue(0));
-                }
-            }
-
-            return foreignKeys;
-        }
-
-        protected virtual List<Guid> GetFilesPrimaryKeys(Command command)
-        { 
-            // Получаем список первичных ключей таблицы файлов.
-            var sqlCommand = Connection.CreateCommand();
-            sqlCommand.CommandText = string.Format("SELECT {0} FROM {1}", command.PrimaryKeyFieldName, command.TableName);
-
-            List<Guid> primaryKeys = new List<Guid>();
-            using (var reader = sqlCommand.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    primaryKeys.Add((Guid)reader.GetValue(0));
-                }
-            }
-
-            return primaryKeys;
+            // Удаляем запись файла из базы данных.
+            DbCommand sqlCommand = _connection.CreateCommand();
+            sqlCommand.CommandText = $"DELETE FROM {command.TableName} WHERE {command.PrimaryKeyFieldName} = @key";
+            DbParameter parameter = sqlCommand.CreateParameter();
+            parameter.ParameterName = "key";
+            parameter.Value = key;
+            parameter.DbType = DbType.Guid;
+            sqlCommand.Parameters.Add(parameter);
+            sqlCommand.ExecuteNonQuery();
         }
 
         private bool RequestConfirmation(Command command, Guid key)
         {
             if (command.Confirmation)
             {
-                Console.WriteLine(string.Format("Вы уверены, что хотите удалить файл {0}? (Y/N)", GetFileNameByKey(command, key)));
+                Console.WriteLine($"Вы уверены, что хотите удалить файл {GetFileUrlByKey(command, key)}? (Y/N)");
                 ConsoleKeyInfo consoleKey = Console.ReadKey();
                 Console.WriteLine();
                 if (consoleKey.Key == ConsoleKey.Y)
@@ -172,6 +141,19 @@ namespace RemoveFiles
             }
         }
 
-        protected abstract string GetFileNameByKey(Command command, Guid key);
+        protected virtual string GetFileUrlByKey(Command command, Guid key)
+        {
+            // Получаем название файла по ключу (для лога)
+            DbCommand sqlCommand = _connection.CreateCommand();
+            sqlCommand.CommandText = $"SELECT {command.UrlFieldName} FROM {command.TableName} WHERE {command.PrimaryKeyFieldName} = @key";
+            DbParameter parameter = sqlCommand.CreateParameter();
+            parameter.ParameterName = "key";
+            parameter.Value = key;
+            parameter.DbType = DbType.Guid;
+            sqlCommand.Parameters.Add(parameter);
+            string result = (string)sqlCommand.ExecuteScalar();
+
+            return result;
+        }
     }
 }
