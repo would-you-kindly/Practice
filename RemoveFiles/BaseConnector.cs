@@ -37,17 +37,19 @@ namespace RemoveFiles
 
         protected virtual List<Guid> FindHangingFileKeys(Command command, DataTable table)
         {
+            // TODO: StringBuilder
+            // TODO: Можно поменять здесь на union внутренних запросов и сделать из них except из первичных ключей файлов
             List<string> subqueries = new List<string>();
 
             foreach (DataRow foreignKey in table.Rows)
             {
-                subqueries.Add($@"SELECT {command.TableName}.{command.PrimaryKeyFieldName}
-                FROM {command.TableName}
-                WHERE {command.TableName}.{command.PrimaryKeyFieldName} IS NOT NULL 
-                AND {command.TableName}.{command.PrimaryKeyFieldName} NOT IN 
-                (SELECT {foreignKey["TableName"]}.{foreignKey["ColumnName"]}
-                FROM {foreignKey["TableName"]} 
-                WHERE {foreignKey["TableName"]}.{foreignKey["ColumnName"]} IS NOT NULL)");
+                subqueries.Add($"SELECT \"{command.TableName}\".\"{command.PrimaryKeyFieldName}\" " +
+                $"FROM \"{command.TableName}\" " +
+                $"WHERE \"{command.TableName}\".\"{command.PrimaryKeyFieldName}\" IS NOT NULL " +
+                $"AND \"{command.TableName}\".\"{command.PrimaryKeyFieldName}\" NOT IN " +
+                $"(SELECT \"{foreignKey["TableName"]}\".\"{foreignKey["ColumnName"]}\" " +
+                $"FROM \"{foreignKey["TableName"]}\" " +
+                $"WHERE \"{foreignKey["TableName"]}\".\"{foreignKey["ColumnName"]}\" IS NOT NULL)");
             }
 
             string queryString = string.Join(" INTERSECT ", subqueries);
@@ -72,7 +74,6 @@ namespace RemoveFiles
             // TODO: Страшный метод
             bool removeAll = false;
             RemoveFilesOptions option = RemoveFilesOptions.No;
-            int i = 0;
 
             foreach (Guid key in keys)
             {
@@ -83,14 +84,13 @@ namespace RemoveFiles
                     {
                         break;
                     }
-                    removeAll = option == RemoveFilesOptions.YesToAll ? true : false;
+                    removeAll = option == RemoveFilesOptions.YesToAll;
                 }
 
                 if (removeAll || option == RemoveFilesOptions.Yes)
                 {
-                    Console.WriteLine("Удален файл " + key.ToString() + "   " + ++i);
-                    //RemoveFromFS(command, key);
-                    //RemoveFromDB(command, key);
+                    RemoveFromFS(command, key);
+                    RemoveFromDB(command, key);
                 }
             }
 
@@ -132,7 +132,7 @@ namespace RemoveFiles
         {
             // Удаляем запись файла из базы данных.
             DbCommand sqlCommand = _connection.CreateCommand();
-            sqlCommand.CommandText = $"DELETE FROM {command.TableName} WHERE {command.PrimaryKeyFieldName} = @key";
+            sqlCommand.CommandText = $"DELETE FROM \"{command.TableName}\" WHERE \"{command.PrimaryKeyFieldName}\" = @key";
             DbParameter parameter = sqlCommand.CreateParameter();
             parameter.ParameterName = "key";
             parameter.Value = key;
@@ -153,13 +153,15 @@ namespace RemoveFiles
 
                 switch (consoleKey.Key)
                 {
+                    // TODO: переспросить поьзователя что он хотел нажать, если не попал
+                    // TODO: добавить комментарии ко все методам
                     case ConsoleKey.A:
                         return RemoveFilesOptions.YesToAll;
                     case ConsoleKey.Y:
                         return RemoveFilesOptions.Yes;
                     case ConsoleKey.N:
                         return RemoveFilesOptions.No;
-                    case ConsoleKey.E:
+                    case ConsoleKey.X:
                         return RemoveFilesOptions.NoToAll;
                     default:
                         throw new ArgumentException("Неверно выбран вариант удаления.");
@@ -175,7 +177,7 @@ namespace RemoveFiles
         {
             // Получаем название файла по ключу (для лога)
             DbCommand sqlCommand = _connection.CreateCommand();
-            sqlCommand.CommandText = $"SELECT {command.UrlFieldName} FROM {command.TableName} WHERE {command.PrimaryKeyFieldName} = @key";
+            sqlCommand.CommandText = $"SELECT \"{command.UrlFieldName}\" FROM \"{command.TableName}\" WHERE \"{command.PrimaryKeyFieldName}\" = @key";
             DbParameter parameter = sqlCommand.CreateParameter();
             parameter.ParameterName = "key";
             parameter.Value = key;

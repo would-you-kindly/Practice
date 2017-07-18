@@ -30,6 +30,7 @@ namespace RemoveFiles
                     ON ccu.constraint_name = tc.constraint_name
                 WHERE constraint_type = 'FOREIGN KEY' AND tc.table_name = @FilesTableName;";
             sqlCommand.Parameters.AddWithValue("FilesTableName", command.TableName);
+
             NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(sqlCommand);
             DataTable table = new DataTable();
             adapter.Fill(table);

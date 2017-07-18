@@ -30,6 +30,7 @@ namespace RemoveFiles
                 WHERE 
                    OBJECT_NAME (fk.referenced_object_id) = @FilesTableName";
             sqlCommand.Parameters.AddWithValue("FilesTableName", command.TableName);
+
             SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
             DataTable table = new DataTable();
             adapter.Fill(table);

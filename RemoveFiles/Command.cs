@@ -44,7 +44,7 @@ namespace RemoveFiles
         internal const bool DefaultLog = false;
         internal const bool DefaultConfirmation = false;
 
-        private Dictionary<Commands, object> commands;
+        private Dictionary<Commands, object> commands = new Dictionary<Commands, object>();
 
         /// <summary>
         /// Создает новый экземпляр класса Command 
@@ -52,19 +52,26 @@ namespace RemoveFiles
         /// </summary>
         public Command()
         {
-            commands = new Dictionary<Commands, object>()
-            {
-                // TODO: Здесь может быть ошибка, если знаения по умолчанию не проверяются (например, если не задать строку подлкючения, то возмется строка по умолчанию, и она не проверится)
-                { Commands.Help, null },
-                { Commands.ConnectionString, DefaultConnectionString },
-                { Commands.Dbms, DefaultDbms },
-                { Commands.TableName, DefaultTableName },
-                { Commands.PrimaryKeyFieldName, DefaultPrimaryKeyFieldName },
-                { Commands.UrlFieldName, DefaultUrlFieldName },
-                { Commands.Path, DefaultPath },
-                { Commands.Log, DefaultLog },
-                { Commands.Confirmation, DefaultConfirmation }
-            };
+            ConnectionString = DefaultConnectionString;
+            Dbms = DefaultDbms;
+            TableName = DefaultTableName;
+            PrimaryKeyFieldName = DefaultPrimaryKeyFieldName;
+            UrlFieldName = DefaultUrlFieldName;
+            Path = DefaultPath;
+            Log = DefaultLog;
+            Confirmation = DefaultConfirmation;
+            //{
+            //    // TODO: Здесь может быть ошибка, если знаения по умолчанию не проверяются (например, если не задать строку подлкючения, то возмется строка по умолчанию, и она не проверится)
+            //    { Commands.Help, null },
+            //    { Commands.ConnectionString, ghghg = DefaultConnectionString },
+            //    { Commands.Dbms, DefaultDbms },
+            //    { Commands.TableName, DefaultTableName },
+            //    { Commands.PrimaryKeyFieldName, DefaultPrimaryKeyFieldName },
+            //    { Commands.UrlFieldName, DefaultUrlFieldName },
+            //    { Commands.Path, DefaultPath },
+            //    { Commands.Log, DefaultLog },
+            //    { Commands.Confirmation, DefaultConfirmation }
+            //};
         }
 
         /// <summary>
