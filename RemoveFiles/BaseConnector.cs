@@ -53,6 +53,7 @@ namespace RemoveFiles
                 INTERSECT";
             }
 
+            // TODO: Не уверен здесь, возможно нужно перевернуть строку.
             queryString.TrimEnd("INTERSECT".ToCharArray());
 
             var sqlCommand = _connection.CreateCommand();
@@ -72,13 +73,23 @@ namespace RemoveFiles
 
         protected virtual void RemoveHangingFiles(Command command, List<Guid> keys)
         {
+            bool removeAll = false;
+            RemoveFilesOptions option = RemoveFilesOptions.No;
+
             foreach (Guid key in keys)
             {
-                // TODO: Сделать удаление всех файлов за раз.
-                if (RequestConfirmation(command, key))
+                if (!removeAll)
                 {
-                    RemoveFromFS(command, key);
-                    RemoveFromDB(command, key);
+                    option = RequestConfirmation(command, key);
+                }
+
+                // TODO: Сделать удаление всех файлов за раз.
+                // TODO: Удалить все/Удалить текущий/Нет для всех/Нет для текущего.
+                if (removeAll = option == RemoveFilesOptions.All ? true : false || option == RemoveFilesOptions.Yes)
+                {
+                    Console.WriteLine(key.ToByteArray().ToString());
+                    //RemoveFromFS(command, key);
+                    //RemoveFromDB(command, key);
                 }
             }
         }
@@ -114,30 +125,37 @@ namespace RemoveFiles
             DbParameter parameter = sqlCommand.CreateParameter();
             parameter.ParameterName = "key";
             parameter.Value = key;
+            // TODO: Тут не уверен насчет типа DbType
             parameter.DbType = DbType.Guid;
             sqlCommand.Parameters.Add(parameter);
             sqlCommand.ExecuteNonQuery();
+
+            _logger.Info($"Удалена запись: {GetFileUrlByKey(command, key)}");
         }
 
-        private bool RequestConfirmation(Command command, Guid key)
+        private RemoveFilesOptions RequestConfirmation(Command command, Guid key)
         {
             if (command.Confirmation)
             {
-                Console.WriteLine($"Вы уверены, что хотите удалить файл {GetFileUrlByKey(command, key)}? (Y/N)");
-                ConsoleKeyInfo consoleKey = Console.ReadKey();
+                Console.WriteLine($"Вы уверены, что хотите удалить файл {GetFileUrlByKey(command, key)}? (A/Y/N)");
+                ConsoleKeyInfo consoleKey = Console.ReadKey(true);
                 Console.WriteLine();
-                if (consoleKey.Key == ConsoleKey.Y)
+
+                switch (consoleKey.Key)
                 {
-                    return true;
-                }
-                else
-                {
-                    return false;
+                    case ConsoleKey.A:
+                        return RemoveFilesOptions.All;
+                    case ConsoleKey.Y:
+                        return RemoveFilesOptions.Yes;
+                    case ConsoleKey.N:
+                        return RemoveFilesOptions.No;
+                    default:
+                        throw new ArgumentException("Неверно выбран варинат удаления.");
                 }
             }
             else
             {
-                return true;
+                return RemoveFilesOptions.All;
             }
         }
 

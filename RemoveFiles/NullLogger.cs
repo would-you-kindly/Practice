@@ -54,6 +54,7 @@ namespace RemoveFiles
         {
             get
             {
+                // TODO: ЧТо тут возвращать?
                 return Logger;
             }
         }
