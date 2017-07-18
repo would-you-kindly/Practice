@@ -3,10 +3,12 @@
     public enum RemoveFilesOptions
     {
         // Удаление всех файлов.
-        All,
+        YesToAll,
         // Удаление текущего файла.
         Yes,
         // Пропуск текущего файла.
-        No
+        No,
+        // Пропуск всех файлов.
+        NoToAll
     }
 }

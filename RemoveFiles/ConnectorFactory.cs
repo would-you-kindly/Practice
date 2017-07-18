@@ -26,13 +26,10 @@ namespace RemoveFiles
             {
                 case "SQL Server":
                     return new SqlServerConnector(logger, command.ConnectionString);
-                    break;
                 case "PostgreSQL":
                     return new PostgreSqlConnector(logger, command.ConnectionString);
-                    break;
                 default:
                     throw new ArgumentException("Неверно указана база данных.");
-                    break;
             }
         }
     }

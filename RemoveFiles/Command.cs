@@ -19,6 +19,8 @@ namespace RemoveFiles
             Help,
             // Задание строки подключения к базе данных.
             ConnectionString,
+            // Задание СУБД
+            Dbms,
             // Задание имени таблицы с файлами.
             TableName,
             // Задание имени поля первичного ключа.
@@ -30,19 +32,17 @@ namespace RemoveFiles
             // Выполнять ли логирование данного действия.
             Log,
             // Запрашивать ли подтверждение перед удалением.
-            Confirmation,
-            // Задание СУБД
-            Dbms
+            Confirmation
         }
 
         internal const string DefaultConnectionString = @"Data Source=.\sqlexpress;Initial Catalog=FlexberryPractice;Integrated Security=True;";
+        internal const string DefaultDbms = "PostgreSQL";
         internal const string DefaultTableName = "Файл";
         internal const string DefaultPrimaryKeyFieldName = "PrimaryKey";
         internal const string DefaultUrlFieldName = "Url";
         internal const string DefaultPath = @"D:\YandexDisk\Third course\Производственная практика\Practice\TestFiles";
         internal const bool DefaultLog = false;
         internal const bool DefaultConfirmation = false;
-        internal const string DefaultDbms = "PostgreSQL";
 
         private Dictionary<Commands, object> commands;
 
@@ -54,22 +54,23 @@ namespace RemoveFiles
         {
             commands = new Dictionary<Commands, object>()
             {
+                // TODO: Здесь может быть ошибка, если знаения по умолчанию не проверяются (например, если не задать строку подлкючения, то возмется строка по умолчанию, и она не проверится)
                 { Commands.Help, null },
                 { Commands.ConnectionString, DefaultConnectionString },
+                { Commands.Dbms, DefaultDbms },
                 { Commands.TableName, DefaultTableName },
                 { Commands.PrimaryKeyFieldName, DefaultPrimaryKeyFieldName },
                 { Commands.UrlFieldName, DefaultUrlFieldName },
                 { Commands.Path, DefaultPath },
                 { Commands.Log, DefaultLog },
-                { Commands.Confirmation, DefaultConfirmation },
-                { Commands.Dbms, DefaultDbms }
+                { Commands.Confirmation, DefaultConfirmation }
             };
         }
 
         /// <summary>
         /// Задает или возвращает строку подключения к базе данных.
         /// </summary>
-        public string ConnectionString
+        internal string ConnectionString
         {
             get
             {
@@ -90,6 +91,27 @@ namespace RemoveFiles
                 catch (Exception)
                 {
                     throw new ArgumentException("При попытке соединения произошла ошибка. Проверьте правильность строки подключения.");
+                }
+            }
+        }
+
+        internal string Dbms
+        {
+            get
+            {
+                return (string)commands[Commands.Dbms];
+            }
+            set
+            {
+                // Проверяем правильность параметров команды -conf.
+                if (value == "SQL Server" || value == "PostgreSQL")
+                {
+                    commands[Commands.Dbms] = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Аргумент команды -dbms указан неверно. " +
+                        "Он может принимать только значение \"SQL Server\" или \"PostgreSQL\".");
                 }
             }
         }
@@ -178,16 +200,7 @@ namespace RemoveFiles
             }
             set
             {
-                // Проверяем правильность параметров команды -log.
-                if (value != null)
-                {
-                    commands[Commands.Log] = value;
-                }
-                else
-                {
-                    throw new ArgumentException("Аргумент команды -log указан неверно." +
-                        "Он может принимать только значение \"true\" или \"false\".");
-                }
+                commands[Commands.Log] = value;
             }
         }
 
@@ -203,37 +216,7 @@ namespace RemoveFiles
             }
             set
             {
-                // Проверяем правильность параметров команды -conf.
-                if (value != null)
-                {
-                    commands[Commands.Confirmation] = value;
-                }
-                else
-                {
-                    throw new ArgumentException("Аргумент команды -conf указан неверно. " +
-                        "Он может принимать только значение \"true\" или \"false\".");
-                }
-            }
-        }
-
-        public string Dbms
-        {
-            get
-            {
-                return (string)commands[Commands.Dbms];
-            }
-            set
-            {
-                // Проверяем правильность параметров команды -conf.
-                if (value == "SQL Server" || value == "PostgreSQL")
-                {
-                    commands[Commands.Dbms] = value;
-                }
-                else
-                {
-                    throw new ArgumentException("Аргумент команды -dbms указан неверно. " +
-                        "Он может принимать только значение \"SQL Server\" или \"PostgreSQL\".");
-                }
+                commands[Commands.Confirmation] = value;
             }
         }
 
@@ -245,22 +228,24 @@ namespace RemoveFiles
             Console.WriteLine("\nУтилита предназначена для удаления файлов и записей о них из базы данных, " +
                 "на которые нет ссылок из других таблиц базы данных. При удалении файлов также выполняется " +
                 "удаление файла с расширением .pdf с тем же именем. Утилита позволяет:\n" +
-                "\n1. указать строку подключения к базе данных, в которой необходимо выполнить удаление;" +
-                "\n2. указать название таблицы, которая предназначена для хранения информации о файлах;" +
-                "\n3. указать название поля, которое является первичным ключом таблицы файлов;" +
-                "\n4. указать название поля, которое предназначено для хранения относительного пути к файлу;" +
-                "\n5. указать абсолютный путь к каталогу, в котором хранятся файлы;" +
-                "\n6. выполнять логирование действий программы." +
+                "\n1. указать строку подключения к базе данных;" +
+                "\n2. указать СУБД, в которой необходимо выполнить удаление;" +
+                "\n3. указать название таблицы, которая предназначена для хранения информации о файлах;" +
+                "\n4. указать название поля, которое является первичным ключом таблицы файлов;" +
+                "\n5. указать название поля, которое предназначено для хранения относительного пути к файлу;" +
+                "\n6. указать абсолютный путь к каталогу, в котором хранятся файлы;" +
+                "\n7. выполнять логирование действий программы." +
                 "\n\nДля задания аргументов используются ключевые слова и параметры. " +
                 "\n\nВызов справки.\n\tКлючевое слово:\n\t\t-help\n\tПараметры:\n\t\tНет параметров.\n\tПример:\n\t\t-help" +
                 "\n\nЗадание строки подключения.\n\tКлючевое слово:\n\t\t-cs\n\tПараметры:\n\t\tСтрока подключения к базе данных в кавычках.\n\tПример:\n\t\t-cs \"Data Source=.\\sqlexpress;Initial Catalog=FlexberryPractice;Integrated Security=True;\"\n\tЗначение по умолчанию:\n\t\t\"Data Source=.\\sqlexpress;Initial Catalog=FlexberryPractice;Integrated Security=True;\"" +
+                "\n\nЗадание СУБД.\n\tКлючевое слово:\n\t\t-dbms\n\tПараметры:\n\t\t- \"SQL Server\"\n\t\t- \"PostgreSQL\"\n\tПример:\n\t\t-dbms \"SQL Server\"\n\tЗначение по умолчанию:\n\t\t\"PostgreSQL\"" +
                 "\n\nЗадание названия таблицы файлов.\n\tКлючевое слово:\n\t\t-tn\n\tПараметры:\n\t\tНазвание таблицы файлов в кавычках.\n\tПример:\n\t\t-tn \"Файлы\"\n\tЗначение по умолчанию:\n\t\t\"Файл\"" +
                 "\n\nЗадание названия поля первичного ключа.\n\tКлючевое слово:\n\t\t-pk\n\tПараметры:\n\t\tНазвание поля первичного ключа в кавычках.\n\tПример:\n\t\t-pk \"Id\"\n\tЗначение по умолчанию:\n\t\t\"PrimaryKey\"" +
                 "\n\nЗадание названия поля с относительным путем к файлу.\n\tКлючевое слово:\n\t\t-url\n\tПараметры:\n\t\tОтносительный путь к каталогу с файлами в кавычках.\n\tПример:\n\t\t-url \"Url\"\n\tЗначение по умолчанию:\n\t\t\"Url\"" +
                 "\n\nЗадание пути к каталогу с файлами.\n\tКлючевое слово:\n\t\t-path\n\tПараметры:\n\t\tПуть к каталогу с файлами в кавычках.\n\tПример:\n\t\t-path \"C:\\Windows\\Help\"\n\tЗначение по умолчанию:\n\t\t\"D:\\YandexDisk\\Third course\\Производственная практика\\Practice\\TestFiles\"" +
-                "\n\nВыполнения логирования действий программы.\n\tКлючевое слово:\n\t\t-log\n\tПараметры:\n\t\t- \"true\" - выполнять логирование.\n\t\t- \"false\" - не выполнять логирование.\n\tПример:\n\t\t-log \"false\"\n\tЗначение по умолчанию:\n\t\t\"true\"" +
-                "\n\nЗапрос на подтверждение удаления.\n\tКлючевое слово:\n\t\t-conf\n\tПараметры:\n\t\t- \"true\" - запрашивать подтверждение удаления.\n\t\t- \"false\" - не запрашивать подтверждение удаления.\n\tПример:\n\t\t-conf \"false\"\n\tЗначение по умолчанию:\n\t\t\"true\"" +
-                "\n\nЗадание СУБД.\n\tКлючевое слово:\n\t\t-dbms\n\tПараметры:\n\t\t- \"SQL Server\"\n\t\t- \"PostgreSQL\"\n\tПример:\n\t\t-dbms \"SQL Server\"\n\tЗначение по умолчанию:\n\t\t\"PostgreSQL\"\n\n\n");
+                "\n\nВыполнения логирования действий программы.\n\tКлючевое слово:\n\t\t-log\n\tПример:\n\t\t-log\n\tЗначение по умолчанию:\n\t\t\"не установлено\"" +
+                "\n\nЗапрос на подтверждение удаления.\n\tКлючевое слово:\n\t\t-conf\n\tПример:\n\t\t-conf\n\tЗначение по умолчанию:\n\t\t\"не установлено\"" +
+                "\n\nЕсли установлен параметр, запрашивающий подтверждение об удалении, то перед удалением каждого файла будет появляться сообщение с просьбой нажатия соответствующей клавиши:\n\tA - удалить все файлы;\n\tY - удалить текущий файл;\n\tN - пропустить удаление текущего файла;\n\tE - пропустить удаление всех файлов.\n\n\n");
         }
     }
 }

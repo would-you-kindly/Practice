@@ -27,11 +27,15 @@ namespace RemoveFiles
                 // args[++i] означает аргумент команды, который должен следовать сразу за ней.
                 switch (args[i])
                 {
+                    // TODO: Разный порядок передачи значений может работать по-разному
                     case Settings.HelpCommand:
                         command.Help();
                         break;
                     case Settings.ConnectionStringCommand:
                         command.ConnectionString = args[++i];
+                        break;
+                    case Settings.DbmsCommand:
+                        command.Dbms = args[++i];
                         break;
                     case Settings.TableNameCommand:
                         command.TableName = args[++i];
@@ -50,9 +54,6 @@ namespace RemoveFiles
                         break;
                     case Settings.ConfirmationCommand:
                         command.Confirmation = true;
-                        break;
-                    case Settings.DbmsCommand:
-                        command.Dbms = args[++i];
                         break;
                     default:
                         throw new ArgumentException("Аргументы заданы неверно. Выполните команду -help для получения дополнительной информации.");

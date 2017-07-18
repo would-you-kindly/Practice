@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartArguments>-cs "SERVER=dis-edb\edb%3bTrusted_connection=no%3bDATABASE=OMSU%3bUser ID=omsu_user%3bPassword=omsu_password%3b" -pk "primaryKey" -conf -dbms "SQL Server"</StartArguments>
+  </PropertyGroup>
+</Project>

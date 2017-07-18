@@ -30,8 +30,6 @@ namespace RemoveFiles
                 DataTable table = FindReferencingTables(command);
                 List<Guid> keys = FindHangingFileKeys(command, table);
                 RemoveHangingFiles(command, keys);
-
-                Console.WriteLine("Удаление файлов прошло успешно.");
             }
         }
 
@@ -39,22 +37,20 @@ namespace RemoveFiles
 
         protected virtual List<Guid> FindHangingFileKeys(Command command, DataTable table)
         {
-            string queryString = string.Empty;
+            List<string> subqueries = new List<string>();
 
             foreach (DataRow foreignKey in table.Rows)
             {
-                queryString += $@"SELECT {command.TableName}.{command.PrimaryKeyFieldName}
+                subqueries.Add($@"SELECT {command.TableName}.{command.PrimaryKeyFieldName}
                 FROM {command.TableName}
                 WHERE {command.TableName}.{command.PrimaryKeyFieldName} IS NOT NULL 
                 AND {command.TableName}.{command.PrimaryKeyFieldName} NOT IN 
                 (SELECT {foreignKey["TableName"]}.{foreignKey["ColumnName"]}
                 FROM {foreignKey["TableName"]} 
-                WHERE {foreignKey["TableName"]}.{foreignKey["ColumnName"]} IS NOT NULL)
-                INTERSECT";
+                WHERE {foreignKey["TableName"]}.{foreignKey["ColumnName"]} IS NOT NULL)");
             }
 
-            // TODO: Не уверен здесь, возможно нужно перевернуть строку.
-            queryString.TrimEnd("INTERSECT".ToCharArray());
+            string queryString = string.Join(" INTERSECT ", subqueries);
 
             var sqlCommand = _connection.CreateCommand();
             sqlCommand.CommandText = queryString;
@@ -73,24 +69,38 @@ namespace RemoveFiles
 
         protected virtual void RemoveHangingFiles(Command command, List<Guid> keys)
         {
+            // TODO: Страшный метод
             bool removeAll = false;
             RemoveFilesOptions option = RemoveFilesOptions.No;
+            int i = 0;
 
             foreach (Guid key in keys)
             {
                 if (!removeAll)
                 {
                     option = RequestConfirmation(command, key);
+                    if (option == RemoveFilesOptions.NoToAll)
+                    {
+                        break;
+                    }
+                    removeAll = option == RemoveFilesOptions.YesToAll ? true : false;
                 }
 
-                // TODO: Сделать удаление всех файлов за раз.
-                // TODO: Удалить все/Удалить текущий/Нет для всех/Нет для текущего.
-                if (removeAll = option == RemoveFilesOptions.All ? true : false || option == RemoveFilesOptions.Yes)
+                if (removeAll || option == RemoveFilesOptions.Yes)
                 {
-                    Console.WriteLine(key.ToByteArray().ToString());
+                    Console.WriteLine("Удален файл " + key.ToString() + "   " + ++i);
                     //RemoveFromFS(command, key);
                     //RemoveFromDB(command, key);
                 }
+            }
+
+            if (option == RemoveFilesOptions.NoToAll)
+            {
+                Console.WriteLine("Удаление файлов отменено.");
+            }
+            else
+            {
+                Console.WriteLine("Удаление файлов прошло успешно.");
             }
         }
 
@@ -117,6 +127,7 @@ namespace RemoveFiles
             }
         }
 
+        // TODO: Все равно пока только guid в качестве первичного ключа
         protected virtual void RemoveFromDB(Command command, Guid key)
         {
             // Удаляем запись файла из базы данных.
@@ -137,25 +148,26 @@ namespace RemoveFiles
         {
             if (command.Confirmation)
             {
-                Console.WriteLine($"Вы уверены, что хотите удалить файл {GetFileUrlByKey(command, key)}? (A/Y/N)");
+                Console.WriteLine($"Вы уверены, что хотите удалить файл {GetFileUrlByKey(command, key)}? (A/Y/N/E)");
                 ConsoleKeyInfo consoleKey = Console.ReadKey(true);
-                Console.WriteLine();
 
                 switch (consoleKey.Key)
                 {
                     case ConsoleKey.A:
-                        return RemoveFilesOptions.All;
+                        return RemoveFilesOptions.YesToAll;
                     case ConsoleKey.Y:
                         return RemoveFilesOptions.Yes;
                     case ConsoleKey.N:
                         return RemoveFilesOptions.No;
+                    case ConsoleKey.E:
+                        return RemoveFilesOptions.NoToAll;
                     default:
-                        throw new ArgumentException("Неверно выбран варинат удаления.");
+                        throw new ArgumentException("Неверно выбран вариант удаления.");
                 }
             }
             else
             {
-                return RemoveFilesOptions.All;
+                return RemoveFilesOptions.YesToAll;
             }
         }
 
@@ -167,6 +179,7 @@ namespace RemoveFiles
             DbParameter parameter = sqlCommand.CreateParameter();
             parameter.ParameterName = "key";
             parameter.Value = key;
+            // TODO: Тут не уверен насчет типа DbType
             parameter.DbType = DbType.Guid;
             sqlCommand.Parameters.Add(parameter);
             string result = (string)sqlCommand.ExecuteScalar();

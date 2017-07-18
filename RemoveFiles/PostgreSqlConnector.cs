@@ -15,6 +15,7 @@ namespace RemoveFiles
 
         protected override DataTable FindReferencingTables(Command command)
         {
+            // TODO: Скорее всего неправильный запрос.
             // Получаем DataTable, содержащий названия таблиц и внешних ключей на таблицу файлов.
             NpgsqlCommand sqlCommand = (_connection as NpgsqlConnection).CreateCommand();
             sqlCommand.CommandText =
