@@ -86,7 +86,7 @@ namespace RemoveFiles
                 if (removeAll || option == RemoveFilesOptions.Yes)
                 {
                     Console.WriteLine(key.ToString());
-                    //RemoveFromFS(command, key);
+                    RemoveFromFS(command, key);
                     //RemoveFromDB(command, key);
                 }
             }
@@ -106,22 +106,37 @@ namespace RemoveFiles
             // Удаляем файлы (включая .pdf) из файловой системы.
             string relativePath = GetFileUrlByKey(command, key);
 
-            FileInfo file = new FileInfo(command.Path + relativePath);
-            FileInfo pdfFile = new FileInfo(command.Path + relativePath.Remove(relativePath.LastIndexOf(".")) + ".pdf");
+            FileInfo file = new FileInfo(command.Path + relativePath.TrimStart('~'));
+            FileInfo pdfFile = new FileInfo(command.Path + relativePath.TrimStart('~').Remove(relativePath.LastIndexOf(".")) + "pdf");
 
             // Удаляем файл.
             if (file != null && file.Exists)
             {
-                file.Delete();
-                _logger.Info($"Удален файл: {file.FullName}");
+                try
+                {
+                    file.Delete();
+                    _logger.Info($"Удален файл: {file.FullName}");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    _logger.Info(e.Message);
+                }
             }
 
-            // TODO: try catch сюда и при удалении записей
             // Удаляем .pdf файл.
             if (pdfFile != null && pdfFile.Exists)
             {
-                pdfFile.Delete();
-                _logger.Info($"Удален .pdf файл: {pdfFile.FullName}");
+                try
+                {
+                    pdfFile.Delete();
+                    _logger.Info($"Удален .pdf файл: {pdfFile.FullName}");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    _logger.Info(e.Message);
+                }
             }
         }
 

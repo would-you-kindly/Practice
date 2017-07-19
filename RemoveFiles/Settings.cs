@@ -14,6 +14,7 @@ namespace RemoveFiles
     public class Settings
     {
         internal const string HelpCommand = "-help";
+        internal const string DbmsCommand = "-dbms";
         internal const string ConnectionStringCommand = "-cs";
         internal const string TableNameCommand = "-tn";
         internal const string PrimaryKeyFieldNameCommand = "-pk";
@@ -21,6 +22,5 @@ namespace RemoveFiles
         internal const string PathCommand = "-path";
         internal const string LogCommand = "-log";
         internal const string ConfirmationCommand = "-conf";
-        internal const string DbmsCommand = "-dbms";
     }
 }

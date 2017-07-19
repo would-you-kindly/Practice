@@ -86,8 +86,8 @@ namespace RemoveFiles
                 Path = DefaultPath;
 
             // Проверяем все параметры на корректные значения.
-            if (ValidateDbms() && ValidateConnectionString() && ValidateTableName() &&
-               ValidatePrimaryKeyFieldName() && ValidateUrlFieldName() && ValidatePath())
+            if (ValidateDbms() & ValidateConnectionString() & ValidateTableName() &
+               ValidatePrimaryKeyFieldName() & ValidateUrlFieldName() & ValidatePath())
             {
                 return true;
             }
@@ -160,7 +160,8 @@ namespace RemoveFiles
             {
                 using (connector.Connection)
                 {
-                    connector.Connection.Open(); NpgsqlCommand sqlQuery = (NpgsqlCommand)connector.Connection.CreateCommand();
+                    connector.Connection.Open();
+                    NpgsqlCommand sqlQuery = (NpgsqlCommand)connector.Connection.CreateCommand();
                     sqlQuery.CommandText = "SELECT EXISTS(SELECT 1 FROM information_schema.tables " +
                         "WHERE table_name = @TableName);";
                     sqlQuery.Parameters.AddWithValue("TableName", TableName);
@@ -187,7 +188,8 @@ namespace RemoveFiles
             {
                 using (connector.Connection)
                 {
-                    connector.Connection.Open(); SqlCommand sqlQuery = (SqlCommand)connector.Connection.CreateCommand();
+                    connector.Connection.Open();
+                    SqlCommand sqlQuery = (SqlCommand)connector.Connection.CreateCommand();
                     sqlQuery.CommandText = "IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS " +
                         "WHERE TABLE_NAME = @TableName AND COLUMN_NAME = @PrimaryKeyFieldName) SELECT 1 ELSE SELECT 0";
                     sqlQuery.Parameters.AddWithValue("TableName", TableName);
@@ -195,7 +197,7 @@ namespace RemoveFiles
                     if ((int)sqlQuery.ExecuteScalar() == 0)
                     {
                         Console.WriteLine($"Столбца с именем {PrimaryKeyFieldName} в таблице {TableName} не существует. " +
-                            "Проверьте правильность названия таблицы.");
+                            "Проверьте правильность названия столбца первичного ключа.");
                         return false;
                     }
                 }
@@ -208,7 +210,8 @@ namespace RemoveFiles
             {
                 using (connector.Connection)
                 {
-                    connector.Connection.Open(); NpgsqlCommand sqlQuery = (NpgsqlCommand)connector.Connection.CreateCommand();
+                    connector.Connection.Open();
+                    NpgsqlCommand sqlQuery = (NpgsqlCommand)connector.Connection.CreateCommand();
                     sqlQuery.CommandText = "SELECT EXISTS(SELECT 1 FROM information_schema.columns " +
                         "WHERE table_name = @TableName AND column_name = @PrimaryKeyFieldName);";
                     sqlQuery.Parameters.AddWithValue("TableName", TableName);
@@ -216,7 +219,7 @@ namespace RemoveFiles
                     if (!(bool)sqlQuery.ExecuteScalar())
                     {
                         Console.WriteLine($"Столбца с именем {PrimaryKeyFieldName} в таблице {TableName} не существует. " +
-                            "Проверьте правильность названия таблицы.");
+                            "Проверьте правильность названия столбца первичного ключа.");
                         return false;
                     }
                 }
@@ -236,7 +239,8 @@ namespace RemoveFiles
             {
                 using (connector.Connection)
                 {
-                    connector.Connection.Open(); SqlCommand sqlQuery = (SqlCommand)connector.Connection.CreateCommand();
+                    connector.Connection.Open();
+                    SqlCommand sqlQuery = (SqlCommand)connector.Connection.CreateCommand();
                     sqlQuery.CommandText = "IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS " +
                         "WHERE TABLE_NAME = @TableName AND COLUMN_NAME = @UrlFieldName) SELECT 1 ELSE SELECT 0";
                     sqlQuery.Parameters.AddWithValue("TableName", TableName);
@@ -244,7 +248,7 @@ namespace RemoveFiles
                     if ((int)sqlQuery.ExecuteScalar() == 0)
                     {
                         Console.WriteLine($"Столбца с именем {UrlFieldName} в таблице {TableName} не существует. " +
-                            "Проверьте правильность названия таблицы.");
+                            "Проверьте правильность названия столбца Url.");
                         return false;
                     }
                 }
@@ -257,7 +261,8 @@ namespace RemoveFiles
             {
                 using (connector.Connection)
                 {
-                    connector.Connection.Open(); NpgsqlCommand sqlQuery = (NpgsqlCommand)connector.Connection.CreateCommand();
+                    connector.Connection.Open();
+                    NpgsqlCommand sqlQuery = (NpgsqlCommand)connector.Connection.CreateCommand();
                     sqlQuery.CommandText = "SELECT EXISTS(SELECT 1 FROM information_schema.columns " +
                         "WHERE table_name = @TableName AND column_name = @UrlFieldName);";
                     sqlQuery.Parameters.AddWithValue("TableName", TableName);
@@ -265,7 +270,7 @@ namespace RemoveFiles
                     if (!(bool)sqlQuery.ExecuteScalar())
                     {
                         Console.WriteLine($"Столбца с именем {UrlFieldName} в таблице {TableName} не существует. " +
-                            "Проверьте правильность названия таблицы.");
+                            "Проверьте правильность названия столбца Url.");
                         return false;
                     }
                 }
