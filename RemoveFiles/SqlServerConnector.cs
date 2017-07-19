@@ -4,7 +4,9 @@ using System.Data.SqlClient;
 
 namespace RemoveFiles
 {
-    // Конкретная стратегия
+    /// <summary>
+    /// 
+    /// </summary>
     class SqlServerConnector : BaseConnector
     {
         public SqlServerConnector(ILog logger, string connectionString)

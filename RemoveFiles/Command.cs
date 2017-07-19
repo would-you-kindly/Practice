@@ -12,32 +12,54 @@ using Npgsql;
 namespace RemoveFiles
 {
     /// <summary>
-    /// Представляет команды программы по удалению файлов.
+    /// Представляет команды программы по удалению 
+    /// файлов и связанные с ними аргументы.
     /// </summary>
     public class Command
     {
         public enum CommandType
         {
-            // Вывод справки по программе.
-            Help,
-            // Задание строки подключения к базе данных.
-            ConnectionString,
-            // Задание СУБД
+            /// <summary>
+            /// Задание СУБД.
+            /// </summary>
             Dbms,
-            // Задание имени таблицы с файлами.
+            /// <summary>
+            /// Задание строки подключения к базе данных.
+            /// </summary>
+            ConnectionString,
+            /// <summary>
+            /// Задание имени таблицы с файлами.
+            /// </summary>
             TableName,
-            // Задание имени поля первичного ключа.
+            /// <summary>
+            /// Задание имени поля первичного ключа.
+            /// </summary>
             PrimaryKeyFieldName,
-            // Задание имени поля, которое хранит относительный путь к файлам.
+            /// <summary>
+            /// Задание имени поля, которое хранит относительный путь к файлам.
+            /// </summary>
             UrlFieldName,
-            // Задание пути к папке, в которой находятся файлы (абсолютный).
+            /// <summary>
+            /// Задание абсолютного пути к папке, в которой находятся файлы.
+            /// </summary>
             Path,
-            // Выполнять ли логирование данного действия.
+            /// <summary>
+            /// Выполнять ли логирование данного действия.
+            /// </summary>
             Log,
-            // Запрашивать ли подтверждение перед удалением.
-            Confirmation
+            /// <summary>
+            /// Запрашивать ли подтверждение перед удалением.
+            /// </summary>
+            Confirmation,
+            /// <summary>
+            /// Вывод справки по программе.
+            /// </summary>
+            Help
         }
 
+        /// <summary>
+        /// Представляют значения аргументов команды по умолчанию.
+        /// </summary>
         internal const string DefaultConnectionString = @"Data Source=.\sqlexpress;Initial Catalog=FlexberryPractice;Integrated Security=True;";
         internal const string DefaultDbms = "PostgreSQL";
         internal const string DefaultTableName = "Файл";
@@ -47,17 +69,18 @@ namespace RemoveFiles
         internal const bool DefaultLog = false;
         internal const bool DefaultConfirmation = false;
 
+        /// <summary>
+        /// Представляет коллекцию команд и связанных с ними параметров.
+        /// </summary>
         private Dictionary<CommandType, object> commands;
 
         /// <summary>
-        /// Создает новый экземпляр класса Command 
-        /// и присваивает аргументам программы значения по умолчнию.
+        /// Создает новый экземпляр класса Command.
         /// </summary>
         public Command()
         {
             commands = new Dictionary<CommandType, object>()
             {
-                // TODO: Здесь может быть ошибка, если знаения по умолчанию не проверяются (например, если не задать строку подлкючения, то возмется строка по умолчанию, и она не проверится)
                 { CommandType.ConnectionString, null },
                 { CommandType.Dbms, null },
                 { CommandType.TableName, null },
@@ -69,6 +92,10 @@ namespace RemoveFiles
             };
         }
 
+        /// <summary>
+        /// Проверяет на корректность все аргументы команды.
+        /// </summary>
+        /// <returns>true, если проверка прошла успешно, иначе false</returns>
         public bool Validate()
         {
             // Если параметры не заданы при запуске, задаем им значение по умолчанию.
@@ -85,7 +112,7 @@ namespace RemoveFiles
             if (Path == null)
                 Path = DefaultPath;
 
-            // Проверяем все параметры на корректные значения.
+            // Проверяем параметры на корректные значения.
             if (ValidateDbms() & ValidateConnectionString() & ValidateTableName() &
                ValidatePrimaryKeyFieldName() & ValidateUrlFieldName() & ValidatePath())
             {
@@ -97,6 +124,10 @@ namespace RemoveFiles
             }
         }
 
+        /// <summary>
+        /// Проверяет на корректность указанную СУБД.
+        /// </summary>
+        /// <returns>true, если проверка прошла успешно, иначе false</returns>
         private bool ValidateDbms()
         {
             switch (Dbms)
@@ -111,6 +142,10 @@ namespace RemoveFiles
             }
         }
 
+        /// <summary>
+        /// Проверяет на корректность указанную строку подключения.
+        /// </summary>
+        /// <returns>true, если проверка прошла успешно, иначе false</returns>
         private bool ValidateConnectionString()
         {
             try
@@ -130,6 +165,10 @@ namespace RemoveFiles
             return true;
         }
 
+        /// <summary>
+        /// Проверяет, существует ли таблица с данным названием.
+        /// </summary>
+        /// <returns>true, если проверка прошла успешно, иначе false</returns>
         private bool ValidateTableName()
         {
             BaseConnector connector = ConnectorFactory.CreateConnector(this);
@@ -179,6 +218,10 @@ namespace RemoveFiles
             return false;
         }
 
+        /// <summary>
+        /// Проверяет, существует ли поле первичного ключа с данным названием.
+        /// </summary>
+        /// <returns>true, если проверка прошла успешно, иначе false</returns>
         private bool ValidatePrimaryKeyFieldName()
         {
             BaseConnector connector = ConnectorFactory.CreateConnector(this);
@@ -230,6 +273,10 @@ namespace RemoveFiles
             return false;
         }
 
+        /// <summary>
+        /// Проверяет, существует ли поле относительного пути с данным названием.
+        /// </summary>
+        /// <returns>true, если проверка прошла успешно, иначе false</returns>
         private bool ValidateUrlFieldName()
         {
             BaseConnector connector = ConnectorFactory.CreateConnector(this);
@@ -281,6 +328,10 @@ namespace RemoveFiles
             return false;
         }
 
+        /// <summary>
+        /// Проверяет, существует ли путь к каталогу в файловой системе.
+        /// </summary>
+        /// <returns>true, если проверка прошла успешно, иначе false</returns>
         private bool ValidatePath()
         {
             DirectoryInfo directory = new DirectoryInfo(Path);
@@ -422,7 +473,7 @@ namespace RemoveFiles
         }
 
         /// <summary>
-        /// Выводит полную справку о программе.
+        /// Выводит полную справку по программе.
         /// </summary>
         public void Help()
         {
@@ -446,7 +497,7 @@ namespace RemoveFiles
                 "\n\nЗадание пути к каталогу с файлами.\n\tКлючевое слово:\n\t\t-path\n\tПараметры:\n\t\tПуть к каталогу с файлами в кавычках.\n\tПример:\n\t\t-path \"C:\\Windows\\Help\"\n\tЗначение по умолчанию:\n\t\t\"D:\\YandexDisk\\Third course\\Производственная практика\\Practice\\TestFiles\"" +
                 "\n\nВыполнения логирования действий программы.\n\tКлючевое слово:\n\t\t-log\n\tПример:\n\t\t-log\n\tЗначение по умолчанию:\n\t\t\"не установлено\"" +
                 "\n\nЗапрос на подтверждение удаления.\n\tКлючевое слово:\n\t\t-conf\n\tПример:\n\t\t-conf\n\tЗначение по умолчанию:\n\t\t\"не установлено\"" +
-                "\n\nЕсли установлен параметр, запрашивающий подтверждение об удалении, то перед удалением каждого файла будет появляться сообщение с просьбой нажатия соответствующей клавиши:\n\tA - удалить все файлы;\n\tY - удалить текущий файл;\n\tN - пропустить удаление текущего файла;\n\tE - пропустить удаление всех файлов.\n\n\n");
+                "\n\nЕсли установлен параметр, запрашивающий подтверждение об удалении, то перед удалением каждого файла будет появляться сообщение с просьбой нажатия соответствующей клавиши:\n\tA - удалить все файлы;\n\tY - удалить текущий файл;\n\tN - пропустить удаление текущего файла;\n\tX - пропустить удаление всех файлов.\n\n\n");
         }
     }
 }

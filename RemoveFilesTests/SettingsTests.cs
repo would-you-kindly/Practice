@@ -14,8 +14,9 @@ namespace RemoveFiles.Tests
         [TestMethod]
         public void ParseArgsAllDefaultsTest()
         {
-            var settings = new Settings();
-            var cmd = settings.ParseArgs(new string[] { });
+            var parser = new Parser();
+            var cmd = parser.ParseArgs(new string[] { });
+            cmd.Validate();
 
             Assert.AreEqual(Command.DefaultConfirmation, cmd.Confirmation);
             Assert.AreEqual(Command.DefaultConnectionString, cmd.ConnectionString);
@@ -30,32 +31,32 @@ namespace RemoveFiles.Tests
         [ExpectedException(typeof(ArgumentException))]        
         public void ParseArgsLogInvalidTest()
         {
-            var settings = new Settings();
-            var cmd = settings.ParseArgs(new string[] { Settings.LogCommand, "123" });            
+            var parser = new Parser();
+            var cmd = parser.ParseArgs(new string[] { Settings.LogCommand, "123" });            
         }
 
         [TestMethod]
         public void ParseArgsLogTrueTest()
         {
-            var settings = new Settings();
-            var cmd = settings.ParseArgs(new string[] { Settings.LogCommand, "true" });
-            Assert.AreEqual("true", cmd.Log);
+            var parser = new Parser();
+            var cmd = parser.ParseArgs(new string[] { Settings.LogCommand });
+            Assert.AreEqual(true, cmd.Log);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void ParseArgsArgumentValueMissingTest()
         {
-            var settings = new Settings();
-            var cmd = settings.ParseArgs(new string[] { Settings.LogCommand });            
+            var parser = new Parser();
+            var cmd = parser.ParseArgs(new string[] { Settings.LogCommand, true.ToString() });            
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void ParseArgsArgumentsValuesMissingTest()
         {
-            var settings = new Settings();
-            var cmd = settings.ParseArgs(new string[] { Settings.LogCommand, Settings.ConfirmationCommand, Settings.HelpCommand });
+            var parser = new Parser();
+            var cmd = parser.ParseArgs(new string[] { Settings.LogCommand, Settings.ConfirmationCommand, Settings.HelpCommand });
         }
     }
 }

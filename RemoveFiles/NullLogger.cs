@@ -63,6 +63,7 @@ namespace RemoveFiles
         {
             get
             {
+                // TODO: ЧТо тут возвращать?
                 throw new NotImplementedException();
             }
         }

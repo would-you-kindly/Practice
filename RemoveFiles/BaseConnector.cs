@@ -37,8 +37,6 @@ namespace RemoveFiles
 
         protected virtual List<Guid> FindHangingFileKeys(Command command, DataTable table)
         {
-            // TODO: StringBuilder
-            // TODO: Можно поменять здесь на union внутренних запросов и сделать из них except из первичных ключей файлов
             List<string> subqueries = new List<string>();
 
             foreach (DataRow foreignKey in table.Rows)
@@ -120,7 +118,7 @@ namespace RemoveFiles
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    _logger.Info(e.Message);
+                    _logger.Info("Удаление файла отменено: " + e.Message);
                 }
             }
 
@@ -135,7 +133,7 @@ namespace RemoveFiles
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    _logger.Info(e.Message);
+                    _logger.Info("Удаление .pdf файла отменено: " + e.Message);
                 }
             }
         }
@@ -159,16 +157,16 @@ namespace RemoveFiles
 
         private RemoveFilesOptions RequestConfirmation(Command command, Guid key)
         {
-            if ((bool)command.Confirmation)
+            if (command.Confirmation)
             {
                 Console.WriteLine($"Вы уверены, что хотите удалить файл {GetFileUrlByKey(command, key)}? (A/Y/N/X)");
+                wrongKey:
                 ConsoleKeyInfo consoleKey = Console.ReadKey(true);
 
                 switch (consoleKey.Key)
                 {
                     // TODO: переспросить поьзователя что он хотел нажать, если не попал
                     // TODO: добавить комментарии ко все методам
-
                     case ConsoleKey.A:
                         return RemoveFilesOptions.YesToAll;
                     case ConsoleKey.Y:
@@ -178,7 +176,9 @@ namespace RemoveFiles
                     case ConsoleKey.X:
                         return RemoveFilesOptions.NoToAll;
                     default:
-                        throw new ArgumentException("Неверно выбран вариант удаления.");
+                        Console.WriteLine("Нажата неверная клавиша. Можно нажимать только клавиши A/Y/N/X. Проверьте раскладку клавиатуры.");
+                        // TODO: GOTO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        goto wrongKey;
                 }
             }
             else
