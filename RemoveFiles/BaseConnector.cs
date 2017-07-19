@@ -15,7 +15,7 @@ namespace RemoveFiles
     {
         protected ILog _logger;
 
-        protected DbConnection _connection;
+        public DbConnection Connection;
 
         public BaseConnector(ILog logger)
         {
@@ -24,9 +24,9 @@ namespace RemoveFiles
 
         public virtual void Execute(Command command)
         {
-            using (_connection)
+            using (Connection)
             {
-                _connection.Open();
+                Connection.Open();
                 DataTable table = FindReferencingTables(command);
                 List<Guid> keys = FindHangingFileKeys(command, table);
                 RemoveHangingFiles(command, keys);
@@ -43,18 +43,14 @@ namespace RemoveFiles
 
             foreach (DataRow foreignKey in table.Rows)
             {
-                subqueries.Add($"SELECT \"{command.TableName}\".\"{command.PrimaryKeyFieldName}\" " +
-                $"FROM \"{command.TableName}\" " +
-                $"WHERE \"{command.TableName}\".\"{command.PrimaryKeyFieldName}\" IS NOT NULL " +
-                $"AND \"{command.TableName}\".\"{command.PrimaryKeyFieldName}\" NOT IN " +
-                $"(SELECT \"{foreignKey["TableName"]}\".\"{foreignKey["ColumnName"]}\" " +
-                $"FROM \"{foreignKey["TableName"]}\" " +
-                $"WHERE \"{foreignKey["TableName"]}\".\"{foreignKey["ColumnName"]}\" IS NOT NULL)");
+                subqueries.Add(string.Format("SELECT \"{0}\".\"{1}\" FROM \"{0}\" WHERE \"{0}\".\"{1}\" IS NOT NULL",
+                    foreignKey["TableName"], foreignKey["ColumnName"]));
             }
 
-            string queryString = string.Join(" INTERSECT ", subqueries);
+            string queryString = string.Format("SELECT \"{0}\".\"{1}\" FROM \"{0}\" WHERE \"{0}\".\"{1}\" IS NOT NULL",
+                command.TableName, command.PrimaryKeyFieldName) + " EXCEPT (" + string.Join(" UNION ", subqueries) + ")";
 
-            var sqlCommand = _connection.CreateCommand();
+            var sqlCommand = Connection.CreateCommand();
             sqlCommand.CommandText = queryString;
 
             List<Guid> keys = new List<Guid>();
@@ -89,8 +85,9 @@ namespace RemoveFiles
 
                 if (removeAll || option == RemoveFilesOptions.Yes)
                 {
-                    RemoveFromFS(command, key);
-                    RemoveFromDB(command, key);
+                    Console.WriteLine(key.ToString());
+                    //RemoveFromFS(command, key);
+                    //RemoveFromDB(command, key);
                 }
             }
 
@@ -119,6 +116,7 @@ namespace RemoveFiles
                 _logger.Info($"Удален файл: {file.FullName}");
             }
 
+            // TODO: try catch сюда и при удалении записей
             // Удаляем .pdf файл.
             if (pdfFile != null && pdfFile.Exists)
             {
@@ -131,7 +129,7 @@ namespace RemoveFiles
         protected virtual void RemoveFromDB(Command command, Guid key)
         {
             // Удаляем запись файла из базы данных.
-            DbCommand sqlCommand = _connection.CreateCommand();
+            DbCommand sqlCommand = Connection.CreateCommand();
             sqlCommand.CommandText = $"DELETE FROM \"{command.TableName}\" WHERE \"{command.PrimaryKeyFieldName}\" = @key";
             DbParameter parameter = sqlCommand.CreateParameter();
             parameter.ParameterName = "key";
@@ -146,15 +144,16 @@ namespace RemoveFiles
 
         private RemoveFilesOptions RequestConfirmation(Command command, Guid key)
         {
-            if (command.Confirmation)
+            if ((bool)command.Confirmation)
             {
-                Console.WriteLine($"Вы уверены, что хотите удалить файл {GetFileUrlByKey(command, key)}? (A/Y/N/E)");
+                Console.WriteLine($"Вы уверены, что хотите удалить файл {GetFileUrlByKey(command, key)}? (A/Y/N/X)");
                 ConsoleKeyInfo consoleKey = Console.ReadKey(true);
 
                 switch (consoleKey.Key)
                 {
                     // TODO: переспросить поьзователя что он хотел нажать, если не попал
                     // TODO: добавить комментарии ко все методам
+
                     case ConsoleKey.A:
                         return RemoveFilesOptions.YesToAll;
                     case ConsoleKey.Y:
@@ -176,7 +175,7 @@ namespace RemoveFiles
         protected virtual string GetFileUrlByKey(Command command, Guid key)
         {
             // Получаем название файла по ключу (для лога)
-            DbCommand sqlCommand = _connection.CreateCommand();
+            DbCommand sqlCommand = Connection.CreateCommand();
             sqlCommand.CommandText = $"SELECT \"{command.UrlFieldName}\" FROM \"{command.TableName}\" WHERE \"{command.PrimaryKeyFieldName}\" = @key";
             DbParameter parameter = sqlCommand.CreateParameter();
             parameter.ParameterName = "key";

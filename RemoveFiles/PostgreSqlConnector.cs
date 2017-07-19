@@ -10,14 +10,14 @@ namespace RemoveFiles
         public PostgreSqlConnector(ILog logger, string connectionString)
             : base(logger)
         {
-            _connection = new NpgsqlConnection(connectionString);
+            Connection = new NpgsqlConnection(connectionString);
         }
 
         protected override DataTable FindReferencingTables(Command command)
         {
             // TODO: Скорее всего неправильный запрос.
             // Получаем DataTable, содержащий названия таблиц и внешних ключей на таблицу файлов.
-            NpgsqlCommand sqlCommand = (_connection as NpgsqlConnection).CreateCommand();
+            NpgsqlCommand sqlCommand = (Connection as NpgsqlConnection).CreateCommand();
             sqlCommand.CommandText =
                 @"SELECT
                   ccu.table_name  AS TableName,

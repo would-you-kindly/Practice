@@ -17,7 +17,7 @@ namespace RemoveFiles
             // Это позволяет сделать проверку на command.Log
             // один раз, а не перед каждой записью в лог.
             ILog logger = new NullLogger();
-            if (command.Log)
+            if ((bool)command.Log)
             {
                 logger = Logger.Log;
             }

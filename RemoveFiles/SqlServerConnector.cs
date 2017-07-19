@@ -10,13 +10,13 @@ namespace RemoveFiles
         public SqlServerConnector(ILog logger, string connectionString)
             : base(logger)
         {
-            _connection = new SqlConnection(connectionString);
+            Connection = new SqlConnection(connectionString);
         }
 
         protected override DataTable FindReferencingTables(Command command)
         {
             // Получаем DataTable, содержащий названия таблиц и внешних ключей на таблицу файлов.
-            SqlCommand sqlCommand = (_connection as SqlConnection).CreateCommand();
+            SqlCommand sqlCommand = (Connection as SqlConnection).CreateCommand();
             sqlCommand.CommandText =
                 @"SELECT 
                    OBJECT_NAME (fk.parent_object_id) TableName,

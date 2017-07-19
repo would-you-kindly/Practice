@@ -62,6 +62,11 @@ namespace RemoveFiles
                 }
             }
 
+            if (!command.Validate())
+            {
+                throw new ArgumentException("Аргументы заданы неверно. Выполните команду -help для получения дополнительной информации.");
+            }
+
             return command;
         }
     }
