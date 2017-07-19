@@ -9,15 +9,22 @@ using log4net.Core;
 
 namespace RemoveFiles
 {
+    /// <summary>
+    /// Представляет сущность для создания коннектора к одной из СУБД.
+    /// </summary>
     class ConnectorFactory
     {
+        /// <summary>
+        /// Создает новый экземпляр коннектора к одной из СУБД.
+        /// </summary>
+        /// <param name="command">Команда, необходимая для получения строки подключения.</param>
+        /// <returns>Новый экземпляр коннектора к одной из СУБД.</returns>
         public static BaseConnector CreateConnector(Command command)
         {
-            // NullLogger пишет в log "пустые" значения.
-            // Это позволяет сделать проверку на command.Log
-            // один раз, а не перед каждой записью в лог.
+            // В зависимости от необходимости выполнения логирования 
+            // создается валидный/невалидный экземпляр logger'а.
             ILog logger = new NullLogger();
-            if ((bool)command.Log)
+            if (command.Log)
             {
                 logger = Logger.Log;
             }

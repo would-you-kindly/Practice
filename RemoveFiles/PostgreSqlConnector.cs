@@ -4,15 +4,30 @@ using System.Data;
 
 namespace RemoveFiles
 {
-    // Конкретная стратегия
+    /// <summary>
+    /// Представляет сущность, выполняющию роль 
+    /// коннектора для СУБД PostgreSQL (конкретная стратегия).
+    /// </summary>
     class PostgreSqlConnector : BaseConnector
     {
+        /// <summary>
+        /// Создает новый экземпляр класса PostgreSqlConnector
+        /// и инициализирует соединение к базе данных.
+        /// </summary>
+        /// <param name="logger">Объект для выполнения логирования действий программы.</param>
+        /// <param name="connectionString">Строка подключения к базе данных.</param>
         public PostgreSqlConnector(ILog logger, string connectionString)
             : base(logger)
         {
             Connection = new NpgsqlConnection(connectionString);
         }
 
+        /// <summary>
+        /// Выполняет поиск всех таблиц и их внешних ключей,
+        /// ссылающихся на таблицу файлов.
+        /// </summary>
+        /// <param name="command">Команда, необходимая для получения названия таблицы файлов.</param>
+        /// <returns>Таблица с названиями таблиц и внешних ключей.</returns>
         protected override DataTable FindReferencingTables(Command command)
         {
             // TODO: Скорее всего неправильный запрос.

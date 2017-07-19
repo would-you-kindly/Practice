@@ -10,18 +10,31 @@ using System.Threading.Tasks;
 
 namespace RemoveFiles
 {
-    // Стратегия
+    /// <summary>
+    /// Представляет сущность, выполняющую роль 
+    /// коннектора к СУБД (стратегия).
+    /// </summary>
     abstract class BaseConnector
     {
         protected ILog _logger;
 
         public DbConnection Connection;
 
+        /// <summary>
+        /// Создает новый экземпляр класса BaseConnector
+        /// и инициализирует logger.
+        /// </summary>
+        /// <param name="logger">Объект для выполнения логирования действий программы.</param>
         public BaseConnector(ILog logger)
         {
             _logger = logger;
         }
 
+        /// <summary>
+        /// Выполняет удаление файлов из файловой 
+        /// системы и записей из базы данных.
+        /// </summary>
+        /// <param name="command">Команда, необходимая для получения параметров программы.</param>
         public virtual void Execute(Command command)
         {
             using (Connection)
@@ -33,8 +46,20 @@ namespace RemoveFiles
             }
         }
 
+        /// <summary>
+        /// Выполняет поиск всех таблиц и их внешних ключей,
+        /// ссылающихся на таблицу файлов.
+        /// </summary>
+        /// <param name="command">Команда, необходимая для получения названия таблицы файлов.</param>
+        /// <returns>Таблица с названиями таблиц и внешних ключей.</returns>
         protected abstract DataTable FindReferencingTables(Command command);
 
+        /// <summary>
+        /// Выполняет поиск первичных ключей таблицы файлов, на которые нет ссылок из других таблиц.
+        /// </summary>
+        /// <param name="command">Команда, необходимая для получения параметров программы.</param>
+        /// <param name="table">Таблица с названиями таблиц и их внешних ключей на таблицу файлов.</param>
+        /// <returns>Список первичных ключей, не имеющих ссылок из других таблиц.</returns>
         protected virtual List<Guid> FindHangingFileKeys(Command command, DataTable table)
         {
             List<string> subqueries = new List<string>();
@@ -165,8 +190,6 @@ namespace RemoveFiles
 
                 switch (consoleKey.Key)
                 {
-                    // TODO: переспросить поьзователя что он хотел нажать, если не попал
-                    // TODO: добавить комментарии ко все методам
                     case ConsoleKey.A:
                         return RemoveFilesOptions.YesToAll;
                     case ConsoleKey.Y:

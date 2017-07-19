@@ -60,8 +60,8 @@ namespace RemoveFiles
         /// <summary>
         /// Представляют значения аргументов команды по умолчанию.
         /// </summary>
-        internal const string DefaultConnectionString = @"Data Source=.\sqlexpress;Initial Catalog=FlexberryPractice;Integrated Security=True;";
         internal const string DefaultDbms = "PostgreSQL";
+        internal const string DefaultConnectionString = @"Data Source=.\sqlexpress;Initial Catalog=FlexberryPractice;Integrated Security=True;";
         internal const string DefaultTableName = "Файл";
         internal const string DefaultPrimaryKeyFieldName = "PrimaryKey";
         internal const string DefaultUrlFieldName = "Url";
@@ -95,7 +95,7 @@ namespace RemoveFiles
         /// <summary>
         /// Проверяет на корректность все аргументы команды.
         /// </summary>
-        /// <returns>true, если проверка прошла успешно, иначе false</returns>
+        /// <returns>true, если проверка прошла успешно, иначе false.</returns>
         public bool Validate()
         {
             // Если параметры не заданы при запуске, задаем им значение по умолчанию.
@@ -127,7 +127,7 @@ namespace RemoveFiles
         /// <summary>
         /// Проверяет на корректность указанную СУБД.
         /// </summary>
-        /// <returns>true, если проверка прошла успешно, иначе false</returns>
+        /// <returns>true, если проверка прошла успешно, иначе false.</returns>
         private bool ValidateDbms()
         {
             switch (Dbms)
@@ -145,7 +145,7 @@ namespace RemoveFiles
         /// <summary>
         /// Проверяет на корректность указанную строку подключения.
         /// </summary>
-        /// <returns>true, если проверка прошла успешно, иначе false</returns>
+        /// <returns>true, если проверка прошла успешно, иначе false.</returns>
         private bool ValidateConnectionString()
         {
             try
@@ -168,7 +168,7 @@ namespace RemoveFiles
         /// <summary>
         /// Проверяет, существует ли таблица с данным названием.
         /// </summary>
-        /// <returns>true, если проверка прошла успешно, иначе false</returns>
+        /// <returns>true, если проверка прошла успешно, иначе false.</returns>
         private bool ValidateTableName()
         {
             BaseConnector connector = ConnectorFactory.CreateConnector(this);
@@ -221,7 +221,7 @@ namespace RemoveFiles
         /// <summary>
         /// Проверяет, существует ли поле первичного ключа с данным названием.
         /// </summary>
-        /// <returns>true, если проверка прошла успешно, иначе false</returns>
+        /// <returns>true, если проверка прошла успешно, иначе false.</returns>
         private bool ValidatePrimaryKeyFieldName()
         {
             BaseConnector connector = ConnectorFactory.CreateConnector(this);
@@ -276,7 +276,7 @@ namespace RemoveFiles
         /// <summary>
         /// Проверяет, существует ли поле относительного пути с данным названием.
         /// </summary>
-        /// <returns>true, если проверка прошла успешно, иначе false</returns>
+        /// <returns>true, если проверка прошла успешно, иначе false.</returns>
         private bool ValidateUrlFieldName()
         {
             BaseConnector connector = ConnectorFactory.CreateConnector(this);
@@ -331,7 +331,7 @@ namespace RemoveFiles
         /// <summary>
         /// Проверяет, существует ли путь к каталогу в файловой системе.
         /// </summary>
-        /// <returns>true, если проверка прошла успешно, иначе false</returns>
+        /// <returns>true, если проверка прошла успешно, иначе false.</returns>
         private bool ValidatePath()
         {
             DirectoryInfo directory = new DirectoryInfo(Path);

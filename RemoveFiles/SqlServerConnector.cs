@@ -5,16 +5,29 @@ using System.Data.SqlClient;
 namespace RemoveFiles
 {
     /// <summary>
-    /// 
+    /// Представляет сущность, выполняющию роль 
+    /// коннектора для СУБД SQL Server (конкретная стратегия).
     /// </summary>
     class SqlServerConnector : BaseConnector
     {
+        /// <summary>
+        /// Создает новый экземпляр класса SqlServerConnector
+        /// и инициализирует соединение к базе данных.
+        /// </summary>
+        /// <param name="logger">Объект для выполнения логирования действий программы.</param>
+        /// <param name="connectionString">Строка подключения к базе данных.</param>
         public SqlServerConnector(ILog logger, string connectionString)
             : base(logger)
         {
             Connection = new SqlConnection(connectionString);
         }
 
+        /// <summary>
+        /// Выполняет поиск всех таблиц и их внешних ключей,
+        /// ссылающихся на таблицу файлов.
+        /// </summary>
+        /// <param name="command">Команда, необходимая для получения названия таблицы файлов.</param>
+        /// <returns>Таблица с названиями таблиц и внешних ключей.</returns>
         protected override DataTable FindReferencingTables(Command command)
         {
             // Получаем DataTable, содержащий названия таблиц и внешних ключей на таблицу файлов.
