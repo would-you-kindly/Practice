@@ -5,14 +5,12 @@ using System.Data;
 namespace RemoveFiles
 {
     /// <summary>
-    /// Представляет сущность, выполняющию роль 
-    /// коннектора для СУБД PostgreSQL (конкретная стратегия).
+    /// Представляет сущность, выполняющию роль коннектора для СУБД PostgreSQL (конкретная стратегия).
     /// </summary>
     class PostgreSqlConnector : BaseConnector
     {
         /// <summary>
-        /// Создает новый экземпляр класса PostgreSqlConnector
-        /// и инициализирует соединение к базе данных.
+        /// Создает новый экземпляр класса PostgreSqlConnector и инициализирует соединение к базе данных.
         /// </summary>
         /// <param name="logger">Объект для выполнения логирования действий программы.</param>
         /// <param name="connectionString">Строка подключения к базе данных.</param>
@@ -23,27 +21,28 @@ namespace RemoveFiles
         }
 
         /// <summary>
-        /// Выполняет поиск всех таблиц и их внешних ключей,
-        /// ссылающихся на таблицу файлов.
+        /// Выполняет поиск всех таблиц и их внешних ключей, ссылающихся на таблицу файлов.
         /// </summary>
         /// <param name="command">Команда, необходимая для получения названия таблицы файлов.</param>
         /// <returns>Таблица с названиями таблиц и внешних ключей.</returns>
         protected override DataTable FindReferencingTables(Command command)
         {
-            // TODO: Скорее всего неправильный запрос.
             // Получаем DataTable, содержащий названия таблиц и внешних ключей на таблицу файлов.
             NpgsqlCommand sqlCommand = (Connection as NpgsqlConnection).CreateCommand();
             sqlCommand.CommandText =
                 @"SELECT
-                  ccu.table_name  AS TableName,
-                  kcu.column_name AS ColumnName
-                FROM
-                  information_schema.table_constraints AS tc
-                  JOIN information_schema.key_column_usage AS kcu
-                    ON tc.constraint_name = kcu.constraint_name
-                  JOIN information_schema.constraint_column_usage AS ccu
-                    ON ccu.constraint_name = tc.constraint_name
-                WHERE constraint_type = 'FOREIGN KEY' AND tc.table_name = @FilesTableName;";
+                  R.TABLE_NAME TableName,
+                  R.COLUMN_NAME ColumnName
+                FROM INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE u
+                  INNER JOIN INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS FK
+                    ON U.CONSTRAINT_CATALOG = FK.UNIQUE_CONSTRAINT_CATALOG
+                       AND U.CONSTRAINT_SCHEMA = FK.UNIQUE_CONSTRAINT_SCHEMA
+                       AND U.CONSTRAINT_NAME = FK.UNIQUE_CONSTRAINT_NAME
+                  INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE R
+                    ON R.CONSTRAINT_CATALOG = FK.CONSTRAINT_CATALOG
+                       AND R.CONSTRAINT_SCHEMA = FK.CONSTRAINT_SCHEMA
+                       AND R.CONSTRAINT_NAME = FK.CONSTRAINT_NAME
+                WHERE U.TABLE_NAME = @FilesTableName";
             sqlCommand.Parameters.AddWithValue("FilesTableName", command.TableName);
 
             NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(sqlCommand);

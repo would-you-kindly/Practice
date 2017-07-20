@@ -8,6 +8,9 @@ using log4net.Core;
 
 namespace RemoveFiles
 {
+    /// <summary>
+    /// Представляет сущность, которая выполняет роль null-объекта, которая не выполняет логирование.
+    /// </summary>
     class NullLogger : ILog
     {
         public bool IsDebugEnabled

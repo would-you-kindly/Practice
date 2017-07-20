@@ -26,6 +26,7 @@ namespace RemoveFiles
             ILog logger = new NullLogger();
             if (command.Log)
             {
+                Logger.InitLogger();
                 logger = Logger.Log;
             }
 

@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace RemoveFiles
 {
     /// <summary>
-    /// Представляет сущность для удаления файлов из файловой системы
-    /// и записей из базы данных (контекст).
+    /// Представляет сущность для удаления файлов из файловой системы и записей из базы данных (контекст).
     /// </summary>
     class FileCleaner
     {
@@ -17,8 +16,7 @@ namespace RemoveFiles
         private Command Command { get; set; }
 
         /// <summary>
-        /// Создает новый экземпляр класса FileCleaner
-        /// и создает коннектор к СУБД.
+        /// Создает новый экземпляр класса FileCleaner и создает коннектор к СУБД.
         /// </summary>
         /// <param name="command">Команда, необходимая для создания коннектора к СУБД.</param>
         public FileCleaner(Command command)
@@ -28,8 +26,7 @@ namespace RemoveFiles
         }
 
         /// <summary>
-        /// Выполняет удаление файлов из файловой 
-        /// системы и записей из базы данных.
+        /// Выполняет удаление файлов из файловой системы и записей из базы данных.
         /// </summary>
         public void Clean()
         {

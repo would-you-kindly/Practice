@@ -12,8 +12,7 @@ namespace RemoveFiles
     class Parser
     {
         /// <summary>
-        /// Выполняет parsing переданных аргументов
-        /// и присваивает их свойствам класса Command.
+        /// Выполняет parsing переданных аргументов и присваивает их свойствам класса Command.
         /// </summary>
         /// <param name="args">Набор аргументов программы.</param>
         public Command ParseArgs(string[] args)

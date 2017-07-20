@@ -12,8 +12,7 @@ using Npgsql;
 namespace RemoveFiles
 {
     /// <summary>
-    /// Представляет команды программы по удалению 
-    /// файлов и связанные с ними аргументы.
+    /// Представляет команды программы по удалению файлов и связанные с ними аргументы.
     /// </summary>
     public class Command
     {
@@ -100,248 +99,45 @@ namespace RemoveFiles
         {
             // Если параметры не заданы при запуске, задаем им значение по умолчанию.
             if (Dbms == null)
+            {
                 Dbms = DefaultDbms;
+            }
             if (ConnectionString == null)
+            {
                 ConnectionString = DefaultConnectionString;
+            }
             if (TableName == null)
+            {
                 TableName = DefaultTableName;
+            }
             if (PrimaryKeyFieldName == null)
+            {
                 PrimaryKeyFieldName = DefaultPrimaryKeyFieldName;
+            }
             if (UrlFieldName == null)
+            {
                 UrlFieldName = DefaultUrlFieldName;
+            }
             if (Path == null)
+            {
                 Path = DefaultPath;
+            }
+
+            List<IValidator> validators = new List<IValidator>();
+            validators.Add(new DbmsValidator());
+            validators.Add(new ConnectionStringValidator());
+            validators.Add(new TableNameValidator());
+            validators.Add(new PrimaryKeyFieldValidator());
+            validators.Add(new UrlFieldNameValidator());
+            validators.Add(new PathValidator());
 
             // Проверяем параметры на корректные значения.
-            if (ValidateDbms() & ValidateConnectionString() & ValidateTableName() &
-               ValidatePrimaryKeyFieldName() & ValidateUrlFieldName() & ValidatePath())
+            foreach (IValidator validator in validators)
             {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Проверяет на корректность указанную СУБД.
-        /// </summary>
-        /// <returns>true, если проверка прошла успешно, иначе false.</returns>
-        private bool ValidateDbms()
-        {
-            switch (Dbms)
-            {
-                case "SQL Server":
-                case "PostgreSQL":
-                    return true;
-                default:
-                    Console.WriteLine("Аргумент команды -dbms указан неверно. " +
-                        "Он может принимать только значение \"SQL Server\" или \"PostgreSQL\".");
+                if (!validator.Validate(this))
+                {
                     return false;
-            }
-        }
-
-        /// <summary>
-        /// Проверяет на корректность указанную строку подключения.
-        /// </summary>
-        /// <returns>true, если проверка прошла успешно, иначе false.</returns>
-        private bool ValidateConnectionString()
-        {
-            try
-            {
-                using (DbConnection connection = ConnectorFactory.CreateConnector(this).Connection)
-                {
-                    connection.Open();
                 }
-            }
-            catch (Exception)
-            {
-                Console.WriteLine($"При попытке соединения с {ConnectionString} произошла ошибка. " +
-                    "Проверьте правильность строки подключения.");
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Проверяет, существует ли таблица с данным названием.
-        /// </summary>
-        /// <returns>true, если проверка прошла успешно, иначе false.</returns>
-        private bool ValidateTableName()
-        {
-            BaseConnector connector = ConnectorFactory.CreateConnector(this);
-
-            // Проверяем наличие таблицы в SQL Server.
-            if (connector is SqlServerConnector)
-            {
-                using (connector.Connection)
-                {
-                    connector.Connection.Open();
-                    SqlCommand sqlQuery = (SqlCommand)connector.Connection.CreateCommand();
-                    sqlQuery.CommandText = "IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES " +
-                        "WHERE TABLE_NAME = @TableName) SELECT 1 ELSE SELECT 0";
-                    sqlQuery.Parameters.AddWithValue("TableName", TableName);
-                    if ((int)sqlQuery.ExecuteScalar() == 0)
-                    {
-                        Console.WriteLine($"Таблицы с именем {TableName} не существует. " +
-                            "Проверьте правильность названия таблицы.");
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            // Проверяем наличие таблицы в PostgreSQL.
-            if (connector is PostgreSqlConnector)
-            {
-                using (connector.Connection)
-                {
-                    connector.Connection.Open();
-                    NpgsqlCommand sqlQuery = (NpgsqlCommand)connector.Connection.CreateCommand();
-                    sqlQuery.CommandText = "SELECT EXISTS(SELECT 1 FROM information_schema.tables " +
-                        "WHERE table_name = @TableName);";
-                    sqlQuery.Parameters.AddWithValue("TableName", TableName);
-                    if (!(bool)sqlQuery.ExecuteScalar())
-                    {
-                        Console.WriteLine($"Таблицы с именем {TableName} не существует. " +
-                            "Проверьте правильность названия таблицы.");
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Проверяет, существует ли поле первичного ключа с данным названием.
-        /// </summary>
-        /// <returns>true, если проверка прошла успешно, иначе false.</returns>
-        private bool ValidatePrimaryKeyFieldName()
-        {
-            BaseConnector connector = ConnectorFactory.CreateConnector(this);
-
-            // Проверяем наличие столбца первичного ключа в SQL Server.
-            if (connector is SqlServerConnector)
-            {
-                using (connector.Connection)
-                {
-                    connector.Connection.Open();
-                    SqlCommand sqlQuery = (SqlCommand)connector.Connection.CreateCommand();
-                    sqlQuery.CommandText = "IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS " +
-                        "WHERE TABLE_NAME = @TableName AND COLUMN_NAME = @PrimaryKeyFieldName) SELECT 1 ELSE SELECT 0";
-                    sqlQuery.Parameters.AddWithValue("TableName", TableName);
-                    sqlQuery.Parameters.AddWithValue("PrimaryKeyFieldName", PrimaryKeyFieldName);
-                    if ((int)sqlQuery.ExecuteScalar() == 0)
-                    {
-                        Console.WriteLine($"Столбца с именем {PrimaryKeyFieldName} в таблице {TableName} не существует. " +
-                            "Проверьте правильность названия столбца первичного ключа.");
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            // Проверяем наличие столбца первичного ключа в PostgreSQL.
-            if (connector is PostgreSqlConnector)
-            {
-                using (connector.Connection)
-                {
-                    connector.Connection.Open();
-                    NpgsqlCommand sqlQuery = (NpgsqlCommand)connector.Connection.CreateCommand();
-                    sqlQuery.CommandText = "SELECT EXISTS(SELECT 1 FROM information_schema.columns " +
-                        "WHERE table_name = @TableName AND column_name = @PrimaryKeyFieldName);";
-                    sqlQuery.Parameters.AddWithValue("TableName", TableName);
-                    sqlQuery.Parameters.AddWithValue("PrimaryKeyFieldName", PrimaryKeyFieldName);
-                    if (!(bool)sqlQuery.ExecuteScalar())
-                    {
-                        Console.WriteLine($"Столбца с именем {PrimaryKeyFieldName} в таблице {TableName} не существует. " +
-                            "Проверьте правильность названия столбца первичного ключа.");
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Проверяет, существует ли поле относительного пути с данным названием.
-        /// </summary>
-        /// <returns>true, если проверка прошла успешно, иначе false.</returns>
-        private bool ValidateUrlFieldName()
-        {
-            BaseConnector connector = ConnectorFactory.CreateConnector(this);
-
-            // Проверяем наличие столбца Url в SQL Server.
-            if (connector is SqlServerConnector)
-            {
-                using (connector.Connection)
-                {
-                    connector.Connection.Open();
-                    SqlCommand sqlQuery = (SqlCommand)connector.Connection.CreateCommand();
-                    sqlQuery.CommandText = "IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS " +
-                        "WHERE TABLE_NAME = @TableName AND COLUMN_NAME = @UrlFieldName) SELECT 1 ELSE SELECT 0";
-                    sqlQuery.Parameters.AddWithValue("TableName", TableName);
-                    sqlQuery.Parameters.AddWithValue("UrlFieldName", UrlFieldName);
-                    if ((int)sqlQuery.ExecuteScalar() == 0)
-                    {
-                        Console.WriteLine($"Столбца с именем {UrlFieldName} в таблице {TableName} не существует. " +
-                            "Проверьте правильность названия столбца Url.");
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            // Проверяем наличие столбца Url в PostgreSQL.
-            if (connector is PostgreSqlConnector)
-            {
-                using (connector.Connection)
-                {
-                    connector.Connection.Open();
-                    NpgsqlCommand sqlQuery = (NpgsqlCommand)connector.Connection.CreateCommand();
-                    sqlQuery.CommandText = "SELECT EXISTS(SELECT 1 FROM information_schema.columns " +
-                        "WHERE table_name = @TableName AND column_name = @UrlFieldName);";
-                    sqlQuery.Parameters.AddWithValue("TableName", TableName);
-                    sqlQuery.Parameters.AddWithValue("UrlFieldName", UrlFieldName);
-                    if (!(bool)sqlQuery.ExecuteScalar())
-                    {
-                        Console.WriteLine($"Столбца с именем {UrlFieldName} в таблице {TableName} не существует. " +
-                            "Проверьте правильность названия столбца Url.");
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Проверяет, существует ли путь к каталогу в файловой системе.
-        /// </summary>
-        /// <returns>true, если проверка прошла успешно, иначе false.</returns>
-        private bool ValidatePath()
-        {
-            DirectoryInfo directory = new DirectoryInfo(Path);
-
-            // Проверяем наличие пути в файловой системе.
-            if (directory == null || !directory.Exists)
-            {
-                Console.WriteLine($"Пути {Path} в файловой системе не существует. " +
-                        "Проверьте правильность пути.");
-                return false;
             }
 
             return true;
@@ -393,8 +189,7 @@ namespace RemoveFiles
         }
 
         /// <summary>
-        /// Задает или возвращает название поля в таблице файлов 
-        /// базы данных, которое является первичным ключом.
+        /// Задает или возвращает название поля в таблице файлов базы данных, которое является первичным ключом.
         /// </summary>
         public string PrimaryKeyFieldName
         {
@@ -409,8 +204,7 @@ namespace RemoveFiles
         }
 
         /// <summary>
-        /// Задает или возвращает название поля в таблице файлов базы данных,
-        /// отвечающее за хранение относительного пути хранения файла.
+        /// Задает или возвращает название поля в таблице файлов базы данных, отвечающее за хранение относительного пути хранения файла.
         /// </summary>
         public string UrlFieldName
         {
@@ -425,8 +219,7 @@ namespace RemoveFiles
         }
 
         /// <summary>
-        /// Задает или возвращает значение, указывающее,
-        /// по какому пути необходимо удалять файлы.
+        /// Задает или возвращает значение, указывающее, по какому пути необходимо удалять файлы.
         /// </summary>
         public string Path
         {
@@ -441,8 +234,7 @@ namespace RemoveFiles
         }
 
         /// <summary>
-        /// Задает или возвращает значение, указывающее, 
-        /// необходимо ли выполнять логирование действий программы. 
+        /// Задает или возвращает значение, указывающее, необходимо ли выполнять логирование действий программы. 
         /// </summary>
         public bool Log
         {
@@ -457,8 +249,7 @@ namespace RemoveFiles
         }
 
         /// <summary>
-        /// Задает или возвращает значение, указывающее, 
-        /// необходимо ли запрашивать подтвержедние перед удалением. 
+        /// Задает или возвращает значение, указывающее, необходимо ли запрашивать подтвержедние перед удалением. 
         /// </summary>
         public bool Confirmation
         {
@@ -480,8 +271,8 @@ namespace RemoveFiles
             Console.WriteLine("\nУтилита предназначена для удаления файлов и записей о них из базы данных, " +
                 "на которые нет ссылок из других таблиц базы данных. При удалении файлов также выполняется " +
                 "удаление файла с расширением .pdf с тем же именем. Утилита позволяет:\n" +
-                "\n1. указать строку подключения к базе данных;" +
-                "\n2. указать СУБД, в которой необходимо выполнить удаление;" +
+                "\n1. указать СУБД, в которой необходимо выполнить удаление;" +
+                "\n2. указать строку подключения к базе данных;" +
                 "\n3. указать название таблицы, которая предназначена для хранения информации о файлах;" +
                 "\n4. указать название поля, которое является первичным ключом таблицы файлов;" +
                 "\n5. указать название поля, которое предназначено для хранения относительного пути к файлу;" +

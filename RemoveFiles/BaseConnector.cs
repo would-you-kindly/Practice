@@ -11,8 +11,7 @@ using System.Threading.Tasks;
 namespace RemoveFiles
 {
     /// <summary>
-    /// Представляет сущность, выполняющую роль 
-    /// коннектора к СУБД (стратегия).
+    /// Представляет сущность, выполняющую роль коннектора к СУБД (стратегия).
     /// </summary>
     abstract class BaseConnector
     {
@@ -21,8 +20,7 @@ namespace RemoveFiles
         public DbConnection Connection;
 
         /// <summary>
-        /// Создает новый экземпляр класса BaseConnector
-        /// и инициализирует logger.
+        /// Создает новый экземпляр класса BaseConnector и инициализирует logger.
         /// </summary>
         /// <param name="logger">Объект для выполнения логирования действий программы.</param>
         public BaseConnector(ILog logger)
@@ -31,8 +29,7 @@ namespace RemoveFiles
         }
 
         /// <summary>
-        /// Выполняет удаление файлов из файловой 
-        /// системы и записей из базы данных.
+        /// Выполняет удаление файлов из файловой системы и записей из базы данных.
         /// </summary>
         /// <param name="command">Команда, необходимая для получения параметров программы.</param>
         public virtual void Execute(Command command)
@@ -47,8 +44,7 @@ namespace RemoveFiles
         }
 
         /// <summary>
-        /// Выполняет поиск всех таблиц и их внешних ключей,
-        /// ссылающихся на таблицу файлов.
+        /// Выполняет поиск всех таблиц и их внешних ключей, ссылающихся на таблицу файлов.
         /// </summary>
         /// <param name="command">Команда, необходимая для получения названия таблицы файлов.</param>
         /// <returns>Таблица с названиями таблиц и внешних ключей.</returns>
@@ -88,9 +84,13 @@ namespace RemoveFiles
             return keys;
         }
 
+        /// <summary>
+        /// Выполняет удаление файлов из файловой системы и записей из базы данных.
+        /// </summary>
+        /// <param name="command">Команда, необходима для получения аргументов программы.</param>
+        /// <param name="keys">Список первичных ключей, по которым необходимо выполнить удаление.</param>
         protected virtual void RemoveHangingFiles(Command command, List<Guid> keys)
         {
-            // TODO: Страшный метод
             bool removeAll = false;
             RemoveFilesOptions option = RemoveFilesOptions.No;
 
@@ -108,9 +108,8 @@ namespace RemoveFiles
 
                 if (removeAll || option == RemoveFilesOptions.Yes)
                 {
-                    Console.WriteLine(key.ToString());
                     RemoveFromFS(command, key);
-                    //RemoveFromDB(command, key);
+                    RemoveFromDB(command, key);
                 }
             }
 
@@ -124,6 +123,11 @@ namespace RemoveFiles
             }
         }
 
+        /// <summary>
+        /// Выполняет удаление файла (включая .pdf) из файловой системы.
+        /// </summary>
+        /// <param name="command">Команда, необходима для получения абсолютного пути к файлу.</param>
+        /// <param name="key">Первичный ключ, по которому необходимо удалить файл.</param>
         protected void RemoveFromFS(Command command, Guid key)
         {
             // Удаляем файлы (включая .pdf) из файловой системы.
@@ -143,7 +147,7 @@ namespace RemoveFiles
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    _logger.Info("Удаление файла отменено: " + e.Message);
+                    _logger.Error("Удаление файла отменено: " + e.Message);
                 }
             }
 
@@ -158,12 +162,16 @@ namespace RemoveFiles
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    _logger.Info("Удаление .pdf файла отменено: " + e.Message);
+                    _logger.Error("Удаление .pdf файла отменено: " + e.Message);
                 }
             }
         }
 
-        // TODO: Все равно пока только guid в качестве первичного ключа
+        /// <summary>
+        /// Выполняет удаление записи из базы данных.
+        /// </summary>
+        /// <param name="command">Команда, необходима для получения аргументов программы.</param>
+        /// <param name="key">Первичный ключ, по которому необходимо удалить запись.</param>
         protected virtual void RemoveFromDB(Command command, Guid key)
         {
             // Удаляем запись файла из базы данных.
@@ -172,36 +180,50 @@ namespace RemoveFiles
             DbParameter parameter = sqlCommand.CreateParameter();
             parameter.ParameterName = "key";
             parameter.Value = key;
-            // TODO: Тут не уверен насчет типа DbType
             parameter.DbType = DbType.Guid;
             sqlCommand.Parameters.Add(parameter);
-            sqlCommand.ExecuteNonQuery();
 
-            _logger.Info($"Удалена запись: {GetFileUrlByKey(command, key)}");
+            try
+            {
+                string record = GetFileUrlByKey(command, key);
+                sqlCommand.ExecuteNonQuery();
+                _logger.Info($"Удалена запись: {record}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                _logger.Error("Удаление записи отменено: " + e.Message);
+            }
         }
 
+        /// <summary>
+        /// Запрашивает подтверждение на удаление.
+        /// </summary>
+        /// <param name="command">Команда, необходима для получения аргументов программы.</param>
+        /// <param name="key">Первичный ключ, по которому необходимо выполнить удаление.</param>
+        /// <returns>Вариант удаления.</returns>
         private RemoveFilesOptions RequestConfirmation(Command command, Guid key)
         {
             if (command.Confirmation)
             {
                 Console.WriteLine($"Вы уверены, что хотите удалить файл {GetFileUrlByKey(command, key)}? (A/Y/N/X)");
-                wrongKey:
-                ConsoleKeyInfo consoleKey = Console.ReadKey(true);
 
-                switch (consoleKey.Key)
+                while (true)
                 {
-                    case ConsoleKey.A:
-                        return RemoveFilesOptions.YesToAll;
-                    case ConsoleKey.Y:
-                        return RemoveFilesOptions.Yes;
-                    case ConsoleKey.N:
-                        return RemoveFilesOptions.No;
-                    case ConsoleKey.X:
-                        return RemoveFilesOptions.NoToAll;
-                    default:
-                        Console.WriteLine("Нажата неверная клавиша. Можно нажимать только клавиши A/Y/N/X. Проверьте раскладку клавиатуры.");
-                        // TODO: GOTO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                        goto wrongKey;
+                    switch (Console.ReadKey(true).Key)
+                    {
+                        case ConsoleKey.A:
+                            return RemoveFilesOptions.YesToAll;
+                        case ConsoleKey.Y:
+                            return RemoveFilesOptions.Yes;
+                        case ConsoleKey.N:
+                            return RemoveFilesOptions.No;
+                        case ConsoleKey.X:
+                            return RemoveFilesOptions.NoToAll;
+                        default:
+                            Console.WriteLine("Нажата неверная клавиша. Можно нажимать только клавиши A/Y/N/X. Проверьте раскладку клавиатуры.");
+                            break;
+                    }
                 }
             }
             else
@@ -210,15 +232,20 @@ namespace RemoveFiles
             }
         }
 
+        /// <summary>
+        /// Получает относительный путь к файлу.
+        /// </summary>
+        /// <param name="command">Команда, необходима для получения аргументов программы.</param>
+        /// <param name="key">Первичный ключ, по которому находится относитлеьный путь к файлу.</param>
+        /// <returns>Строка относительного пути к файлу.</returns>
         protected virtual string GetFileUrlByKey(Command command, Guid key)
         {
-            // Получаем название файла по ключу (для лога)
+            // Получаем название файла по ключу.
             DbCommand sqlCommand = Connection.CreateCommand();
             sqlCommand.CommandText = $"SELECT \"{command.UrlFieldName}\" FROM \"{command.TableName}\" WHERE \"{command.PrimaryKeyFieldName}\" = @key";
             DbParameter parameter = sqlCommand.CreateParameter();
             parameter.ParameterName = "key";
             parameter.Value = key;
-            // TODO: Тут не уверен насчет типа DbType
             parameter.DbType = DbType.Guid;
             sqlCommand.Parameters.Add(parameter);
             string result = (string)sqlCommand.ExecuteScalar();

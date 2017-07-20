@@ -57,22 +57,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command.cs" />
+    <Compile Include="ConnectionStringValidator.cs" />
+    <Compile Include="DbmsValidator.cs" />
     <Compile Include="FileCleaner.cs" />
     <Compile Include="BaseConnector.cs" />
     <Compile Include="ConnectorFactory.cs" />
+    <Compile Include="IValidator.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="NullLogger.cs" />
     <Compile Include="Parser.cs" />
+    <Compile Include="PathValidator.cs" />
     <Compile Include="PostgreSqlConnector.cs" />
+    <Compile Include="PrimaryKeyFieldValidator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoveFilesOptions.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SqlServerConnector.cs" />
+    <Compile Include="TableNameValidator.cs" />
+    <Compile Include="UrlFieldNameValidator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="ClassDiagram2.cd" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
