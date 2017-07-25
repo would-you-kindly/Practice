@@ -1,6 +1,0 @@
-2017-07-20 11:15:38,536  INFO  Удален файл: C:\Users\aschelkunov\Documents\Мои полученные файлы\upload\MAChernyshova\d5e1b9eb-90a7-4148-b9e2-004b3a51b8fb.docx
-2017-07-20 11:15:38,670  INFO  Удалена запись: 
-2017-07-20 11:18:59,790  ERROR Удаление файла отменено: Процесс не может получить доступ к файлу "C:\Users\aschelkunov\Documents\Мои полученные файлы/upload/ZSPKSpecialist/084a6043-f847-48c8-a2f7-005a6a599eff.docm", так как этот файл используется другим процессом.
-2017-07-20 11:18:59,806  INFO  Удален .pdf файл: C:\Users\aschelkunov\Documents\Мои полученные файлы\upload\ZSPKSpecialist\084a6043-f847-48c8-a2f7-005a6a599eff.pdf
-2017-07-20 11:18:59,837  INFO  Удалена запись: 
-2017-07-20 11:26:52,157  INFO  Удалена запись: ~/upload/ZSPKSpecialist/6e69fe66-87ef-499d-9cac-005c94984a66.pdf

@@ -132,15 +132,16 @@ namespace RemoveFiles
             validators.Add(new PathValidator());
 
             // Проверяем параметры на корректные значения.
+            bool valid = true;
             foreach (IValidator validator in validators)
             {
                 if (!validator.Validate(this))
                 {
-                    return false;
+                    valid = false;
                 }
             }
 
-            return true;
+            return valid;
         }
 
         /// <summary>
