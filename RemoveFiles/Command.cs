@@ -72,6 +72,7 @@ namespace RemoveFiles
         /// Представляет коллекцию команд и связанных с ними параметров.
         /// </summary>
         private Dictionary<CommandType, object> commands;
+        private List<IValidator> validators;
 
         /// <summary>
         /// Создает новый экземпляр класса Command.
@@ -88,6 +89,16 @@ namespace RemoveFiles
                 { CommandType.Path, null },
                 { CommandType.Log, DefaultLog },
                 { CommandType.Confirmation, DefaultConfirmation }
+            };
+
+            validators = new List<IValidator>()
+            {
+                new DbmsValidator(),
+                new ConnectionStringValidator(),
+                new TableNameValidator(),
+                new PrimaryKeyFieldValidator(),
+                new UrlFieldNameValidator(),
+                new PathValidator()
             };
         }
 
@@ -122,14 +133,6 @@ namespace RemoveFiles
             {
                 Path = DefaultPath;
             }
-
-            List<IValidator> validators = new List<IValidator>();
-            validators.Add(new DbmsValidator());
-            validators.Add(new ConnectionStringValidator());
-            validators.Add(new TableNameValidator());
-            validators.Add(new PrimaryKeyFieldValidator());
-            validators.Add(new UrlFieldNameValidator());
-            validators.Add(new PathValidator());
 
             // Проверяем параметры на корректные значения.
             bool valid = true;
