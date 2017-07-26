@@ -20,6 +20,9 @@ namespace RemoveFiles
         /// <returns>true, если проверка прошла успешно, иначе false.</returns>
         public bool Validate(Command command)
         {
+            string error = $"Столбца с именем \"{command.UrlFieldName}\" в таблице \"{command.TableName}\" не существует. " +
+                "Проверьте правильность названия столбца Url.";
+
             BaseConnector connector = ConnectorFactory.CreateConnector(command);
 
             // Проверяем наличие столбца Url в SQL Server.
@@ -35,8 +38,8 @@ namespace RemoveFiles
                     sqlQuery.Parameters.AddWithValue("UrlFieldName", command.UrlFieldName);
                     if ((int)sqlQuery.ExecuteScalar() == 0)
                     {
-                        Console.WriteLine($"Столбца с именем {command.UrlFieldName} в таблице {command.TableName} не существует. " +
-                            "Проверьте правильность названия столбца Url.");
+                        Logger.Log.ErrorFormat(error);
+                        Console.WriteLine(error);
                         return false;
                     }
                 }
@@ -57,8 +60,8 @@ namespace RemoveFiles
                     sqlQuery.Parameters.AddWithValue("UrlFieldName", command.UrlFieldName);
                     if (!(bool)sqlQuery.ExecuteScalar())
                     {
-                        Console.WriteLine($"Столбца с именем {command.UrlFieldName} в таблице {command.TableName} не существует. " +
-                            "Проверьте правильность названия столбца Url.");
+                        Logger.Log.ErrorFormat(error);
+                        Console.WriteLine(error);
                         return false;
                     }
                 }

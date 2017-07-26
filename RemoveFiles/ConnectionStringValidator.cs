@@ -19,6 +19,9 @@ namespace RemoveFiles
         /// <returns>true, если проверка прошла успешно, иначе false.</returns>
         public bool Validate(Command command)
         {
+            string error = $"При попытке соединения с {command.ConnectionString} произошла ошибка. " +
+                "Проверьте правильность строки подключения.";
+
             try
             {
                 using (DbConnection connection = ConnectorFactory.CreateConnector(command).Connection)
@@ -28,8 +31,8 @@ namespace RemoveFiles
             }
             catch (Exception)
             {
-                Console.WriteLine($"При попытке соединения с {command.ConnectionString} произошла ошибка. " +
-                    "Проверьте правильность строки подключения.");
+                Logger.Log.ErrorFormat(error);
+                Console.WriteLine(error);
                 return false;
             }
 

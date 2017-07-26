@@ -20,6 +20,9 @@ namespace RemoveFiles
         /// <returns>true, если проверка прошла успешно, иначе false.</returns>
         public bool Validate(Command command)
         {
+            string error = $"Столбца с именем \"{command.PrimaryKeyFieldName}\" в таблице \"{command.TableName}\" не существует. " +
+                "Проверьте правильность названия столбца первичного ключа.";
+
             BaseConnector connector = ConnectorFactory.CreateConnector(command);
 
             // Проверяем наличие столбца первичного ключа в SQL Server.
@@ -35,8 +38,8 @@ namespace RemoveFiles
                     sqlQuery.Parameters.AddWithValue("PrimaryKeyFieldName", command.PrimaryKeyFieldName);
                     if ((int)sqlQuery.ExecuteScalar() == 0)
                     {
-                        Console.WriteLine($"Столбца с именем {command.PrimaryKeyFieldName} в таблице {command.TableName} не существует. " +
-                            "Проверьте правильность названия столбца первичного ключа.");
+                        Logger.Log.ErrorFormat(error);
+                        Console.WriteLine(error);
                         return false;
                     }
                 }
@@ -57,8 +60,8 @@ namespace RemoveFiles
                     sqlQuery.Parameters.AddWithValue("PrimaryKeyFieldName", command.PrimaryKeyFieldName);
                     if (!(bool)sqlQuery.ExecuteScalar())
                     {
-                        Console.WriteLine($"Столбца с именем {command.PrimaryKeyFieldName} в таблице {command.TableName} не существует. " +
-                            "Проверьте правильность названия столбца первичного ключа.");
+                        Logger.Log.ErrorFormat(error);
+                        Console.WriteLine(error);
                         return false;
                     }
                 }

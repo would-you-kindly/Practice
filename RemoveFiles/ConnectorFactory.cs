@@ -21,6 +21,8 @@ namespace RemoveFiles
         /// <returns>Новый экземпляр коннектора к одной из СУБД.</returns>
         public static BaseConnector CreateConnector(Command command)
         {
+            string error = $"Неверно указана СУБД \"{command.Dbms}\".";
+
             // В зависимости от необходимости выполнения логирования 
             // создается валидный/невалидный экземпляр logger'а.
             ILog logger = new NullLogger();
@@ -37,7 +39,8 @@ namespace RemoveFiles
                 case "PostgreSQL":
                     return new PostgreSqlConnector(logger, command.ConnectionString);
                 default:
-                    throw new ArgumentException("Неверно указана база данных.");
+                    Logger.Log.ErrorFormat(error);
+                    throw new ArgumentException(error);
             }
         }
     }

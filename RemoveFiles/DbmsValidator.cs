@@ -18,14 +18,16 @@ namespace RemoveFiles
         /// <returns>true, если проверка прошла успешно, иначе false.</returns>
         public bool Validate(Command command)
         {
+            string error = "Аргумент команды -dbms указан неверно. " +
+                "Он может принимать только значение \"SQL Server\" или \"PostgreSQL\".";
             switch (command.Dbms)
             {
                 case "SQL Server":
                 case "PostgreSQL":
                     return true;
                 default:
-                    Console.WriteLine("Аргумент команды -dbms указан неверно. " +
-                        "Он может принимать только значение \"SQL Server\" или \"PostgreSQL\".");
+                    Logger.Log.ErrorFormat(error);
+                    Console.WriteLine(error);
                     return false;
             }
         }

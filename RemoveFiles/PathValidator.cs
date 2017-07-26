@@ -19,13 +19,16 @@ namespace RemoveFiles
         /// <returns>true, если проверка прошла успешно, иначе false.</returns>
         public bool Validate(Command command)
         {
+            string error = $"Пути \"{command.Path}\" в файловой системе не существует. " +
+                "Проверьте правильность пути.";
+
             DirectoryInfo directory = new DirectoryInfo(command.Path);
 
             // Проверяем наличие пути в файловой системе.
             if (directory == null || !directory.Exists)
             {
-                Console.WriteLine($"Пути {command.Path} в файловой системе не существует. " +
-                        "Проверьте правильность пути.");
+                Logger.Log.ErrorFormat(error);
+                Console.WriteLine(error);
                 return false;
             }
 

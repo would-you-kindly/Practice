@@ -18,19 +18,24 @@ namespace RemoveFiles
         public Command ParseArgs(string[] args)
         {
             Command command = new Command();
+            string invalidArgumentsError = "Аргументы заданы неверно. Выполните команду -help для получения дополнительной информации.";
 
             for (int i = 0; i < args.Length; i++)
             {
+                string missCommandArgumentError = $"Для команды {args[i]} не задан параметр. Выполните команду -help для получения дополнительной информации.";
+                string commandNotExistsError = $"Команды {args[i]} не существует. Выполните команду -help для получения дополнительной информации.";
+
                 // Команды, которые принимают аргумент, не могут быть последним элементом в args.
-                if (i == args.Length - 1 && 
-                    (args[i] == Settings.DbmsCommand || 
+                if (i == args.Length - 1 &&
+                    (args[i] == Settings.DbmsCommand ||
                     args[i] == Settings.ConnectionStringCommand ||
                     args[i] == Settings.TableNameCommand ||
                     args[i] == Settings.PrimaryKeyFieldNameCommand ||
                     args[i] == Settings.UrlFieldNameCommand ||
                     args[i] == Settings.PathCommand))
                 {
-                    throw new ArgumentException($"Для команды {args[i]} не задан параметр. Выполните команду -help для получения дополнительной информации.");
+                    Logger.Log.ErrorFormat(missCommandArgumentError);
+                    throw new ArgumentException(missCommandArgumentError);
                 }
 
                 // args[++i] означает аргумент команды, который должен следовать сразу за ней.
@@ -64,13 +69,15 @@ namespace RemoveFiles
                         command.Confirmation = true;
                         break;
                     default:
-                        throw new ArgumentException($"Команды {args[i]} не существует. Выполните команду -help для получения дополнительной информации.");
+                        Logger.Log.ErrorFormat(commandNotExistsError);
+                        throw new ArgumentException(commandNotExistsError);
                 }
             }
 
             if (!command.Validate())
             {
-                throw new ArgumentException("Аргументы заданы неверно. Выполните команду -help для получения дополнительной информации.");
+                Logger.Log.ErrorFormat(invalidArgumentsError);
+                throw new ArgumentException(invalidArgumentsError);
             }
 
             return command;

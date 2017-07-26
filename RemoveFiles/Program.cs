@@ -13,6 +13,7 @@ namespace RemoveFiles
         {
             try
             {
+                Logger.InitLogger();
                 Parser parser = new Parser();
                 Command command = parser.ParseArgs(args);
                 FileCleaner cleaner = new FileCleaner(command);

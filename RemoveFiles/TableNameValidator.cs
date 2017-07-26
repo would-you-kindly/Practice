@@ -20,6 +20,9 @@ namespace RemoveFiles
         /// <returns>true, если проверка прошла успешно, иначе false.</returns>
         public bool Validate(Command command)
         {
+            string error = $"Таблицы с именем \"{command.TableName}\" не существует. " +
+                "Проверьте правильность названия таблицы.";
+
             BaseConnector connector = ConnectorFactory.CreateConnector(command);
 
             // Проверяем наличие таблицы в SQL Server.
@@ -34,8 +37,8 @@ namespace RemoveFiles
                     sqlQuery.Parameters.AddWithValue("TableName", command.TableName);
                     if ((int)sqlQuery.ExecuteScalar() == 0)
                     {
-                        Console.WriteLine($"Таблицы с именем {command.TableName} не существует. " +
-                            "Проверьте правильность названия таблицы.");
+                        Logger.Log.ErrorFormat(error);
+                        Console.WriteLine(error);
                         return false;
                     }
                 }
@@ -55,8 +58,8 @@ namespace RemoveFiles
                     sqlQuery.Parameters.AddWithValue("TableName", command.TableName);
                     if (!(bool)sqlQuery.ExecuteScalar())
                     {
-                        Console.WriteLine($"Таблицы с именем {command.TableName} не существует. " +
-                            "Проверьте правильность названия таблицы.");
+                        Logger.Log.ErrorFormat(error);
+                        Console.WriteLine(error);
                         return false;
                     }
                 }

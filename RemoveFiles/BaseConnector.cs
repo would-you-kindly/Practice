@@ -81,6 +81,9 @@ namespace RemoveFiles
                 }
             }
 
+            _logger.InfoFormat($"Найдено {keys.Count} файлов, на которые нет ссылок.");
+            Console.WriteLine($"Найдено {keys.Count} файлов, на которые нет ссылок.");
+
             return keys;
         }
 
@@ -115,10 +118,12 @@ namespace RemoveFiles
 
             if (option == RemoveFilesOptions.NoToAll)
             {
+                _logger.InfoFormat("Удаление файлов отменено.");
                 Console.WriteLine("Удаление файлов отменено.");
             }
             else
             {
+                _logger.InfoFormat("Удаление файлов прошло успешно.");
                 Console.WriteLine("Удаление файлов прошло успешно.");
             }
         }
